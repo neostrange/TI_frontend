@@ -1,0 +1,287 @@
+<div class="hbox hbox-auto-xs hbox-auto-sm" ng-init="
+    app.settings.asideFolded = false; 
+    app.settings.asideDock = false;
+  ">
+  <!-- main -->
+ <div class="col">
+    <!-- main header -->
+    <div class="bg-light lter b-b wrapper-sm">
+      <div class="row">
+        <div class="hidden-sm hidden-xs hidden-md col-lg-2">
+          <h1 class="m-n font-thin h3 text-black">Dashboard</h1>
+          <small class="text-muted">Threat Intelligence </small>
+        </div>	 
+		   <div class="col-md-4 col-lg-4 col-sm-4 col-xs-12">	  
+				<div class="dropdown">
+					<a class="dropdown-toggle" id="dropdown1" role="button" data-toggle="dropdown" data-target="#"
+					   href="">
+						<div class="input-group">
+							<input type="text" class="form-control" ng-model="dataformatter"  placeholder="startDateTime">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+						</div>
+					</a>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+						<datetimepicker data-ng-model="dataformatter"
+										data-datetimepicker-config="{ dropdownSelector: '#dropdown1' }"></datetimepicker>
+					</ul>
+				</div>
+			</div>
+			
+			
+			<div class="col-sm-2 col-md-2 col-lg-2">
+				<button class="btn m-b-xs w-xs btn-default" ng-click="searchDate()"> OK  </button>
+			</div>
+
+			<div class="col-sm-4 col-lg-4 col-md-4">
+				<ul class="nav navbar-nav">
+					<li class="dropdown">
+					<select class="form-control" ng-model="header.criteria" ng-change="chooseValue(header.criteria)">
+							<option value="" selected="selected">Last hour</option>
+							<option value="globalThreat">Yesterday</option>
+							<option value="malwareAttacks">Last Week</option>
+							<option value="SIPAttacks">Last 15 days</option>
+							<option value="webAttacks">Last Month</option>
+							
+					</select>
+					</li>
+				</ul>
+			</div>
+		
+      </div>
+    </div>
+    <!-- / main header -->
+    <div class="wrapper-md">
+      <!-- stats -->
+	<div class="row row-sm text-center">
+		<div class="col-xs-2 col-md-2">
+              <a href="#/app/dashboardAttack/probing/counts/{{prob}}" target="_blank" class="block bg-orange dker item" title="Probing attempts">
+                <div class="h1 text-white font-thin h1">{{prob}}</div>
+                 <i class="fa fa-user-secret fa-5"></i>
+			  </a>
+         </div>
+		 
+		 <div class="col-xs-2 col-md-2 rotate" ng-class="mal" title="Malware Attacks">
+              <a href="#/app/dashboardAttack/malware/counts/{{mal}}" target="_blank" class="block bg-danger item">
+                <span class="text-white font-thin h1 block"> {{mal}}</span>
+                <span> <i class="glyphicon glyphicon-fire"> </i> </span>
+              </a>
+         </div>
+		 
+         <div class="col-xs-2 col-md-2">
+              <a href="#/app/dashboardAttack/web/counts/{{wb}}" target="_blank" class="block bg-info item" title="web Attacks">
+                <span class="text-white font-thin h1 block" >{{wb}}</span>
+                    <span> <i class="glyphicon glyphicon-globe"></i> </span> 
+               </a>
+         </div>
+            
+		<div class="col-xs-2 col-md-2">
+            <a href="#/app/dashboardAttack/ssh/counts/{{ssh}}" target="_blank" class="block bg-black" title="SSH Attacks">
+              <span class="text-white font-thin h1 block">{{ssh}} </span>
+              <span><i class="glyphicon glyphicon-eye-close"></i> </span>   
+             </a>
+        </div>
+			
+		<div class="col-xs-2 col-md-2">
+             <a href="#/app/dashboardAttack/sip/counts/{{sp}}" target="_blank" class="block bg-success" title="SIP Attacks">
+               <span class="text-white font-thin h1 block">{{sp}} </span>
+               <span><i class="glyphicon glyphicon-earphone"></i> </span> 
+             </a>
+        </div>
+			
+		<div class="col-xs-2 col-md-2 m-b-md">
+			<div class="r bg-light dker item hbox no-border">          
+			<div class="text-primary-dk font-thin h1"><a href="#/app/dashboardAttack/db/counts/{{db}}" target="_blank"> <span>{{db}} </a> </span></div>
+				<i class="fa fa-database"></i>
+            </div>
+        </div>
+		
+	</div>	
+      <div class="row">
+		<!--
+        <div class="col-md-5">
+          <div class="row row-sm ">
+            
+          </div>
+        </div>
+		-->
+        <div class="col-md-12 col-xs-12 col-sm-12">
+          <div class="panel bg-dark">
+          <div d3-maps vals="value" id="container"> </div>
+           <!-- <datamap map="map" </datamap>  -->
+           
+          </div>
+        </div>
+      </div>
+      <!-- / stats -->
+
+     
+
+    
+      <!-- / tasks -->
+
+	  
+	   <!-- service -->
+		  <!-- service -->
+      <div class="panel hbox hbox-auto-xs no-border">
+        <div class="col wrapper">
+			<nvd3 options="lineChartOptions" data="lineChartData" api="apis" config="config" class="with-3d-shadow with-transitions"></nvd3>
+        </div>
+        <div class="col wrapper-lg w-lg bg-light dk r-r">
+          <h4 class="font-thin m-t-none m-b">Attacks</h4>
+          <div class="">
+            <div class="">
+              <span class="pull-right text-danger">{{malPerct}}%</span>
+              <span> Malwares </span>
+            </div>
+            <progressbar value="malPerct" class="progress-xs m-t-sm bg-white" animate="true" type="danger"></progressbar>
+            <div class="">
+              <span class="pull-right text-success">{{sipPerct}}%</span>
+              <span> SIP </span>
+            </div>
+            <progressbar value="sipPerct" class="progress-xs m-t-sm bg-white" animate="true" type="success"></progressbar>
+            <div class="">
+              <span class="pull-right text-info">{{webPerct}}%</span>
+              <span>Web </span>
+            </div>
+            <progressbar value="webPerct" class="progress-xs m-t-sm bg-white" animate="true" type="info"></progressbar>
+          </div>
+       
+        </div>
+      </div>
+      <!-- / service -->
+	 
+      <!-- / service -->
+	  
+    
+      <div class="row">
+        <div class="col-md-6">
+		<highchart id="chart1" config="chartConfig" class="span9" ></highchart>
+		<!--
+          <div class="panel no-border">
+            <div class="panel-heading wrapper b-b b-light">
+              <h4 class="font-thin m-t-none m-b-none text-muted">Top countries Attack</h4>              
+            </div>
+			
+			<ul class="list-group">
+				<li class="list-group-item" ng-repeat="attack in country"  ui-sref-active="active"> 
+							
+				<a href="#/app/CountryIps/{{attack.country}}" >
+				<span class="badge bg-info pull-right">{{attack.hits}}</span>
+					<span> <img src="img/16/{{attack.country}}-flag.png" height="12px" /> </span> {{attack.country }} 
+				</a>
+				</li>
+			</ul>
+          </div>
+		  -->
+        </div>
+        <div class="col-md-6"> 
+		
+			
+          <div class="panel no-border">
+            <highchart id="chart1" config="difference" class="span9" ></highchart>
+			<!--
+			<div class="panel-heading wrapper b-b b-light">
+              <h4 class="font-thin m-t-none m-b-none text-muted">Top Ten Ip</h4>              
+            </div>
+			<ul class="list-group">
+				<li class="list-group-item" ng-repeat="attack in ipDatas"  ui-sref-active="active"> 
+				<a href="#/app/CountryIps/{{attack.ip_country}}/ip/{{attack.ip}}">
+				<span class="badge bg-info pull-right">{{attack.hits}}</span>
+					<span> <img src="img/16/{{attack.ip_country}}-flag.png" height="12px" /> </span>{{attack.ip}} ({{attack.ip_country}})
+				</a>
+				</li>
+			</ul>
+					
+			-->
+			
+			</div>
+	
+        </div>
+      </div>
+	  <div class="row">
+	  <!--
+	  <div class="col-md-6">            
+         
+          <div class="panel no-border">
+            <div class="panel-heading wrapper b-b b-light">
+              <h4 class="font-thin m-t-none m-b-none text-muted">Top Destination Countries</h4>              
+            </div>
+			
+			<ul class="list-group">
+				<li class="list-group-item" ng-repeat="attack in ipDatas"  ui-sref-active="active"> 		
+				<a href="#/app/CountryIps/{{attack.ip_country}}/ip/{{attack.ip}}">
+				<span class="badge bg-info pull-right">{{attack.hits}}</span>
+					<span> <img src="img/16/{{attack.ip_country}}-flag.png" height="12px" /> </span> {{attack.ip}} ({{attack.ip_country}})
+				</a>
+				</li>
+			</ul>
+			</div>
+        </div>
+		-->
+		<div class="col-md-6">
+			<!-- <highchart id="chart1" config="chartConfig" class="span9" ></highchart> 
+				<highchart id="chart1" config="difference" class="span9" ></highchart> -->
+		<!--	<div id="containers" style="min-width:250px; margin: 0 auto" high-donut></div>  -->
+		
+		</div>
+		</div>
+      <!-- / tasks -->
+    </div>
+  </div>
+  <!-- / main -->
+  <!-- right col -->
+   <div class="col w-md bg-white-only b-l bg-auto no-border-xs">
+    <div class="padder">      
+      <!-- streamline -->
+      <div class="m-b text-md">Recent Attack Activity</div>
+      <div class="showFlow">
+	  <div class="streamline m-l-xs b-l m-b-sm" ng-repeat="item in items | limitTo:limitTo"  ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}" >
+        <div class="sl-item b-danger b-l" ng-show="item.data.type == 'malware'">
+          <div class="m-l">
+            <div class="text-muted">  <a href="#/app/CountryIps/{{item.data['name']}}/cCode/{{item.data['country-code']}}" >{{item['data']['name']}} </a></div>
+            <p> <a href="#/app/CountryIps/{{item.data['name']}}/ip/{{item.data['Ip']}}" target="_blank"> {{item.data['Ip']}} </a> <a href="" class="text-danger"> {{item.data['type']}}</a> <a href="" ng-click="showIP(item)"> .detail </a> </p>
+          </div>
+        </div>
+   
+		<div class="sl-item b-info b-l" ng-if="item.data.type == 'web'">
+          <div class="m-l">
+            <div class="text-muted"> <a href="#/app/CountryIps/{{item.data['name']}}/cCode/{{item.data['country-code']}}" >{{item['data']['name']}} </a> </div>
+            <p> <a href="#/app/CountryIps/{{item.data['name']}}/ip/{{item.data['Ip']}}" target="_blank"> {{item.data['Ip']}} </a> <a href="" class="text-info"> {{item.data['type']}} </a> <a href="" ng-click="showIP(item)"> .detail </a> </p>
+          </div>
+        </div>
+
+		<div class="sl-item b-orange b-l" ng-if="item.data.type =='probing'">
+          <div class="m-l">
+            <div class="text-muted"> <a href="#/app/CountryIps/{{item.data['name']}}/cCode/{{item.data['country-code']}}" >{{item['data']['name']}} </a> </div>
+            <p> <a href="#/app/CountryIps/{{item.data['name']}}/ip/{{item.data['Ip']}}" target="_blank"> {{item.data['Ip']}} </a> <a href="" class="text-orange"> {{item.data['type']}} </a> <a href="" ng-click="showIP(item)"> .detail </a> </p>
+          </div>
+        </div>
+		
+		<div class="sl-item b-success b-l" ng-if="item.data.type =='sip'">
+          <div class="m-l">
+            <div <a href="#/app/CountryIps/{{item.data['name']}}/cCode/{{item.data['country-code']}}" >{{item['data']['name']}} </a> </div>
+            <p> <a href="#/app/CountryIps/{{item.data['name']}}/ip/{{item.data['Ip']}}" target="_blank"> {{item.data['Ip']}} </a> <a href="" class="text-success"> {{item.data['type']}} </a> <a href="" ng-click="showIP(item)"> .detail </a> </p>
+          </div>
+        </div>
+		
+		<div class="sl-item b-black dker b-l" ng-if="item.data.type =='ssh'">
+          <div class="m-l">
+            <div class="text-muted"> <a href="#/app/CountryIps/{{item.data['name']}}/cCode/{{item.data['country-code']}}" >{{item['data']['name']}} </a> </div>
+            <p> <a href="#/app/CountryIps/{{item.data['name']}}/ip/{{item.data['Ip']}}" target="_blank"> {{item.data['Ip']}} </a> <a href="" class="text-black"> {{item.data['type']}} </a> <a href="" ng-click="showIP(item)"> .detail </a> </p>
+          </div>
+        </div>
+      
+		<div class="sl-item b-black dker b-l" ng-if="item.data.type =='database'">
+          <div class="m-l">
+            <div class="text-muted"> <a href="#/app/CountryIps/{{item.data['name']}}/cCode/{{item.data['country-code']}}" >{{item['data']['name']}} </a> </div>
+            <p> <a href="#/app/CountryIps/{{item.data['name']}}/ip/{{item.data['Ip']}}" target="_blank"> {{item.data['Ip']}} </a> <a href="" class="text-black"> {{item.data['type']}} </a> <a href="" ng-click="showIP(item)"> .detail </a> </p>
+          </div>
+        </div>
+	  
+	  </div>
+	  </div>
+      <!-- / streamline -->
+    </div>
+  </div>
+  <!-- / right col -->
+</div>

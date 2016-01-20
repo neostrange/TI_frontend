@@ -1,0 +1,51 @@
+<div class="bg-light lter b-b wrapper-sm">
+   <div class="row">
+   <div class="col-sm-2 hidden-xs hidden-sm">
+	<h3 class="m-n font-thin h3"> {{heading}} </h3>
+  </div>
+  <div class="col-sm-4">	  
+		<div class="dropdown">
+			<a class="dropdown-toggle" id="dropdown1" role="button" data-toggle="dropdown" data-target="#"
+			   href="">
+				<div class="input-group">
+					<input type="text" class="form-control" ng-model="date.startDate" data-on-set-time="onD1Set(newDate, oldDate)" placeholder="startDateTime">
+					<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+				</div>
+			</a>
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+				<datetimepicker data-ng-model="date.startDate" data-on-set-time="onD1Set(newDate, oldDate)"
+								data-datetimepicker-config="{ dropdownSelector: '#dropdown1' }"></datetimepicker>
+			</ul>
+		</div>
+		
+		 <div ng-messages='d_one_error' style="color:maroon"> 
+        <div ng-message='today'>Date_Time should be Less than today</div>
+        <div ng-message='date_two'>Start-date should < End-Date </div>
+		</div>
+		
+	</div>
+	
+	<div class="col-sm-4">	  
+		<div class="dropdown">
+			<a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#"
+			   href="">
+				<div class="input-group">
+					<input type="text" class="form-control" ng-model="date.endDate"  placeholder="EndDateTime" data-on-set-time="onD2Set(newDate, oldDate)">
+					<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+				</div>
+			</a>
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+				<datetimepicker data-ng-model="date.endDate" data-on-set-time="onD2Set(newDate, oldDate)"
+								data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }"></datetimepicker>
+			</ul>
+		</div>
+		 <div ng-messages='d_two_error' style="color:maroon"> 
+        <div ng-message='today'>Date_Time should be Less than today</div>
+        <div ng-message='date_one'>End-Date should > start-Date </div>
+		</div>
+	</div>
+		<div class="col-sm-2">
+			<button type="button" class="btn m-b-xs w-xs btn-default" ng-disabled="(!date.startDate || !date.endDate || d_one_error.today || d_one_error.date_one || d_two_error.today || d_two_error.date_one)" ng-click="searchDate()"> Search</button>
+		</div>
+	</div>
+</div>

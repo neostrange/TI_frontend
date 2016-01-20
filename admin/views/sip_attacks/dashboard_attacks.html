@@ -1,0 +1,44 @@
+<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n font-thin h3">  Attacks Report </h1>
+</div>
+<div class="wrapper-md">
+	<div class="row">	
+	<div class="col-sm-12 col-xs-12 col-md-12">
+		<div class="panel panel-default" ng-show="type == malware">
+			<div class="panel-heading">
+			  Detail
+			</div>
+    <div class="table-responsive">
+      <table class="table b-light">
+        <thead>
+          <tr>
+                 <th> Malware name </th>
+                 <th> Malware hash</th>
+                 <th> IP</th>
+				 <th> Country </th>
+				 <th> Protocol </th>
+				 <th> DateTime</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+			 <tr ng-repeat="val in data">
+                 <td><span ng-show="!val.malware_attack['malware_name']">-</span>{{val.malware_attack['malware_name']}}</td>
+                 <td><span ng-show="!val.malware_attack['malware_hash']">-</span>{{val.malware_attack['malware_hash']}}</td>
+                 <td><span ng-show="!val.malware_attack['remote_host']">-</span>{{val.malware_attack['remote_host']}}</td>
+				 <td><span ng-show="!val.malware_attack['remote_country']">-</span>{{val.malware_attack['remote_country']}}</td>
+				 <td><span ng-show="!val.malware_attack['protocol']">-</span>{{val.malware_attack['protocol']}}</td>
+				 <td><span ng-show="!val.malware_attack['date_time']">-</span>{{val.malware_attack['date_time']}}</td>
+             </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+        </div>
+		
+    
+   </div>	
+
+</div>   
+
+

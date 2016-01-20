@@ -1,0 +1,327 @@
+<!-- list -->
+<ul class="nav">
+  <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+    <span translate="aside.nav.HEADER">Navigation</span>
+  </li>
+  <!--
+  <li>
+    <a href class="auto">      
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-stats icon text-primary-dker"></i>
+      <span class="font-bold" translate="aside.nav.DASHBOARD">Dashboard</span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li class="nav-sub-header">
+        <a href>
+          <span translate="aside.nav.DASHBOARD">Dashboard</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.dashboard-v1">
+          <span>Dashboard </span>
+        </a>
+      </li>
+     
+    </ul>
+  </li>
+  -->
+   <li ui-sref-active="active">
+   
+        <a ui-sref="app.dashboard-v1">
+		 <i class="glyphicon glyphicon-dashboard"></i>
+          <span>Dashboard </span>
+        </a>
+	</li>
+	
+	  <li>
+    <a href class="auto">      
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-globe "></i>
+      <span class="font-bold" >Threat Analysis</span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li class="nav-sub-header">
+        <a href>
+          <span>Threat Analysis</span>
+        </a>
+      </li>
+    
+     <li ui-sref-active="active">
+    <a ui-sref="app.globalThreat">
+      <span class="font-bold" translate="aside.nav.GLOBAL THREAT">Global Analysis</span>
+    </a>
+	</li>
+	
+	<li ui-sref-active="active">
+    <a ui-sref="app.internalThreat">
+      <span class="font-bold" >Internal Threat</span>
+    </a>
+	</li>
+	
+    </ul>
+  </li>
+	<!--
+	<li ui-sref-active="active">
+    <a ui-sref="app.globalThreat">
+      <i class="glyphicon glyphicon-globe"></i>
+      <span class="font-bold" translate="aside.nav.GLOBAL THREAT">Global Threat</span>
+    </a>
+	</li>
+	
+	-->
+  
+  <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+    <span translate="aside.nav.attacks.ATTACKS"> Attacks </span>
+  </li>
+ 
+  <li ng-class="{active:$state.includes('app.malware')}">
+    <a href ui-sref="app.malware.main" class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-fire"></i>
+      <span translate="aside.nav.attacks.malware.MALWARE">MALWARE</span>
+    </a>
+	<ul class="nav nav-sub dk">
+      <li class="nav-sub-header">
+        <a ui-sref="app.malware.main">
+          <span translate="aside.nav.attacks.malware.MALWARE">Malware</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.malware.mpc">
+          <span > Most Probing Countries </span>
+        </a>
+      </li>  
+	  
+	  <li ui-sref-active="active">
+        <a ui-sref="app.malware.mpcUniqueIp">
+          <span >Probing Countries-Unique IP's </span>
+        </a>
+      </li>
+	  
+	  <li ui-sref-active="active">
+        <a ui-sref="app.malware.mpIP">
+          <span > Probing IP's </span>
+        </a>
+      </li>
+	  
+	  <li ui-sref-active="active">
+        <a ui-sref="app.malware.maIP">
+          <span >Attacking IP's </span>
+        </a>
+      </li>
+	  
+	  <li ui-sref-active="active">
+        <a ui-sref="app.malware.mac">
+          <span >Attacking Countries </span>
+        </a>
+      </li>
+	  
+	   <li ui-sref-active="active">
+        <a ui-sref="app.malware.aIpFix">
+          <span >Attacking IP's 10 Attacks</span>
+        </a>
+      </li>
+	  
+	  <li ui-sref-active="active">
+        <a ui-sref="app.malware.top_vul">
+          <span >Top Vulnerabilities</span>
+        </a>
+      </li>
+	  
+	  <li ui-sref-active="active">
+        <a ui-sref="app.malware.mal_det">
+          <span >Malwares Detected</span>
+        </a>
+      </li>
+	  
+	  
+	  <li ui-sref-active="active">
+        <a ui-sref="app.malware.cnc">
+          <span> CnC IP's & Domains</span>
+        </a>
+      </li>
+	  
+	  <li ui-sref-active="active">
+        <a ui-sref="app.malware.ap">
+          <span> Attacked Protocols </span>
+        </a>
+      </li>
+	  
+	  </ul>
+	
+  </li>
+  <li ng-class="{active:$state.includes('app.sip')}">
+    <a href ui-sref="app.sip.main" class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-earphone"></i>
+      <span translate="aside.nav.attacks.sip.SIP">SIP</span>
+    </a>
+	
+    <ul class="nav nav-sub dk">
+      <li class="nav-sub-header">
+        <a href  ui-sref="app.sip.main">
+          <span translate="aside.nav.attacks.sip.SIP">Sip</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.sip.attacks">
+          <span translate="aside.nav.attacks.sip.ATTACKS">Attack</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.sip.rsa">
+          <span > Registrar Server Attack</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.sip.ofa">
+          <span > Option Flooding Attack </span>
+        </a>
+      </li>
+	  
+      <li ui-sref-active="active">
+        <a ui-sref="app.sip.fpsa">
+          <span>Flooding Proxy Server </span>
+        </a>
+      </li>
+	  
+	  <li ui-sref-active="active">
+        <a ui-sref="app.sip.tool">
+          <span>SIP Tools  </span>
+        </a>
+      </li>
+    </ul>
+
+  </li>
+  <li ng-class="{active:$state.includes('app.web')}">
+    <a href ui-sref="app.web.main" class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-link"></i>
+      <span translate="aside.nav.attacks.web.WEB">Web</span>
+    </a>
+	
+    <ul class="nav nav-sub dk">
+      <li class="nav-sub-header">
+        <a href ui-sref="app.web.main">
+          <span translate="aside.nav.attacks.web.WEB">Web</span>
+        </a>
+      </li>
+	  
+	   <li ui-sref-active="active">
+        <a ui-sref="app.web.tfc">
+          <span translate="aside.nav.attacks.web.TFC">TFC</span>
+        </a>
+      </li>
+	  
+      <li ui-sref-active="active">
+        <a ui-sref="app.web.tfip">
+          <span translate="aside.nav.attacks.web.TFIA">TFIA</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.web.tfwa">
+          <span translate="aside.nav.attacks.web.TFWA">TFWA</span>
+        </a>
+      </li>
+      
+    </ul>
+	
+  </li>
+  <li ng-class="{active:$state.includes('app.brute')}">
+    <a href ui-sref="app.brute.main" class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-eye-close"></i>
+      <span translate="aside.nav.attacks.brute.BRUTE">Brute</span>
+    </a>
+	
+    <ul class="nav nav-sub dk">
+      <li class="nav-sub-header">
+        <a href ui-sref="app.brute.main">
+          <span translate="aside.nav.attacks.brute.BRUTE">Brute</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.brute.mu">
+          <span translate="aside.nav.attacks.brute.MU">Most Username</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.brute.mp">
+          <span >Most Password</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.brute.ipssh">
+          <span translate="aside.nav.attacks.brute.IPSSH">IP's SSH </span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.brute.tufssh">
+          <span translate="aside.nav.attacks.brute.TUFSSH">Tools used for </span>
+        </a>
+      </li>
+      
+      
+     
+    </ul>
+	
+  </li>
+
+  <li class="line dk hidden-folded"></li>
+
+  <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">          
+    <span translate="aside.nav.report.REPORTING"> Reporting </span>
+	  <li ng-class="{active:$state.includes('app.web')}">
+    <a href class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-edit"></i>
+      <span> Reporting </span>
+    </a>
+	
+    <ul class="nav nav-sub dk">
+      <li class="nav-sub-header">
+        <a href="">
+          <span> Reporting </span>
+        </a>
+      </li>
+	  
+	   <li ui-sref-active="active">
+        <a ui-sref="app.pdfReport">
+          <span > Download PDF</span>
+        </a>
+      </li>
+	  
+      <li ui-sref-active="active">
+        <a ui-sref="app.csvReport">
+          <span > Download CSV </span>
+        </a>
+      </li>
+     
+    </ul>
+	
+  </li>
+  </li>  
+ 
+</ul>
+<!-- / list -->

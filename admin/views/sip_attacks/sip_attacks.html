@@ -1,0 +1,80 @@
+<div ng-include="'views/dateBar.html'"> </div>
+
+ <div class="wrapper-md">
+	<div class="row">	
+	<div class="col-lg-9 col-sm-12 col-xs-12 col-md-12">
+          <highchart id="chart1" config="chartConfig" class="span9" ></highchart>
+    </div>
+	
+	<div class="col-lg-3 col-md-12 col-xs-12 col-md-12">
+		<div class="panel wrapper">
+			 <div class="panel panel-default">
+			
+				<div class="table-responsive">
+				  <table class="table table-striped b-t b-light">
+					<thead>
+					  <tr>
+						
+						   <th> SIP Messages</th>
+							 <th> No. of Distinct Connections</th>
+							
+					   
+					  </tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="val in data">
+							 <td>{{val['method']}}</td>
+							 <td>{{val['hits']}}</td>
+						 </tr>
+					  
+					</tbody>
+				  </table>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+ 
+ <!--
+<div class="panel hbox hbox-auto-xs no-border">
+        <div class="col wrapper auto">
+          <highchart id="chart1" config="chartConfig" class="span9" ></highchart>
+		  
+        </div>
+        <div class="col wrapper-lg w-lg bg-light dk r-r">
+          <h4 class="font-thin m-t-none m-b"> About Attack </h4>
+          <div class="panel panel-default">
+    <div class="panel-heading">
+      Detail
+    </div>
+    
+    <div class="table-responsive">
+      <table class="table table-striped b-t b-light">
+        <thead>
+          <tr>
+            
+               <th> SIP Messages</th>
+                 <th> No. of Distinct Connections</th>
+                
+           
+          </tr>
+        </thead>
+        <tbody>
+			<tr ng-repeat="val in data">
+                 <td>{{val['key']}}</td>
+                 <td>{{val['doc_count']}}</td>
+             </tr>
+          
+        </tbody>
+      </table>
+    </div>
+    
+  </div>
+         
+</div>
+</div>	
+
+-->		
+</div>
+			
+

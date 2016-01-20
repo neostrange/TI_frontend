@@ -1,0 +1,145 @@
+<div class="bg-light lter b-b wrapper-sm">
+   <div class="row">
+   <div class="col-sm-6 col-xs-12">
+		<h4 class="m-n font-thin h3"> Global Threat </h4>
+	</div>
+	</div>
+</div>
+
+<div class="clear"> </div>
+
+<div class="wrapper-md">
+
+	<div class="row wrapper-sm">
+		 <div class="col-sm-4">	  
+		<div class="dropdown">
+			<a class="dropdown-toggle" id="dropdown1" role="button" data-toggle="dropdown" data-target="#"
+			   href="">
+				<div class="input-group">
+					<input type="text" class="form-control" ng-model="date.startDate" data-on-set-time="onD1Set(newDate, oldDate)" placeholder="startDateTime">
+					<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+				</div>
+			</a>
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+				<datetimepicker data-ng-model="date.startDate" data-on-set-time="onD1Set(newDate, oldDate)"
+								data-datetimepicker-config="{ dropdownSelector: '#dropdown1' }"></datetimepicker>
+			</ul>
+		</div>
+		
+		 <div ng-messages='d_one_error' style="color:maroon"> 
+        <div ng-message='today'>Date_Time should be Less than today</div>
+        <div ng-message='date_two'>Start-date should < End-Date </div>
+		</div>
+		
+	</div>
+	
+	<div class="col-sm-4">	  
+		<div class="dropdown">
+			<a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#"
+			   href="">
+				<div class="input-group">
+					<input type="text" class="form-control" ng-model="date.endDate"  placeholder="EndDateTime" data-on-set-time="onD2Set(newDate, oldDate)">
+					<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+				</div>
+			</a>
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+				<datetimepicker data-ng-model="date.endDate" data-on-set-time="onD2Set(newDate, oldDate)"
+								data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }"></datetimepicker>
+			</ul>
+		</div>
+		 <div ng-messages='d_two_error' style="color:maroon"> 
+        <div ng-message='today'>Date_Time should be Less than today</div>
+        <div ng-message='date_one'>End-Date should > start-Date </div>
+		</div>
+	</div>
+		<div class="col-sm-4">
+			<button type="button" class="btn m-b-xs w-xs btn-default" ng-disabled="(!date.startDate || !date.endDate || d_one_error.today || d_one_error.date_one || d_two_error.today || d_two_error.date_one)" ng-click="searchDate()"> Search</button>
+		</div>
+	</div>
+	
+	
+	<div class="row">	
+		<div class="col-lg-8 col-md-12">
+		<div class="panel wrapper">
+		<!--<div new-map vals="value"> </div> -->
+			
+			<datamap resize
+					map="map"
+					plugins="mapPlugins"
+					plugin-data="mapPluginData"
+					on-click="updateActiveGeography">
+			</datamap>
+			
+			
+		</div>	
+		</div>
+		
+		<div class="col-lg-4 col-md-12">
+			<div class="panel wrapper">
+				<h4 class="font-thin m-t-none m-b"> Top few Attacks </h4>
+				  <p class="text-muted">Following figure shows the list of
+						individual IP addresses that are found
+						to be making connections and doing
+						probing. </p>
+				<div class="panel panel-default">
+					<div class="table-responsive">
+					  <table class="table b-t b-light">
+						<thead>
+						</thead>
+						<tbody>
+							<tr ng-repeat="val in countries">
+								 <td><span ng-show="!val['country']"> </span>  <img src="img/gif/{{val['countryCode']}}.gif" height="12px" /> <a href="#/app/CountryIps/{{val.country}}/cCode/{{val.countryCode}}" >{{val['country']}} ({{val['numberOfThings']}}) </a> </td>
+								
+							 </tr>
+						  
+						</tbody>
+					  </table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+ 
+ 
+</div>
+
+<!--
+<div class="panel hbox hbox-auto-xs no-border">
+        <div class="col wrapper auto">
+         <div>
+					<datamap
+							map="map"
+							plugins="mapPlugins"
+							plugin-data="mapPluginData"
+							on-click="updateActiveGeography">
+					</datamap>
+
+		</div>			
+        </div>
+        <div class="col wrapper-lg w-xl bg-light dk r-r">
+          <h4 class="font-thin m-t-none m-b"> Top few Attacks</h4>
+          
+          <p class="text-muted">Following are the  of Countries that are doing most number of malware attacks. Attacks are the next
+step after Probing and connection.
+Vulnerable services and targeted
+systems are exploited in this process.. </p>
+
+	 <div class="table-responsive">
+      <table class="table b-t b-light">
+        <thead>
+        </thead>
+        <tbody>
+			<tr ng-repeat="val in countries">
+                 <td ng-class="{fst:val.color == '#1f77b4', sec:val.color == '#ff4040',third:val.color == '#1f77b4', forth:val.color == '#ff4040',fifth:val.color == '#1f77b4', six:val.color == '#ff4040',seven:val.color == '#1f77b4', eight:val.color == '#ff4040',}"><span ng-show="!val['country']">-</span>{{val['country']}} ({{val['numberOfThings']}})</td>
+                
+             </tr>
+          
+        </tbody>
+      </table>
+    </div>
+
+        </div>
+ </div>			
+	-->
+
+

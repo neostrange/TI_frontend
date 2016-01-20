@@ -1,0 +1,89 @@
+<div ng-include="'views/dateBar.html'"> </div>
+
+<div class="wrapper-md">
+<div class="row">	
+	<div class="col-lg-9 col-sm-12 col-xs-12 col-md-12">
+          <highchart id="chart1" config="chartConfig" class="span9" ></highchart>
+    </div>
+	<div class="col-sm-12 col-xs-12 col-lg-3 col-md-12">
+      <div class="panel wrapper">
+	<p >Following is the list of IP addresses
+		which are found to be launching
+		highest number of Web attacks. It
+		is recommended to block these IP
+		addresses to secure your system
+		from such attacks.</p>  
+	</div>
+	</div>
+</div>
+</div>
+<!--
+ <div class="panel hbox hbox-auto-xs no-border">
+        <div class="col wrapper auto">
+         <div class="panel panel-default">
+    <div class="panel-heading">
+      Detail
+    </div>
+    
+    <div class="table-responsive">
+      <table class="table table-striped b-t b-light">
+        <thead>
+          <tr>
+            
+              <th> IP Addresses</th>
+                 <th> Country</th>
+                 <th> Total</th>
+           
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="val in data | orderBy:'-hits' | limitTo:'10'">
+                 <td><span ng-show="!val['remote_host']">-</span>{{val['remote_host']}}</td>
+                 <td><span ng-show="!val['remote_country']">-</span>{{val['remote_country']}}</td>
+                 <td><span ng-show="!val['hits']">-</span>{{val['hits']}}</td>
+             </tr>
+          
+        </tbody>
+      </table>
+    </div>
+    
+  </div>
+		  
+        </div>
+        <div class="col wrapper-lg w-lg bg-light dk r-r">
+          
+        <p >Following is the list of IP addresses
+which are found to be launching
+highest number of Web attacks. It
+is recommended to block these IP
+addresses to secure your system
+from such attacks.</p>  
+		
+		</div>
+          
+        
+ </div>				
+	
+
+
+<!--
+<div class="wrapper-md">
+  <div class="row">
+  
+  <div class="wrapper-sm">
+          
+			<p class="m-n font-thin h4">Following is the list of IP addresses
+which are found to be launching
+highest number of Web attacks. It
+is recommended to block these IP
+addresses to secure your system
+from such attacks.</p>
+			</div>
+            <div class="line line-lg b-b b-light"></div>
+            
+    </div>
+  
+ 
+</div>					
+					
+	-->			

@@ -1,0 +1,53 @@
+<div ng-include="'views/toggleBar.html'"></div>
+								
+		<div id="wrapper" >
+		
+		
+			<!-- Sidebar -->
+			<div ng-include="'views/bruteBar.html'"></div>
+			<!-- /#sidebar-wrapper -->
+
+			<!-- Page Content -->
+			<div id="page-content-wrapper">
+				<!--<div class="header">
+					<a href="" class="btn btn-default" id="menu-toggle"><i class="fa fa-list"></i></a>
+				</div>-->
+				<div class="sub-container">
+					<div class="container-fluid">
+						<div class="row">
+						
+						<div class="row">
+	<h1 class="main_heading">{{message}}</h1>
+</div>
+<div class="exec_summary">
+<p>The following figures present
+the distribution of attack types
+originating from top three countries
+hosting the attacking IP addresses.
+It is quite evident from the following
+figures that attack type distributions
+of each originating/hosting country
+is very different from the other. These
+figures reflect the fact that attack
+types, motivation of attackers, and
+sophistication of attacks are different
+in different regions of the World.<p>
+</div>
+
+<!--<canvas id="pie" class="chart chart-pie" data="pieChart.attacks" labels="pieChart.countries" options="pieChart.optionList"></canvas> -->
+
+<highchart id="chart1" config="chartConfig1" class="span9" ></highchart>
+
+<highchart id="chart2" config="chartConfig2" class="span9" ></highchart>
+
+<highchart id="chart3" config="chartConfig3" class="span9" ></highchart>
+
+						
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /#page-content-wrapper -->
+
+		</div>  <!-- wrrapper end  div-->

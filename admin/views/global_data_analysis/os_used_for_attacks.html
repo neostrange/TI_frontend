@@ -1,0 +1,48 @@
+<div ng-include="'views/toggleBar.html'"></div>
+								
+		<div id="wrapper" >
+		
+		
+			<!-- Sidebar -->
+			<div ng-include="'views/bruteBar.html'"></div>
+			<!-- /#sidebar-wrapper -->
+
+			<!-- Page Content -->
+			<div id="page-content-wrapper">
+				<!--<div class="header">
+					<a href="" class="btn btn-default" id="menu-toggle"><i class="fa fa-list"></i></a>
+				</div>-->
+				<div class="sub-container">
+					<div class="container-fluid">
+						<div class="row">
+						
+						<div class="row">
+	<h1 class="main_heading">{{message}}</h1>
+</div>
+<div class="exec_summary">
+	<p>Following is the list of Operating Systems which were used by attackers.</p>
+</div>
+<div class="med_text">
+    <table ng-show="data.length>0">
+         <tbody>
+             <tr>
+                 <th> Operating System</th>
+                 <th> Attempts</th>
+             </tr>
+             <tr ng-repeat="val in data">
+                 <td><span ng-show="!val['os']">-</span>{{val['os']}}</td>
+                 <td><span ng-show="!val['counts']">-</span>{{val['counts']}}</td>
+             </tr>
+         </tbody>
+     </table>
+</div>
+
+						
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /#page-content-wrapper -->
+
+		</div>  <!-- wrrapper end  div-->

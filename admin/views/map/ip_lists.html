@@ -1,0 +1,56 @@
+<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n font-thin h3">  Attack </h1>
+</div>
+<div class="wrapper-md">
+
+<div class="row"> 
+ <div class="col-lg-8 col-sm-12 col-xs-12 col-md-12">
+         <div class="panel panel-default">
+				<div class="panel-heading">
+				  Detail
+				</div>
+	          <div class="panel panel-default">
+				<div class="table-responsive">
+				  <table class="table table-striped b-t b-light">
+					<thead>
+					  <tr>
+						
+							<th> IP Addressed</th>
+							 <th> Country</th>
+							 <th> City </th>
+							 <th> Port </th>
+							 <th> Protocol</th>
+							 <th> DateTime </th>
+							 
+							 
+						
+					  </tr>
+					</thead>
+					<tbody>
+						 <tr ng-repeat="val in ips">
+							 <td>{{val['_source']['srcIP']}}</td>
+							 <td>{{val['_source']['origin']['srcCountry']}}</td>
+							<td>{{val['_source']['origin']['city']}}</td>								 
+							<td>{{val['_source']['dstPort']}}</td>
+							<td>{{val['_source']['protocol']}}</td>
+							<td>{{val['_source']['dateTime']}}</td>
+							
+						 </tr>
+					</tbody>
+				  </table>
+				</div>
+				</div>
+				</div>
+          
+        </div>
+		
+       <div class="col-sm-12 col-xs-12 col-lg-4 col-md-12">
+          <h4 class="font-thin m-t-none m-b"> Attacks </h4>
+          <p class="text-muted"> 
+			This IP is to be involved in Malacious activity: </p>
+        </div>
+   </div>	
+
+</div>   
+
+

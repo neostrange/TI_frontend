@@ -1,0 +1,63 @@
+<div ng-include="'views/dateBar.html'"> </div>
+
+<div class="wrapper-md">
+	<div class="row">	
+		<div class="col-lg-9 col-sm-12 col-xs-12 col-md-12">
+			  <highchart id="chart1" config="chartConfig" class="span9" ></highchart>
+		</div>
+	
+	<div class="col-lg-3 col-md-12 col-xs-12 col-md-12">
+		<div class="panel wrapper">
+			<h4> Sip Option Flooding Attacks </h4>
+			<p>Flooding with OPTIONS messages (which have a structure similar to INVITE message) consumes more resources, the longer
+			an attack lasts.</br>
+			Following top IPs are found to be involved in OPTIONS flooding </p>
+		</div>
+	</div>
+	</div>
+
+
+<!--
+ <div class="panel hbox hbox-auto-xs no-border">
+        <div class="col wrapper auto">
+          <div class="panel panel-default">
+    <div class="panel-heading">
+      Detail
+    </div>
+    <div class="table-responsive">
+      <table class="table table-striped b-t b-light">
+        <thead>
+          <tr>
+            
+                 <th> IP Addresses</th>
+                 <th> Country</th>
+                 <th> Total</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+			<tr ng-repeat="val in data">
+                 <td>{{val['key_as_string']}}</td>
+				 <td>{{val['remote_country']['buckets'][0]['key'] }}</td>	
+				<td>{{val['doc_count']}}</td>
+                
+             </tr>
+          
+        </tbody>
+      </table>
+    </div>
+    
+  </div>
+        </div>
+        <div class="col wrapper-lg w-lg bg-light dk r-r">
+          <h4 class="font-thin m-t-none m-b"> SIP Option Flooding Attacks </h4>
+          
+          <p class="text-muted"> Flooding with OPTIONS messages (which have a structure similar to INVITE message) consumes more resources, the longer
+			an attack lasts.</br>
+Following top IPs are found to be involved in OPTIONS flooding: </p>
+        </div>
+   </div>	
+-->
+</div>   
+
+

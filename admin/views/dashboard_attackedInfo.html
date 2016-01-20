@@ -1,0 +1,224 @@
+<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n font-thin h3">  Attack </h1>
+</div>
+<div class="wrapper-md">
+
+<div class="row"> 
+	<div class="col-sm-12 col-xs-12 col-md-12">   
+          <div class="panel panel-default" ng-show="type == 'malware'">
+			<div class="panel-heading">
+			  Detail
+			</div>
+			<div class="table-responsive">
+			  <table class="table b-light">
+				<thead>
+				  <tr>
+						 <th > Malware name </th>
+						 <th> Malware hash</th>
+						 <th> Src IP</th>
+						 <th> Country </th>
+						<th> Destination Port </th> 
+						<th> Destination IP </th> 
+						<th> Protocol </th>
+						 <th> DateTime</th>
+					
+				  </tr>
+				</thead>
+				<tbody>
+					 <tr ng-repeat="val in data">
+						 <td><span ng-show="!val['malware_name']">-</span>{{val['malware_name']}}</td>
+						 <td><span ng-show="!val['md5Hash']">-</span>{{val['md5Hash']}}</td>
+						 <td><span ng-show="!val['srcIP']">-</span> <a href="#/app/CountryIps/{{val['origin']['srcCountry']}}/ip/{{val['srcIP']}}" >{{val['srcIP']}} </a> </td>
+						 <td><span ng-show="!val['origin']['srcCountry']">-</span>{{val['origin']['srcCountry']}}</td>
+						<td>{{val['dstPort']}}</td>
+						<td>{{val['dstIP']}}</td>						
+						<td><span ng-show="!val['protocol']">-</span>{{val['protocol']}}</td>
+						 <td><span ng-show="!val['date_time']">-</span>{{val['dateTime']}}</td>
+					 </tr>
+				</tbody>
+			  </table>
+			</div>
+		</div>
+		
+		 <div class="panel panel-default" ng-show="type == 'probing'">
+			<div class="panel-heading">
+			  Detail
+			</div>
+			<div class="table-responsive">
+			  <table class="table b-light">
+				<thead>
+				  <tr>
+						 
+						 <th> Src IP</th>
+						 <th> Country </th>
+						<th> Destination Port </th> 
+						<th> Destination IP </th> 
+						<th> Protocol </th>
+						 <th> DateTime</th>
+					
+				  </tr>
+				</thead>
+				<tbody>
+					 <tr ng-repeat="val in data">
+						
+						 <td><span ng-show="!val['srcIP']">-</span> <a href="#/app/CountryIps/{{val['origin']['srcCountry']}}/ip/{{val['srcIP']}}" >{{val['srcIP']}} </a> </td>
+						 <td><span ng-show="!val['origin']['srcCountry']">-</span>{{val['origin']['srcCountry']}}</td>
+						<td>{{val['dstPort']}}</td>
+						<td>{{val['dstIP']}}</td>						
+						<td><span ng-show="!val['protocol']">-</span>{{val['protocol']}}</td>
+						 <td><span ng-show="!val['date_time']">-</span>{{val['dateTime']}}</td>
+					 </tr>
+				</tbody>
+			  </table>
+			</div>
+		</div>
+		
+		
+		 <div class="panel panel-default" ng-show="type == 'sip'">
+			<div class="panel-heading">
+			  Detail
+			</div>
+			<div class="table-responsive">
+			  <table class="table b-light">
+				<thead>
+				  <tr>
+						 <th >SIP  </th>
+						
+						 <th> Src IP</th>
+						 <th> Country </th>
+						<th> Destination Port </th> 
+						<th> Destination IP </th> 
+						<th> Protocol </th>
+						 <th> DateTime</th>
+					
+				  </tr>
+				</thead>
+				<tbody>
+					 <tr ng-repeat="val in data">
+						 <td>{{val['id']}}</td>
+					
+						 <td><span ng-show="!val['srcIP']">-</span> <a href="#/app/CountryIps/{{val['origin']['srcCountry']}}/ip/{{val['srcIP']}}" >{{val['srcIP']}} </a> </td>
+						 <td><span ng-show="!val['origin']['srcCountry']">-</span>{{val['origin']['srcCountry']}}</td>
+						<td>{{val['dstPort']}}</td>
+						<td>{{val['dstIP']}}</td>						
+						<td><span ng-show="!val['protocol']">-</span>{{val['protocol']}}</td>
+						 <td><span ng-show="!val['date_time']">-</span>{{val['dateTime']}}</td>
+					 </tr>
+				</tbody>
+			  </table>
+			</div>
+		</div>
+		
+		
+		
+		
+		 <div class="panel panel-default" ng-show="type == 'ssh'">
+			<div class="panel-heading">
+			  Detail
+			</div>
+			<div class="table-responsive">
+			  <table class="table b-light">
+				<thead>
+				  <tr>
+						 
+						 <th> Src IP</th>
+						 <th> Country </th>
+						<th> Destination Port </th> 
+						<th> Destination IP </th> 
+						<th> Protocol </th>
+						 <th> DateTime</th>
+					
+				  </tr>
+				</thead>
+				<tbody>
+					 <tr ng-repeat="val in data">
+						
+						 <td><span ng-show="!val['srcIP']">-</span> <a href="#/app/CountryIps/{{val['origin']['srcCountry']}}/ip/{{val['srcIP']}}" >{{val['srcIP']}} </a> </td>
+						 <td><span ng-show="!val['origin']['srcCountry']">-</span>{{val['origin']['srcCountry']}}</td>
+						<td>{{val['dstPort']}}</td>
+						<td>{{val['dstIP']}}</td>						
+						<td><span ng-show="!val['protocol']">-</span>{{val['protocol']}}</td>
+						 <td><span ng-show="!val['date_time']">-</span>{{val['dateTime']}}</td>
+					 </tr>
+				</tbody>
+			  </table>
+			</div>
+		</div>
+		
+		
+		 <div class="panel panel-default" ng-show="type == 'web'">
+			<div class="panel-heading">
+			  Detail
+			</div>
+			<div class="table-responsive">
+			  <table class="table b-light">
+				<thead>
+				  <tr>
+						 <th > Malware name </th>
+						
+						 <th> Src IP</th>
+						 <th> Country </th>
+						<th> Destination Port </th> 
+						<th> Destination IP </th> 
+						<th> Protocol </th>
+						 <th> DateTime</th>
+					
+				  </tr>
+				</thead>
+				<tbody>
+					 <tr ng-repeat="val in data">
+						 <td><span ng-show="!val['userAgent']">-</span>{{val['userAgent']}}</td>
+						 <td><span ng-show="!val['srcIP']">-</span> <a href="#/app/CountryIps/{{val['origin']['srcCountry']}}/ip/{{val['srcIP']}}" >{{val['srcIP']}} </a> </td>
+						 <td><span ng-show="!val['origin']['srcCountry']">-</span>{{val['origin']['srcCountry']}}</td>
+						<td>{{val['dstPort']}}</td>
+						<td>{{val['dstIP']}}</td>						
+						<td><span ng-show="!val['protocol']">-</span>{{val['protocol']}}</td>
+						 <td><span ng-show="!val['date_time']">-</span>{{val['dateTime']}}</td>
+					 </tr>
+				</tbody>
+			  </table>
+			</div>
+		</div>
+		
+		 <div class="panel panel-default" ng-show="type == 'db'">
+			<div class="panel-heading">
+			  Detail
+			</div>
+			<div class="table-responsive">
+			  <table class="table b-light">
+				<thead>
+				  <tr>
+						 
+						 <th> Src IP</th>
+						 <th> Country </th>
+						<th> Destination Port </th> 
+						<th> Destination IP </th> 
+						<th> Protocol </th>
+						 <th> DateTime</th>
+					
+				  </tr>
+				</thead>
+				<tbody>
+					 <tr ng-repeat="val in data">
+						 
+						 <td><span ng-show="!val['srcIP']">-</span> <a href="#/app/CountryIps/{{val['origin']['srcCountry']}}/ip/{{val['srcIP']}}" >{{val['srcIP']}} </a> </td>
+						 <td><span ng-show="!val['origin']['srcCountry']">-</span>{{val['origin']['srcCountry']}}</td>
+						<td>{{val['dstPort']}}</td>
+						<td>{{val['dstIP']}}</td>						
+						<td><span ng-show="!val['protocol']">-</span>{{val['protocol']}}</td>
+						 <td><span ng-show="!val['date_time']">-</span>{{val['dateTime']}}</td>
+					 </tr>
+				</tbody>
+			  </table>
+			</div>
+		</div>
+		
+		
+    </div>
+		
+     
+   </div>	
+
+</div>   
+
+

@@ -1,0 +1,22 @@
+{
+  "rating": "8.4",
+  "categorization": [
+    {
+      "date":"June-12,2015",
+      "category":"Policy Voilation"
+    },
+    {
+      "date":"June-13,2015 ",
+      "category":"Bots"
+    },
+    {
+      "date":"June-14,2015",
+      "category": "Scanning Host"
+    },
+    {
+      "date":"June-15,2015",
+      "category":"Malware IP"
+    }
+  ]
+
+}

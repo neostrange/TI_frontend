@@ -1,0 +1,404 @@
+<div ng-include="'views/dateBar.html'"> </div>
+<ul class="breadcrumb">
+		<li><a href="#/app/dashboard-v1"> Dashboard </a></li>                   
+		 <li><a href="#/app/globalThreat"> GlobalThreat </a></li>  
+		<li class="active"><a href="" ng-click = "reload()"> Attack Types </a></li>
+</ul>
+
+<div class="wrapper-md" ng-controller="DetailCountryIpsCtrl">
+<div class="panel hbox hbox-auto-xs no-border"> 
+
+<div class="col wrapper-sm w-lg bg-auto dk r-r">
+					<h5 class="font-bold m-l-sm" ><a href="" ng-click = "reload()"> Attack Types </a> </h5>
+					 
+      <ul class="nav nav-pills nav-stacked nav-sm">
+        <li ng-repeat="attack in country['attackTypes']" ui-sref-active="active" active-link='active' class="sub_sec" ng-click ="changeView(attack.exploit)">
+			<a href="" ng-if="(attack.exploit !='Dos_Attacks') && (attack.exploit !='Possible_Compromise') && (attack.exploit !='Network_Exploit_Attempt') && (attack.exploit !='Policy_Voilation')">
+							
+				<span class="badge bg-info pull-right">{{attack.hits | getPercent:country.attacks}}</span>
+				{{attack.exploit}}
+				</a>
+				
+				<a href="" ng-if="(attack.exploit =='DOS_Attacks') || (attack.exploit =='Possible_Compromise') || (attack.exploit =='Network_Exploit_Attempt') || (attack.exploit =='Policy_Voilation')">
+				
+				<span class="badge bg-info pull-right">{{attack.hits | getPercent:country.attacks}}</span>
+					{{attack.exploit}}
+				</a>
+        </li>
+      </ul>
+   	
+ </div>
+
+
+
+        <div class="col wrapper-sm auto" ng-if="view == 'country'">
+				<div class="row m-t-xs m-r-none m-b-none m-l-n">
+					<div class="col-sm-6">
+						<span class="font-bold label bg-danger font-14">Attacks: {{country.attacks}}</span>
+					   
+					</div>
+					<div class="col-sm-6">
+						
+					    <span class="font-bold label bg-success font-14 pull-right"> {{countryName}} <img src="img/gif/{{flag}}.gif" height="12px" /></span>
+					</div>
+				</div>
+		
+				
+         <div  class="panel panel-default" style="margin: 8px 0 0 0px;">
+				<div class="panel-body">
+					 <leaflet defaults="defaults" center="center" markers="markers" layers="layers" width="100%" height="480px"></leaflet>
+				</div>
+
+		</div>
+							
+		  
+        </div>
+		
+		<!-- Reconnense -->
+		<div class="panel hbox hbox-auto-sm no-border" ng-if="view == 'rec'">
+		
+       <div class="col wrapper-sm w-xxl">
+			<div class="row">
+				<div class="col-sm-6">
+		
+				</div>
+				<div class="col-sm-6">
+					<span class="font-bold label bg-success font-14 pull-right"> {{countryName}} <img src="img/gif/{{flag}}.gif" height="12px" /></span>
+				</div>
+			</div>	
+          	 <leaflet defaults="defaults" layers="layers" center="center" markers="markers" width="100%" height="380px"></leaflet>
+		</div>
+        <div class="col wrapper-sm w-md">
+          <h4 class="font-thin m-t-none m-b">  </h4>
+          <h3> connection <sup> 12 </sup></h3>
+          <p class="text-muted">  </p>
+		</div>
+		</div>			
+		
+		<!-- SSH -->
+		<div class="panel hbox hbox-auto-md no-border" ng-if="view == 'ssh'">
+        
+		<div class="col wrapper-sm wrapper-md w-xxl">
+			<div class="row">
+					<div class="col-sm-6">
+						
+					   
+					</div>
+					<div class="col-sm-6">
+						
+					    <span class="font-bold label bg-success font-14 pull-right">{{countryName}} <img src="img/gif/{{flag}}.gif" height="12px" /></span>
+					</div>			 
+			</div>
+			
+			<leaflet layers="layers" center="center" markers="markers" width="100%" height="350px"></leaflet>
+          	 
+        </div>
+		
+		  <div class="col wrapper-sm w-md">
+			    
+           <!-- <h4 class="font-thin m-t-none m-b-md font-bold"> SSH Summary</h4>  -->
+          
+			 <div class="panel panel-default">
+				<div class="panel-heading font-bold">
+				  SSH Attack Summary  
+				</div>
+			 
+			  <table class="table">
+				<thead>
+					<tr>
+            
+					<th> Attack Name </th>
+					<th> No. of Attacks</th>
+					</tr>
+				</thead>
+				<tbody ng-repeat ="val in ssh">
+					<tr>
+						 <td> {{val['category']}} </td>
+						 <td> {{val['hits']}} </td>
+					 </tr>
+				 
+				</tbody>
+			  </table>
+			
+			
+			
+		</div>
+	 </div>
+	</div>
+	
+	    <div class="panel wrapper" ng-if="view == 'ssh'">
+        <div class="row">
+          <div class="col-md-6 b-r b-light no-border-xs" ng-show="inputs.length >=1">
+			<highchart id="chart1" config="inputConfig" class="span9" ></highchart>			
+         </div>
+          <div class="col-md-6">            
+			<highchart id="chart1" config="userNameConfig" class="span9" ></highchart>            
+          </div>
+        </div>
+		</div>
+	  
+	   <div class="panel wrapper" ng-if="view == 'ssh'">
+        <div class="row">
+          <div class="col-md-6 b-r b-light no-border-xs">
+            
+			<highchart id="chart1" config="passwordConfig" class="span9" ></highchart>
+			
+            </div>
+          
+          <div class="col-md-6">            
+				<highchart id="chart1" config="combinationConfig" class="span9" ></highchart>
+                         
+          </div>
+        </div>
+      </div>
+	  
+	  <!--
+	   <div class="panel wrapper" ng-if="view == 'ssh'">
+        <div class="row">
+          <div class="col-lg-12 col-md-12 b-r b-light no-border-xs">
+            
+			<highchart id="chart1" config="allConfig" class="span9" ></highchart>
+			
+            </div>
+          
+         
+        </div>
+      </div>
+	  -->
+	
+		<!-- db -->
+		<div class="panel hbox hbox-auto-md no-border" ng-if="view == 'db'">
+        <div class="col wrapper-sm w-xxl">
+			<div class="row">
+					<div class="col-sm-6">
+						<span class="font-bold label bg-danger font-14">Attacks: {{db_summary['Attack']['doc_count']}}</span>
+					   
+					</div>
+					<div class="col-sm-6">
+					    <span class="font-bold label bg-success font-14 pull-right"> {{countryName}} <img src="img/16/{{countryName}}-flag.png" height="12px" /></span>
+					</div>
+				</div>	
+          	
+			<leaflet defaults="defaults" layers="layers" center="center" markers="markers" width="100%" height="400px"></leaflet>
+        </div>
+        <div class="col wrapper-sm w-md bg-auto dk r-r">
+			 <div class="panel panel-default">
+				<div class="panel-heading font-bold">
+				  Database Attacks Summary 
+				</div>
+    
+			<div class="table-responsive">
+			  <table class="table">
+				<thead>
+				 
+				</thead>
+				<tbody ng-repeat ="val in db">
+					<tr>
+						 <td> {{val['category']}} </td>
+						 <td> {{val['hits']}} </td>
+					 </tr>
+				 
+				</tbody>
+			  </table>
+			</div>
+    
+		</div>
+		
+        </div>
+			
+			
+		</div>	
+		
+		<!-- db -->
+		<div class="panel hbox hbox-auto-md no-border" ng-if="view == 'aea'">
+        <div class="col wrapper-sm  w-xxl auto">
+			<div class="row">
+					<div class="col-sm-6">
+						<span class="font-bold label bg-danger font-14">Attacks: {{web['Attacks']['doc_count'] }}</span>
+					   
+					</div>
+					<div class="col-sm-6">
+						
+					    <span class="font-bold label bg-success font-14 pull-right">{{countryName}} <img src="img/gif/{{flag}}.gif" height="12px" /></span>
+					</div>
+				</div>	
+          	 <leaflet defaults="defaults" layers="layers" center="center" markers="markers" width="100%" height="500px"></leaflet>
+        </div>
+		
+		<div class="col wrapper-sm w-md bg-auto dk r-r">
+			 <div class="panel panel-default">
+				<div class="panel-heading font-bold">
+				  WEB Based Attacks
+				</div>
+				<div class="table-responsive">
+			  <table class="table">
+				<thead>
+				</thead>
+				<tbody ng-repeat ="val in web">
+					<tr>
+						 <td> {{val['category']}} </td>
+						 <td> {{val['hits']}} </td>
+					 </tr>
+				 
+				</tbody>
+			  </table>
+				</div>
+			</div>
+			
+			<div class="panel panel-default">
+				<div class="panel-heading font-bold">
+				  SIP Based Attacks
+				</div>
+				<div class="table-responsive">
+			  <table class="table">
+				<thead>
+				</thead>
+				<tbody ng-repeat ="val in sip">
+					<tr>
+						 <td> {{val['category']}} </td>
+						 <td> {{val['hits']}} </td>
+					 </tr>
+				 
+				</tbody>
+			  </table>
+			</div>
+    
+		</div>
+		
+        </div>
+		
+		</div>		
+
+			
+			<!-- virus MAp-->
+			
+		<div class="panel hbox hbox-auto-md no-border" ng-if="view == 'virusMap'">
+        <div class="col wrapper-sm w-xxl">
+			<div class="row">
+					<div class="col-sm-6">
+						
+					</div>
+					<div class="col-sm-6">
+					<span class="font-bold label bg-success font-14 pull-right">{{countryName}}  <img src="img/gif/{{flag}}.gif" height="12px" /></span>
+					</div>
+			</div>	
+			<div ng-show="$parent.showMap === true;">	
+          	 <leaflet defaults="defaults" layers="layers" center="center" markers="markers" width="100%" height="400px"></leaflet>
+			</div>
+			
+			
+			<div ng-show="$parent.showPie === true;">
+			<highchart id="chart1" config="chartConfig" class="span9" ></highchart>
+			</div>
+			
+			<div ng-show="$parent.showPie === true;">
+			<account-details width="500" height="400" vals = "vals"></account-details>
+			</div>
+		</div>	
+		
+			<div class="col wrapper-sm w-md bg-auto dk r-r">
+			<div class="m-xs">
+			 <button class="btn btn-sm btn-info" ng-click="showMaps()" ng-show="$parent.showPie === true;"> View MAP  </button>
+			 <button class="btn btn-sm btn-info" ng-click="showGraphs()" ng-show="$parent.showMap === true;"> View Graph  </button>
+			</div>
+			 <div class="panel panel-default" ng-show="$parent.showPie === true;">
+				<div class="panel-heading font-bold">
+				  Hashes 
+				</div>
+				<div class="table-responsive">
+			  <table class="table" ng-show="hashes[0]">
+				<thead>
+				 <th> Hash </th>
+				 <th> MalwareFamily </th>
+				 <th> Score </th>
+				 
+				</thead>
+				<tbody>
+					<tr ng-repeat="hash in hashes track by $index">
+						<td><a href="#/app/country/{{countryName}}/cCode/{{stateCode}}/hash/{{hash['hash']}}/inbox/signatures" >{{hash['hash']}} </a></td>
+						<td> {{hash['malScore']}} </td>
+						<td> {{hash['malFamily']}} </td>
+					</tr>
+				</tbody>
+			  </table>
+				</div>	
+			
+    
+		</div>
+		
+        </div>
+			
+			
+		</div>		
+		
+			
+		<div class="panel hbox hbox-auto-md no-border" ng-if="view == 'virusMaps'">
+         <div class="col wrapper-sm w-xxl">
+          	 <leaflet defaults="defaults" layers="layers" center="center" markers="markers" width="100%" height="320px"></leaflet>
+        </div>
+		
+        <div class="col wrapper-sm w-md bg-auto dk r-r">
+			 <div class="panel panel-default">
+				<div class="panel-heading font-bold">
+				  Hashes
+				</div>
+    
+			<div class="table-responsive">
+			  <table class="table table-striped b-t b-light">
+				<thead>
+				 
+				</thead>
+				<tbody>
+					<tr ng-repeat="hash in hashes track by $index">
+						<td><a href="#/app/country/{{countryName}}/cCode/{{stateCode}}/hash/{{hash['hash']}}/inbox/signatures" >{{hash['hash']}} </a></td>
+					</tr>
+				</tbody>
+			  </table>
+			</div>
+    
+		</div>
+		
+        </div>
+		
+	
+      </div>
+		
+	
+		
+		
+       
+ </div>			
+	 <div class="col">
+    <div ui-view ></div>
+  </div>		
+</div>
+
+
+<!--
+<div ng-include="'views/toggleBar.html'"></div>
+								
+		<div id="wrapper" >
+		
+		
+			
+			<div ng-include="'views/menuBars/countryBar.html'"></div>
+			
+
+			
+			<div id="page-content-wrapper">
+				
+				<div class="sub-container">
+					<div class="container-fluid">
+						<div class="row">
+						
+						 <leaflet defaults="defaults" center="center" markers="markers" layers="layers" width="100%" height="480px"></leaflet>
+						
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			
+
+		</div>  
+-->

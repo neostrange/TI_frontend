@@ -1,0 +1,46 @@
+
+<div ng-include="'views/toggleBar.html'"></div>
+								
+		<div id="wrapper">
+		
+		
+			<!-- Sidebar -->
+				<div id="sidebar-wrapper" class="side_margin">
+					
+				<div class="upfront_sec">
+				<h2>8769<sup>Attacks</sup></h2>
+				<h3><img src="../Triam sep/images/16/Pakistan-flag.png">  SSH Attacks</h3>
+				
+				<h3>Probing IP <span>{{ssh['ssh_attacks']['probing_ip']}}</span> </h3> 
+				<h3>Sessions <span>{{ssh['ssh_attacks']['sessions']}}</span></h3>
+				
+				<h3>Success <span>{{ssh['ssh_attacks']['success'] }}</span></h3>
+				<h3>User Names <span>{{ssh['ssh_attacks']['usernames'] }}</span></h3>
+				<h3>Passwords <span>{{ssh['ssh_attacks']['passwords'] }}</span></h3>
+				<h3>Inputs <span>{{ssh['ssh_attacks']['inputs'] }}</span></h3>
+				<h3>Downloads <span>{{ssh['ssh_attacks']['downloads'] }}</span></h3>
+				
+				</div>
+				
+				</div>
+				
+			<!-- /#sidebar-wrapper -->
+
+			<!-- Page Content -->
+			<div id="page-content-wrapper">
+				<!--<div class="header">
+					<a href="" class="btn btn-default" id="menu-toggle"><i class="fa fa-list"></i></a>
+				</div>-->
+				<div class="sub-container">
+					<div class="container-fluid">
+						
+						 <leaflet defaults="defaults" center="center" markers="markers" width="100%" height="370px"></leaflet>
+						
+							
+						
+					</div>
+				</div>
+			</div>
+			<!-- /#page-content-wrapper -->
+
+		</div>  <!-- wrrapper end  div-->

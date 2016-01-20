@@ -1,0 +1,94 @@
+<div ng-include="'views/dateBar.html'"> </div>
+
+
+
+<div class="wrapper-md">
+	<div class="row">	
+		<div class="col-lg-9 col-md-12">
+			<highchart id="chart1" config="allConfig" class="span9" ></highchart>
+		</div>
+		
+		<div class="col-lg-3 col-md-12">
+			 <div class="panel wrapper">
+				<h4 class="font-thin m-t-none m-b">Most Usernames Used </h4>
+				<p > Lists shows the most user attempts seen in Pakistan for SSH. The <b>root</b> username was
+				tried the most number of times. It is strongly
+				recommended to avoid such user names
+				or use complex user names or two factor
+				authentications</p> 
+			</div>
+		</div>
+	</div>
+
+
+
+<!--
+ <div class="panel hbox hbox-auto-xs no-border">
+        <div class="col wrapper auto">
+		<highchart id="chart1" config="allConfig" class="span9" ></highchart>
+        <!--
+		<div class="panel panel-default">
+			<div class="panel-heading">
+			  Detail
+			</div>
+    
+			<div class="table-responsive">
+			  <table class="table table-striped b-t b-light">
+				<thead>
+				  <tr>
+					
+					  <th> UserNames</th>
+						 <th> Attempts</th>
+						
+				   
+				  </tr>
+				</thead>
+				<tbody>
+				  <tr ng-repeat="val in data">
+						 <td><span ng-show="!val['username']">-</span>{{val['username']}}</td>
+						 <td><span ng-show="!val['hits']">-</span>{{val['hits']}}</td>
+					 </tr>
+				  
+				</tbody>
+			  </table>
+			</div>
+    
+		</div>
+		 
+        </div>
+        <div class="col wrapper-lg w-lg bg-light dk r-r">
+          
+        <p >Below table lists the most user attempts seen
+in Pakistan for SSH. The <b>root</b> username was
+tried the most number of times. It is strongly
+recommended to avoid such user names
+or use complex user names or two factor
+authentications</p>  
+		
+		</div>
+          
+        
+ </div>				
+	 -->
+</div>
+
+<!--
+<div class="wrapper-md">
+  <div class="row">
+  
+  <div class="wrapper-sm">
+<p class="m-n font-thin h4">Below table lists the most user attempts seen
+in Pakistan for SSH. The <b>root</b> username was
+tried the most number of times. It is strongly
+recommended to avoid such user names
+or use complex user names or two factor
+authentications.</p>
+	</div>
+    <div class="line line-lg b-b b-light"></div>
+            
+ </div>
+  
+ 
+</div>	
+
+-->

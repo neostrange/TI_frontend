@@ -1,0 +1,149 @@
+<div class="bg-light lter b-b wrapper-sm">
+  <h1 class="m-n font-thin h3">  Threat Analysis  </h1>
+</div>
+<ul class="breadcrumb">
+                    <li><a ui-sref="app.dashboard-v1"> Dashboard</a></li>                    
+					<li><a href="#/app/globalThreat"> GlobalThreat </a></li>  
+					<li ><a href="" ng-click ="reload()"> Attack Types </a></li>
+					<li class="active">IP History</li>
+</ul>
+	<div class="wrapper-md">
+	<div class="panel hbox hbox-auto-xs no-border">
+
+			<div class="col wrapper-sm w-md bg-auto dk r-r">	
+				
+			<div class="upfront_sec">
+					<h2 class="head">Analysis Result for:</h2>
+				
+					<p>   <span class="ipAddress"> {{ipAddress}} <span></p>
+					<p> <span class="cityName">{{country.city}}</span> <span class="countryName"><img src="img/gif/{{country.srcCountryCode}}.gif"> <span>{{country.srcCountry}} </span>  </p>  
+					
+					
+			</div>
+			<div class="upfront_sec activeIP">	
+					<!--<img src="img/logo.png" class="logo_main" style="float: left; margin:10px 5px 0 5px; width:18px;" /> -->
+					<div ng-show = "analysis.activity == 'Active'">
+					 <h2><i class="fa fa-life-ring fa-3"></i>  {{analysis.activity}} </h2>
+					</div>
+					
+					<div ng-show = "analysis.activity == 'Hibernate'">
+					 <h2><i class="glyphicon glyphicon-off"></i>  {{analysis.activity}} </h2>
+					</div>
+					
+					<div ng-show = "analysis.activity == 'Sleep'">
+					 <h2><i class="glyphicon glyphicon-off"></i>  {{analysis.activity}} </h2>
+					</div>
+					
+					<div ng-show = "analysis.activity == 'Inactive'">
+					 <h2><i class="glyphicon glyphicon-off"></i>  Previously Malacious </h2>
+					</div>	
+					
+					<hr class="hr">
+					<h6>First seen <span>{{analysis.firstSeen}}</span> </h6> 
+					<h6>Last seen <span>{{analysis.lastSeen}}</span></h6>
+					<!--
+					<h2 >Probing <span class="badge bg-info">{{country.connections}} </span> </h2> 
+					<h2>Attacks <span class="badge bg-danger"> {{country.attacks}}</h2>
+					-->
+					
+	
+			</div>
+		  
+	
+
+				 <div class="row row-lg text-center wrapper-sm">
+				<button class="btn btn-md btn-info"ng-click="viewIPHistory(countryName,ipAddress)" ng-show="showMap"> View IP History  </button>
+				<button class="btn btn-md btn-info" ng-click="viewMap()" ng-show="showIp"> View MAP  </button>
+				</div>
+				
+				
+
+        </div>
+
+	
+        <div class="col wrapper" >
+         <div class="wrapper-md">
+		 <div class="row">
+		 
+		 <div ng-show="showMap" class="col-md-6">
+				<leaflet center="center" layers="layers" markers="markers" width="100%" height="400px" defaults="defaults" ></leaflet>
+		</div>
+		 <div ng-show="showMap" class="col-md-6 ">
+				<div class="panel wrapper">		
+				 <highchart id="chart1" config="barConfig" class="span9" ></highchart>
+				</div>
+		</div>
+		
+		</div>
+			
+
+		<div class="row">
+		 <div ng-show="showMap" class="col-md-12 col-lg-12 col-sm-12">
+				<highchart id="chart1" config="chartConfig" class="span9" ></highchart>
+		</div>
+		
+		</div>	
+		</div>
+		 <div ng-show="showIp" >
+			<div calss="row">
+			<div class="col-xs-6">
+					<div class="panel padder-v item">
+					<div class="font-thin h1 text-center" ng-class="{ 'bg-warning': analysis.riskFactor >=0 || analysis.riskFactor <=2 , 'bg-warning':analysis.riskFactor >=3 || analysis.riskFactor <=4, 'bg-danger':analysis.riskFactor >=5 || analysis.riskFactor <=9}">{{analysis.riskFactor}}</div>
+					<span class="text-muted text-xs">Risk Factor</span>
+                <div class="bottom text-left">
+                  <i class="fa fa-caret-up text-warning m-l-sm"></i>
+                </div>
+              </div>
+            </div>
+			
+			<div class="col-xs-6">
+					<div class="panel padder-v item">
+					<div class="font-thin h1"> {{analysis.confidence}}</div>
+					<span class="text-muted text-xs"> Confidence</span>
+                <div class="bottom text-left">
+                  <i class="fa fa-caret-up text-warning m-l-sm"></i>
+                </div>
+              </div>
+            </div>
+			
+		</div>
+		<div class="clear"> </div>
+
+		   
+	<div class="col-xs-12">
+    <div class="table-responsive">
+      <table class="table table-striped b-t b-light">
+        <thead>
+          <tr>
+            
+               
+                 <th> Date</th>
+				 <th> Category</th>
+          </tr>
+        </thead>
+        <tbody>
+			 <tr ng-repeat="val in data">
+                 <td>{{val['dateTime']}}</td>
+                 <td>{{val['attackType']}}</td>
+				 
+            </tr>
+          
+        </tbody>
+      </table>
+	  </div>
+    </div>
+    </div>
+  </div>
+  
+        </div>
+		
+		
+		
+       
+ </div>			
+	 <div class="col">
+    <div ui-view ></div>
+  </div>		
+</div>
+
+

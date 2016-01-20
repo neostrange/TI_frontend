@@ -1,0 +1,44 @@
+
+<div ng-include="'views/toggleBar.html'"></div>
+								
+		<div id="wrapper">
+		
+		
+			<!-- Sidebar -->
+				<div id="sidebar-wrapper" class="side_margin">
+					
+				<div class="upfront_sec">
+				<h2>8769<sup>Attacks</sup></h2>
+				<h3><img src="../Triam sep/images/16/Pakistan-flag.png">  DataBase Attacks</h3>
+				
+				<h3>Probing IP <span>{{db['database_attacks']['probing_ip']}}</span> </h3> 
+				<h3>Attacks <span>{{db['database_attacks']['attacks']}}</span></h3>
+				
+				<h3>MS sql attacks <span>{{db['database_attacks']['mssql'] }}</span></h3>
+				<h3>My Sql Attacks <span>{{db['database_attacks']['mysql'] }}</span></h3>
+				
+				</div>
+				
+				</div>
+				
+			<!-- /#sidebar-wrapper -->
+
+			<!-- Page Content -->
+			<div id="page-content-wrapper">
+				<!--<div class="header">
+					<a href="" class="btn btn-default" id="menu-toggle"><i class="fa fa-list"></i></a>
+				</div>-->
+				<div class="sub-container">
+					<div class="container-fluid">
+						<div class="row">
+						
+						 <leaflet defaults="defaults" center="center" markers="markers" width="100%" height="480px"></leaflet>
+						
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /#page-content-wrapper -->
+
+		</div>  <!-- wrrapper end  div-->

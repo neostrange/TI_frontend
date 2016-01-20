@@ -1,0 +1,107 @@
+<div class="bg-light lter b-b wrapper-sm">
+  <h1 class="m-n font-thin h3"> Global Threat Analysis - Virus Hashes Information</h1>
+</div>
+<ul class="breadcrumb"  ng-show="ctCode != 'ct' ">
+                    <li><a href="#/app/dashboard-v1"> Dashboard </a></li>                   
+					 <li><a href="#/app/globalThreat"> GlobalThreat </a></li>  
+					<li ><a href="#/app/CountryIps/{{ctName}}/cCode/{{ctCode}}"> Attack Types </a></li>
+					 <li class="active"> Virus Infection</li>	 
+				  
+</ul>
+
+<ul class="breadcrumb" ng-show="ctCode == 'ct' ">
+                    <li><a href="#/app/dashboard-v1"> Dashboard </a></li>
+					<li><a href="#/app/malware/detectedMalwares"> Malware Detected </a></li>					
+					 <li class="active"> Virus Infection</li>	 
+				  
+</ul>
+
+ <div class="wrapper-sm bg">
+      <button class="btn btn-sm btn-default pull-right visible-sm visible-xs" ui-toggle-class="show" target="#email-menu"><i class="fa fa-bars"></i></button>
+ </div>
+ 
+<div class="hbox hbox-auto-xs hbox-auto-sm">
+  <div class="col w-md bg-light dk b-r bg-auto">
+     
+    <div class="wrapper hidden-sm hidden-xs" id="email-menu">
+      <ul class="nav nav-pills nav-stacked nav-sm">
+        <li ng-repeat="na in nav" ui-sref-active="active">
+          <a ui-sref="app.hashMap.list({fold:na})">
+            {{na}}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  
+	
+
+  <div class="col">
+    <div ui-view ></div>
+  </div>
+  </div>
+
+
+
+
+
+
+<!--
+<div class="bg-light lter b-b wrapper-sm">
+  <h1 class="m-n font-thin h3"> Global Threat Analysis  </h1>
+</div>
+<ul class="breadcrumb">
+                    <li><a href="#">Home</a></li>                    
+                    <li >Dashboard</li>
+					 <li >Dashboard</li>
+					  <li class="active">Dashboard</li>	  
+</ul>
+
+<div class="wrapper-md">
+<div class="hbox hbox-auto-xs hbox-auto-sm">
+<button class="btn btn-sm btn-default pull-right visible-sm visible-xs" ui-toggle-class="show" target="#email-menu"><i class="fa fa-bars"></i></button>
+  <div class="col w-md bg-light dk b-r bg-auto">
+    
+    <div class="wrapper hidden-sm hidden-xs" id="email-menu">
+      <ul class="nav nav-pills nav-stacked nav-sm">
+        <li ng-repeat="na in nav" ui-sref-active="active">
+          <a href="">
+            {{na}}
+          </a>
+        </li>
+      </ul>
+     
+    </div>
+  </div>
+  
+		<div class="col wrapper auto" ng-if="list_div == 'virustotal'">
+				
+					<p> Detection Rate </p>
+					<p> {{data['virustotal']['positives']}} /  {{data['virustotal']['total']}}</p>
+					<p> <a ng-click="scans = !scans">Expand</a> </p>
+					<div class="med_text">
+							<table ng-show="scans">
+								<tbody>
+									<tr>
+									 <th> Antivirus </td>
+									 <th> Result </td>
+									  <th> Update </td>
+									</tr>
+								<tr ng-repeat="val in scans">
+									 <td> {{val['virus']}} </td>
+									 <td> {{val['res']}} </td>
+									 <td> {{val['upd']}} </td>
+								 </tr>
+								
+								 
+							 </tbody>
+						 </table>
+						</div>
+							
+		  
+			</div>
+  
+  </div>
+</div>
+
+-->

@@ -1,0 +1,40 @@
+{
+  "results": [
+   {
+     "country": "Venezuela",
+     "attacks": "58044"
+   },
+   {
+     "country": "Taiwan",
+     "attacks": "45201"
+   },
+   {
+     "country": "Hungary",
+     "attacks": "24183"
+   },
+   {
+     "country": "United States",
+     "attacks": "22432"
+   },
+   {
+     "country": "Russian Federation",
+     "attacks": "18285"
+   },
+   {
+     "country": "France",
+     "attacks": "17091"
+   },
+   {
+     "country": "India",
+     "attacks": "7465"
+   },
+   {
+     "country": "Germany",
+     "attacks": "3447"
+   },
+   {
+     "country": "Morocco",
+     "attacks": "1197"
+   }
+  ]
+}

@@ -1,0 +1,351 @@
+<div class="wrapper-md">
+<div ng-if="list_div == 'virustotal'">
+					<div class="sers">
+						<h2> Detection Rate </h2>
+						<h3> <span class="badge bg-success"> {{data['virustotal']['positives']}}  /  {{data['virustotal']['total']}} </span> </h3>	
+					</div>	
+		
+					<!--<p> {{data['virustotal']['positives']}} /  {{data['virustotal']['total']}}</p> -->
+					<div class="med_text">
+							<table ng-show="scans">
+								<tbody>
+									<tr>
+									 <th> Antivirus </td>
+									 <th> Result </td>
+									  <th> Update </td>
+									</tr>
+								<tr ng-repeat="val in scans">
+									 <td> {{val['virus']}} </td>
+									 <td> {{val['res']}} </td>
+									 <td> {{val['upd']}} </td>
+								 </tr>
+								
+								 
+							 </tbody>
+						 </table>
+					</div>
+							
+		  
+</div>
+
+
+<div ng-if="list_div == 'network'">
+							
+							<div class="clear"></div>
+						<tabset>
+						<tab heading="Domains" active="true">
+						</tab>
+						<tab heading="Host" >
+						</tab>		
+						<tab heading="Http" >
+						</tab>
+						
+						<tab heading="Irc" >
+						</tab>
+						
+						<tab heading="Smtp" >
+						</tab>
+						
+						</tabset>		
+							
+					
+					
+</div>
+
+
+<div ng-if="list_div == 'behavior'">
+							
+							<div class="clear"></div>
+						<tabset>
+						<tab heading="Files" active="true">
+						<div class="med_text">
+							<table ng-show="behavior">
+								<tbody>
+									<tr>
+									 <th> Path </td> 
+									</tr>
+								<tr ng-repeat="val in behavior['summary']['files']">
+									 <td> {{val}} </td>
+								</tr>
+							 </tbody>
+						 </table>
+						</div>
+						
+						</tab>
+						<tab heading="Mutexes" >
+						<div class="med_text">
+							<table ng-show="behavior">
+								<tbody>
+									<tr>
+									 <th> Path </td>
+									 
+									</tr>
+								<tr ng-repeat="val in behavior['summary']['keys']">
+									 <td> {{val}} </td>
+								</tr>
+							 
+							 </tbody>
+							</table>
+						</div>
+						</tab>
+						
+						<tab heading="Process" >
+						
+						
+						<div class="med_text">
+							<table ng-show="behavior">
+								<tbody>
+									<tr>
+									 <th> Parent Id </td>
+									 <th> Process Id </td>
+									  <th> Process Name </td>
+									  <th> first_seen </td>
+									</tr>
+								<tr ng-repeat="val in behavior['processes']">
+									 <td> {{val['parent_id']}} </td>
+									 <td> {{val['process_id']}} </td>
+									 <td> {{val['process_name']}} </td>
+									 <td> {{val['first_seen']}} </td>
+								 </tr>
+								
+								 
+							 </tbody>
+						 </table>
+						</div>
+						
+						</tab>
+					
+						</tabset>		
+				
+				</div>  <!-- end of bahavior -->
+
+				<div ng-if="list_div == 'signatures'">
+					<accordion close-others="oneAtATime">
+					<accordion-group heading="{{group.description}}" ng-class="{yel:group.name == 'packer_entropy'}"  ng-repeat="group in groups">
+					{{group.name}} 
+					{{group.data}}
+					</accordion-group>
+					</accordion>
+				</div>
+				
+				<div ng-if="list_div == 'info'">
+					<div class="m-t-n-lg">
+						<div class="col-xs-4 align-center">
+						<ul class="list-group">
+						<li class="list-group-item">
+						  <a href="">
+							<span class="badge bg-danger pull-right">{{data['info']['category']}}</span>
+							Category
+						  </a>
+						</li>
+						<li class="list-group-item">
+						  <a href="">
+							<span class="badge bg-info pull-right"> {{data['info']['started']}}</span>
+							Started On
+						  </a>
+						</li>
+						
+						<li class="list-group-item">
+						  <a href="">
+							<span class="badge bg-info pull-right"> {{data['info']['ended']}}</span>
+							Completed
+						  </a>
+						</li>
+						
+						<li class="list-group-item">
+						  <a href="">
+							<span class="badge bg-info pull-right"> {{data['info']['duration']}}</span>
+							Duration
+						  </a>
+						</li>
+						
+						
+						<li class="list-group-item">
+						  <a href="">
+							<span class="badge bg-warning pull-right"> {{data['malscore']}}</span>
+							MalwareScore
+						  </a>
+						</li>
+						
+						<li class="list-group-item">
+						  <a href="">
+							<span class="badge bg-info pull-right"> {{data['malfamily']}}</span>
+							MalwareFamily
+						  </a>
+						</li>
+						
+						</ul>
+						</div>
+
+					</div>
+						<div class="med_text">
+							<table ng-show="target">
+								<tbody>
+									<tr>
+									 <td> FileName </td>
+									 <td> {{target.name}} </td>
+									</tr>
+								<tr>
+									 <td> FileSize </td>
+									 <td> {{target.size}} </td>
+								 </tr>
+								<tr>
+									 <td> File Type </td>
+									 <td> {{target.type}} </td>
+								 </tr>
+								<tr>
+									 <td> MD5 </td>
+									 <td> {{target.md5}} </td>
+								 </tr>
+
+								<tr>
+									 <td> SHA1 </td>
+									 <td> {{target.sha1}} </td>
+								 </tr>
+								<tr>
+									 <td> SHA2 </td>
+									 <td> {{target.sha256}} </td>
+								 </tr>	
+
+								<tr>
+									 <td> SH512 </td>
+									 <td> {{target.sha512}} </td>
+								 </tr>
+								<tr>
+									 <td> Ssdeep </td>
+									 <td> {{target.ssdeep}} </td>
+								 </tr>		
+								 
+								 <tr>
+									 <td> yara </td>
+									 <td> {{target.yara}} </td>
+								 </tr>	
+								 
+							 </tbody>
+						 </table>
+						</div>
+				</div>  
+<div ng-if="list_div == 'statistics'">
+	<div class="clear"></div>
+	<tabset>
+		<tab heading="Processing" active="true">
+			<div class="med_text">
+				<table ng-show="stat">
+					<tbody>
+						<tr>
+							<th> name </td>
+							<th> time </td>							
+						</tr>
+						<tr ng-repeat="val in stat['processing']">
+							<td> {{val['name']}} </td>
+							<td> {{val['time']}} </td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</tab>
+		
+		<tab heading="reporting" >
+			<div class="med_text">
+				<table ng-show="stat">
+					<tbody>
+						<tr>
+							<th> name </td>
+							<th> time </td>							
+						</tr>
+						<tr ng-repeat="val in stat['reporting']">
+							<td> {{val['name']}} </td>
+							<td> {{val['time']}} </td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</tab>
+		<tab heading="Process" >
+			<div class="med_text">
+				<table ng-show="behavior">
+					<tbody>
+						<tr>
+							<th> Parent Id </td>
+							<th> Process Id </td>
+							<th> Process Name </td>
+							<th> first_seen </td>
+						</tr>
+						<tr ng-repeat="val in behavior['processes']">
+							<td> {{val['parent_id']}} </td>
+							<td> {{val['process_id']}} </td>
+							<td> {{val['process_name']}} </td>
+							<td> {{val['first_seen']}} </td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</tab>
+	</tabset>
+</div>
+<!-- end of statics -->				
+					
+</div>					
+					<!--info end -->
+				
+				<!-- end of signature-->
+				
+<!--
+<div class="bg-light lter b-b wrapper-sm">
+  <h1 class="m-n font-thin h3"> Global Threat Analysis  </h1>
+</div>
+<ul class="breadcrumb">
+                    <li><a href="#">Home</a></li>                    
+                    <li >Dashboard</li>
+					 <li >Dashboard</li>
+					  <li class="active">Dashboard</li>	  
+</ul>
+
+<div class="wrapper-md">
+<div class="hbox hbox-auto-xs hbox-auto-sm">
+<button class="btn btn-sm btn-default pull-right visible-sm visible-xs" ui-toggle-class="show" target="#email-menu"><i class="fa fa-bars"></i></button>
+  <div class="col w-md bg-light dk b-r bg-auto">
+    
+    <div class="wrapper hidden-sm hidden-xs" id="email-menu">
+      <ul class="nav nav-pills nav-stacked nav-sm">
+        <li ng-repeat="na in nav" ui-sref-active="active">
+          <a href="">
+            {{na}}
+          </a>
+        </li>
+      </ul>
+     
+    </div>
+  </div>
+  
+		<div class="col wrapper auto" ng-if="list_div == 'virustotal'">
+				
+					<p> Detection Rate </p>
+					<p> {{data['virustotal']['positives']}} /  {{data['virustotal']['total']}}</p>
+					<p> <a ng-click="scans = !scans">Expand</a> </p>
+					<div class="med_text">
+							<table ng-show="scans">
+								<tbody>
+									<tr>
+									 <th> Antivirus </td>
+									 <th> Result </td>
+									  <th> Update </td>
+									</tr>
+								<tr ng-repeat="val in scans">
+									 <td> {{val['virus']}} </td>
+									 <td> {{val['res']}} </td>
+									 <td> {{val['upd']}} </td>
+								 </tr>
+								
+								 
+							 </tbody>
+						 </table>
+						</div>
+							
+		  
+			</div>
+  
+  </div>
+</div>
+
+-->

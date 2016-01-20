@@ -1,0 +1,123 @@
+<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n font-thin h3"> PDF Report 
+ 
+</div>
+
+ <div class="panel hbox hbox-auto-xs no-border wrapper-md">
+		<div class="check-box-panel">
+		<div class="row">
+			<div class="col-sm-4">
+				<div class="dropdown">
+					<a class="dropdown-toggle" id="dropdown1" role="button" data-toggle="dropdown" data-target="#"
+					   href="">
+						<div class="input-group">
+							<input type="text" class="form-control" ng-model="data.dateDropDownInputNoFormatting"  placeholder="startDateTime">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+						</div>
+					</a>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+						<datetimepicker data-ng-model="data.dateDropDownInputNoFormatting"
+										data-datetimepicker-config="{ dropdownSelector: '#dropdown1' }"></datetimepicker>
+					</ul>
+				</div>
+			</div>
+			<div class="col-sm-4">
+			<div class="dropdown">
+                <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#"
+                   href="">
+                    <div class="input-group">
+                        <input type="text" class="form-control" ng-model="data.dateDropDownInput"  placeholder="EndDateTime">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    </div>
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                    <datetimepicker data-ng-model="data.dateDropDownInput"
+                                    data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }"></datetimepicker>
+                </ul>
+			</div>
+			</div>
+		</div>
+		
+		 <div class="row">
+			<div class="col-xs-4">
+				<div class="m-md">
+					<h4 class="font-bold"> Malware Attacks </h4> 
+					<div ng-repeat="employee in malware">
+						<div class="action-checkbox">
+							<input id="{{employee.name}}" type="checkbox" value="{{employee.name}}" ng-checked="selection.indexOf(employee.name) > -1" ng-click="toggleSelection(employee.name)" />
+							<label for="{{employee.name}}"></label>
+							{{employee.name}}
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="col-xs-4">
+				<div class="m-md">
+					<h4 class="font-bold">  Sip Attacks  </h4> 
+					<div ng-repeat="employee in sip">
+						<div class="action-checkbox">
+							<input id="{{employee.name}}" type="checkbox" value="{{employee.name}}" ng-checked="selection.indexOf(employee.name) > -1" ng-click="toggleSelection(employee.name)" />
+							<label for="{{employee.name}}"></label>
+							{{employee.name}}
+						</div>
+					</div>
+					<h4 class="font-bold"> Web Attacks </h4>
+					<div ng-repeat="employee in web">
+						<div class="action-checkbox">
+							<input id="{{employee.name}}" type="checkbox" value="{{employee.name}}" ng-checked="selection.indexOf(employee.name) > -1" ng-click="toggleSelection(employee.name)" />
+							<label for="{{employee.name}}"></label>
+							{{employee.name}}
+						</div>
+					</div>	
+				</div>
+			</div>
+			
+			<div class="col-xs-4">
+				<div class="m-md">
+				<h4 class="font-bold">  Brute-Force Attacks  </h4> 
+					<div ng-repeat="employee in brute">
+						<div class="action-checkbox">
+							<input id="{{employee.name}}" type="checkbox" value="{{employee.name}}" ng-checked="selection.indexOf(employee.name) > -1" ng-click="toggleSelection(employee.name)" />
+							<label for="{{employee.name}}"></label>
+							{{employee.name}}
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		
+		<div class="clear"></div>
+		<div class="bg-light lter b-b wrapper-sm">
+			<div class="row">
+				<div class="col-sm-3">
+					<a href="http://115.186.132.19:8333/report.pdf"><button class="btn m-b-xs w-xs btn-default btn-rounded" > Download </button> </a>
+					<button class="btn m-b-xs w-xs btn-default btn-rounded"> cancel  </button>
+				</div>	
+			</div> 
+		</div>
+		</div>
+	
+		<div class="clear">
+		
+		</div>
+		
+		
+	   
+	   
+		<!--
+	   <div class="col wrapper auto">
+          <highchart id="chart1" config="chartConfig" class="span9" ></highchart>
+		  
+        </div>
+        <div class="col wrapper-lg w-lg bg-light dk r-r">
+          <h4 class="font-thin m-t-none m-b"> About Attack </h4>
+          
+          <p class="text-muted"> The countries hosting IP Addresses
+performing the most attacks are
+shown in the following figure </p>
+        </div>
+		-->
+ </div>			
+			

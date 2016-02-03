@@ -20,26 +20,18 @@ angular.module('app')
 				console.log(toState, toParams, fromState, fromParams);
 			});
 
-		
 		$rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
 				if($cookies['token'] == null || $cookies['token'] == undefined){
 					$state.go("access.signin");
 				}
 			
-			
-			
 		});
-		
-		
-		
      }]
-	
-	
   )
   .config(
-    [          '$stateProvider', '$urlRouterProvider',
-      function ($stateProvider,   $urlRouterProvider) {
-          
+    [          '$stateProvider', '$urlRouterProvider','$compileProvider',
+      function ($stateProvider, $urlRouterProvider , $compileProvider) {
+           $compileProvider.debugInfoEnabled(false);
           $urlRouterProvider
               .otherwise('/app/dashboard-v1');
           $stateProvider
@@ -334,10 +326,10 @@ angular.module('app')
 				controller  : 'DashBoardAttackInfo'
               })
 			  
-			   .state('app.dashboardAttackInfo', {
-                url: '/dashboardAttackInfo',
-                templateUrl : 'views/dashboard_attackedInfos.html',
-				controller  : 'DashBoardAttackInfos'
+			   .state('app.testDashBoard', {
+                  url: '/testDashBoard/:type/counts/:counts',
+                templateUrl : 'views/testDashBoard.html',
+				controller  : 'TestDashBoard'
               })
 			 
               // form

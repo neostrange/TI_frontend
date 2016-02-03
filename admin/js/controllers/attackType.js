@@ -74,13 +74,16 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 						$scope.country['attackTypes'] = [];
 						
 						data.forEach(function(elem,i){
-						 count = count + parseInt(elem.hits);
-						 console.log(elem.hits);
-						console.log($scope.country['attackTypes']['attacks']);	
-						$scope.country['attackTypes'].push({exploit:elem.category, hits:elem.hits});	
+						if(elem.hasOwnProperty('total')){
+							$scope.country['attacks'] = elem['total'];
+						}else{	
+						
+							console.log($scope.country['attackTypes']['attacks']);	
+							$scope.country['attackTypes'].push({exploit:elem.category, hits:elem.hits});	
+							}
 						});
 						
-						$scope.country['attacks'] = count;
+					//	$scope.country['attacks'] = count;
 						/*
 						 function compare(a,b) {
 								if (a.hits > b.hits)
@@ -111,7 +114,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 						console.log(error);
 					});
 					
-					crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/all/ip-geopoints?size=20&from="+d1+"&to="+d2,function(data, status){
+					crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/all/ip-geopoints?size=100&from="+d1+"&to="+d2,function(data, status){
 				console.log(data);
 						$scope.mar = [];
 						data.forEach(function(elem,i){
@@ -159,7 +162,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 		}
 		});	
 		
-			crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/all/ip-geopoints?size=20",function(data, status){
+			crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/all/ip-geopoints?size=100",function(data, status){
 				console.log(data);
 				data.forEach(function(elem,i){
 							 // console.log(elem['fields']['origin.geoPoint.lat'],elem['fields']['origin.geoPoint.lon'], elem['fields']['srcIP']);
@@ -202,11 +205,13 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 	
 	$scope.changeView = function (view){
 			//alert(view);
-			if(view == 'Reconnaissance')
+			if(view == 'Reconnaissance'){
+		
+			}
 				//$scope.rec(view);
-			if(view == 'SSH Attacks')
-				alert("in");
+			if(view == "SSH Attacks"){
 				$scope.sshAttacks(view);
+			}
 		    if(view == 'Database Attacks')
 				$scope.dbAttacks(view);
 			if(view == 'Application Exploit Attempts')
@@ -248,7 +253,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 		
 		$scope.markers = {};
 		if(gd1 != undefined && gd2 != undefined){
-					crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/probing/ip-geopoints?size=10&from="+gd1+"&to="+gd2,function(data, status){
+					crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/probing/ip-geopoints?size=100&from="+gd1+"&to="+gd2,function(data, status){
 					console.log(data);
 					ngProgress.complete();
 					data.forEach(function(elem,i){
@@ -274,7 +279,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 				console.log(error);
 			});
 			}else{
-				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/probing/ip-geopoints?size=10",function(data, status){
+				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/probing/ip-geopoints?size=100",function(data, status){
 				console.log(data);
 				data.forEach(function(elem,i){
 							 // console.log(elem['fields']['origin.geoPoint.lat'],elem['fields']['origin.geoPoint.lon'], elem['fields']['srcIP']);
@@ -354,7 +359,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 			});
 			
 			// withDate Time usernames	
-			crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/ssh/username?size=10&from="+gd1+"&to="+gd2,function(data, status){
+			crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/ssh/username?size=100&from="+gd1+"&to="+gd2,function(data, status){
 					console.log(data);
 					getUsername(data);
 			}, function(error){
@@ -414,7 +419,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 			}
 			
 			if(gd1 != undefined && gd2 != undefined){
-					crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/ssh/ip-geopoints?size=10&from="+gd1+"&to="+gd2,function(data, status){
+					crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/ssh/ip-geopoints?size=100&from="+gd1+"&to="+gd2,function(data, status){
 					console.log(data);
 					data.forEach(function(elem,i){
 							 // console.log(elem['fields']['origin.geoPoint.lat'],elem['fields']['origin.geoPoint.lon'], elem['fields']['srcIP']);
@@ -438,7 +443,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 				console.log(error);
 			});
 			}else{
-				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/ssh/ip-geopoints?size=10",function(data, status){
+				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/ssh/ip-geopoints?size=100",function(data, status){
 				console.log(data);
 				data.forEach(function(elem,i){
 							 // console.log(elem['fields']['origin.geoPoint.lat'],elem['fields']['origin.geoPoint.lon'], elem['fields']['srcIP']);
@@ -476,7 +481,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 		});
 		console.log($scope.passwords);
 		$scope.chartSeries = [{
-			name: "Attacks",
+			name: "Passwords",
 			colorByPoint: true,
 			data: $scope.passwords
 		}];
@@ -501,7 +506,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 		
 		console.log($scope.usernames);
 		$scope.chartSeries = [{
-			name: "Attacks",
+			name: "UserNames ",
 			colorByPoint: true,
 			data: $scope.usernames
 		}];
@@ -522,7 +527,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 		
 		console.log($scope.inputs);
 		$scope.chartSeries = [{
-			name: "Attacks",
+			name: "Inputs",
 			colorByPoint: true,
 			data: $scope.inputs
 		}];
@@ -546,7 +551,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 		});
 		console.log($scope.combination);
 		$scope.chartSeries = [{
-			name: "Attacks",
+			name: "Username & Passwords",
 			colorByPoint: true,
 			data: $scope.combination
 		}];
@@ -618,7 +623,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 			}
 		
 			if(gd1 != undefined && gd2 != undefined){
-					crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/db/ip-geopoints?size=10&from="+gd1+"&to="+gd2,function(data, status){
+					crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/db/ip-geopoints?size=100&from="+gd1+"&to="+gd2,function(data, status){
 					console.log(data);
 					ngProgress.complete();
 					data.forEach(function(elem,i){
@@ -644,7 +649,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 				console.log(error);
 			});
 			}else{
-				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/db/ip-geopoints?size=10",function(data, status){
+				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/db/ip-geopoints?size=100",function(data, status){
 				console.log(data);
 				data.forEach(function(elem,i){
 							 // console.log(elem['fields']['origin.geoPoint.lat'],elem['fields']['origin.geoPoint.lon'], elem['fields']['srcIP']);
@@ -747,7 +752,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 		}
 		
 		if(gd1 != undefined && gd2 != undefined){
-					crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/application/ip-geopoints?size=10&from="+gd1+"&to="+gd2,function(data, status){
+					crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/application/ip-geopoints?size=100&from="+gd1+"&to="+gd2,function(data, status){
 					console.log(data);
 					ngProgress.complete();
 					data.forEach(function(elem,i){
@@ -768,7 +773,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 				console.log(error);
 			});
 			}else{
-				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/web/ip-geopoints?size=10",function(data, status){
+				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/web/ip-geopoints?size=100",function(data, status){
 				console.log(data);
 				data.forEach(function(elem,i){
 							 // console.log(elem['fields']['origin.geoPoint.lat'],elem['fields']['origin.geoPoint.lon'], elem['fields']['srcIP']);
@@ -877,7 +882,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 			}
 		
 			if(gd1 != undefined && gd2 != undefined){
-					crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/db/ip-geopoints?size=10&from="+gd1+"&to="+gd2,function(data, status){
+					crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/db/ip-geopoints?size=100&from="+gd1+"&to="+gd2,function(data, status){
 					console.log(data);
 					ngProgress.complete();
 					data.forEach(function(elem,i){
@@ -900,7 +905,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 				console.log(error);
 			});
 			}else{
-				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/malware/ip-geopoints?size=10",function(data, status){
+				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/malware/ip-geopoints?size=100",function(data, status){
 				console.log(data);
 				data.forEach(function(elem,i){
 							 // console.log(elem['fields']['origin.geoPoint.lat'],elem['fields']['origin.geoPoint.lon'], elem['fields']['srcIP']);
@@ -953,6 +958,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 					console.log(malwareName);
 					console.log(malwareName.malware);
 					crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/malware/hashes/"+malwareName.malware+"/?size=10",function(data, status){
+						console.log(data);
 						$scope.hashes = data;
 					});
 				

@@ -161,6 +161,15 @@ a:hover .caret-white {
   background-color: #1c2b36;
 }
 
+.progress-bar-orange {
+  background-color:#FFA07A;
+}
+
+.progress-bar-db {
+  background-color:#54596a;
+}
+
+
 .progress-bar-white {
   background-color: #fff;
 }

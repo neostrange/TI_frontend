@@ -148,15 +148,28 @@
       <!-- / link and dropdown -->
 
         <!-- search form -->
-        <form class="navbar-form navbar-form-sm navbar-left "  target=".navbar-collapse" role="search" ng-controller="AppSearchCtrl">
-          <div class="form-group">
+        <form class="navbar-form navbar-form-sm navbar-left" target=".navbar-collapse" role="search" ng-controller="AppSearchCtrl">
+          <!--
+		  <div class="form-group">
             <div class="input-group">
-              <input type="text" ng-model="selected" class="form-control input-sm bg-light no-border rounded padder" placeholder="Search projects...">
+              <input type="text" ng-model="selected" class="form-control input-sm bg-light no-border rounded padder" placeholder="Search IP">
               <span class="input-group-btn">
-                <button type="button" class="btn btn-sm bg-light rounded" ng-click="chooseValue(selected)"><i class="fa fa-search"></i></button>
+                <button type="submit" class="btn btn-sm bg-light rounded"><i class="fa fa-search"></i> </button>
               </span>
             </div>
           </div>
+		  -->
+		  <div class="new_sear">
+										
+			<input type="text" ng-model="selected" class="form-control" placeholder="Search IP">
+				<button ng-show="selected" type="button" ng-click="clearSearch()" class="btn_del">
+						<span class="glyphicon glyphicon-remove"></span>
+				</button>
+			</div>
+			<div class="new_sear">
+				<button type="submit" ng-click="chooseValue(selected)" class="btn btn-primary nav_sub_main_search_but"><span class="glyphicon glyphicon-search glapb"></span></button>
+			</div>
+		  
         </form>
         <!-- / search form -->
 

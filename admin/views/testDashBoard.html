@@ -1,0 +1,54 @@
+<div class="wrapper-md" ng-class="{'bg-orange':type == 'probing', 'bg-info':type == 'web' , 'bg-dark':type =='ssh', 'bg-success':type =='sip', 'bg-light':type == 'database' , 'bg-danger':type== 'malware'}">
+  <h1 class="m-n font-thin h3">  <span ng-show="type"> <b> {{type | getCapitilize}} </b> </span> Attacks </h1>
+</div>
+<div class="wrapper-md">
+
+<div class="row"> 
+	<div class="col-sm-12 col-xs-12 col-md-12">   
+          
+		 <div class="panel panel-default" ng-show="type == 'probing'">
+			
+			<div class="table-responsive">
+			   <table class="table b-light">
+				<thead>
+				  <tr>
+						
+						 <th> Source IP</th>
+						 <th> Destination IP </th> 
+						 <th> Destination Port </th> 
+						 <th> Service </th>
+						 <th> Country </th>
+						 <th ng-click="sort('dateTime')">DateTime
+						<span class="glyphicon sort-icon" ng-show="sortKey=='dateTime'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+						</th>
+						
+				  </tr>
+				</thead>
+				<tbody>
+					 <tr dir-paginate="val in data | orderBy:sortKey:reverse | filter:search | itemsPerPage:20" total-items="totalCount" current-page="pagination.current">
+						
+						
+						 <td><span ng-show="!val['srcIP']">-</span> <a href="#/app/CountryIps/{{val['origin']['srcCountry']}}/ip/{{val['srcIP']}}" >{{val['srcIP']}} </a> </td>
+						<td>{{val['dstIP']}}</td>
+						<td>{{val['dstPort']}}</td>				
+						<td><span ng-show="!val['service']"></span>{{val['service']}}</td>						
+						<td><span ng-show="!val['origin']['srcCountry']">-</span>{{val['origin']['srcCountry']}}</td>
+						<td>{{val['dateTime'] | dateTimeFilter }}</td>
+						
+					 </tr>
+				</tbody>
+			  </table>
+			  
+				
+			<dir-pagination-controls on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
+				
+			</div>
+			
+		</div>
+		
+		
+    </div>
+     
+   </div>	 
+
+

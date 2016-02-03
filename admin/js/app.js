@@ -26,6 +26,8 @@ angular.module('app', [
 	'mgcrea.ngStrap',
 	'ui.bootstrap.datetimepicker',
 	'elasticsearch',
-	'ngMessages'
+	'ngMessages',
+	'angularUtils.directives.dirPagination',
+	'ui.bootstrap.modal'
 	
 ]);

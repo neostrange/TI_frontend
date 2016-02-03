@@ -87,15 +87,18 @@
 						<thead>
 						</thead>
 						<tbody>
-							<tr ng-repeat="val in countries">
+							<tr dir-paginate="val in countries | itemsPerPage:23">
 								 <td><span ng-show="!val['country']"> </span>  <img src="img/gif/{{val['countryCode']}}.gif" height="12px" /> <a href="#/app/CountryIps/{{val.country}}/cCode/{{val.countryCode}}" >{{val['country']}} ({{val['numberOfThings']}}) </a> </td>
-								
+								 
 							 </tr>
-						  
+						 
 						</tbody>
 					  </table>
+					
 					</div>
+					
 				</div>
+				<dir-pagination-controls></dir-pagination-controls>
 			</div>
 		</div>
 	</div>

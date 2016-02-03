@@ -558,7 +558,7 @@ app.directive('d3Maps', function($compile, $rootScope, $window) {
 		responsive:true,
         element: elem[0],
         // change the projection to something else only if you have absolutely no cartographic sense
-        fills: { 'defaultFill': '#DDDDDD' , 'mal': 'red'},
+        fills: { 'defaultFill': '#DDDDDD' , 'malware': 'red' , 'probing': '#FFA07A' , 'web':'#19a9d5', 'ssh':'#141719' , 'sip':'#1a9c39', 'database':'#999'},
         geographyConfig: {
           dataUrl: null,
           hideAntarctica: true,
@@ -576,10 +576,13 @@ app.directive('d3Maps', function($compile, $rootScope, $window) {
         },
 	});
 
+		
+	
 			var dot = [];
 			scope.$watch('vals', function (neww, old) {
 			 var boom = [];	
 			  var col = '';
+			  var fill;
 			 var hi = [];
 			console.log(neww);
 			if(neww != undefined){
@@ -587,32 +590,39 @@ app.directive('d3Maps', function($compile, $rootScope, $window) {
 					 
 					if(elem.type == "malware"){
 						col = '#f05050';
+						fill = elem.type;
 					}else if(elem.type == "probing"){
-					col = '#FFA07A';
+						col = '#FFA07A';
+						fill = elem.type;
 					}else if(elem.type == "web"){
 						col = '#19a9d5';
+						fill = elem.type;
 					}else if(elem.type == "ssh"){
 						col = '#141719';
+						fill = elem.type;
 					}else if(elem.type == "sip"){
 						col = '#1a9c39';
+						fill = elem.type;
 					}else if(elem.type == "database"){
 						col = '#999';
+						fill = elem.type;
 					}else{
 					col = 'white';
 				}
+				
+				
 				var hit = { origin : { latitude: +elem.lat, longitude: +elem.longs }, destination : { latitude: +elem.affected.lat, longitude: +elem.affected.longs } };
 				hi.push(hit);
 				
-				
-				dot.push( { radius: 3, latitude: +elem.lat, longitude: +elem.longs, fillKey: 'mal',
-                        fillOpacity: 0.5, attk:elem.name, IP:elem['Ip'], yeild: 50000, borderColor:'red'});
+				dot.push( { radius: 3, latitude: +elem.lat, longitude: +elem.longs, fillKey: fill,
+                        fillOpacity: 0.5, attk:elem.name, IP:elem['Ip'], yeild: 50000, borderColor:col , animate:true});
 						
 				boom.push( { radius: 7, latitude: +elem.affected.lat, longitude: +elem.affected.longs,
                         fillOpacity: 0.5, attk: elem.name , IP:elem['Ip']});
-				console.log(boom);
+					console.log(boom);
 			});
 				
-           map.arc(hi, {strokeWidth: 3, strokeColor: col});   
+			map.arc(hi, {strokeWidth: 3, strokeColor: col});   
            /*
 		   map.bubbles(boom, {
                 popupTemplate: function(geo, data) {

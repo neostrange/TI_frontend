@@ -171,7 +171,7 @@
         <div class="col wrapper-sm w-xxl">
 			<div class="row">
 					<div class="col-sm-6">
-						<span class="font-bold label bg-danger font-14">Attacks: {{db_summary['Attack']['doc_count']}}</span>
+						
 					   
 					</div>
 					<div class="col-sm-6">
@@ -214,7 +214,7 @@
         <div class="col wrapper-sm  w-xxl auto">
 			<div class="row">
 					<div class="col-sm-6">
-						<span class="font-bold label bg-danger font-14">Attacks: {{web['Attacks']['doc_count'] }}</span>
+						
 					   
 					</div>
 					<div class="col-sm-6">
@@ -234,7 +234,7 @@
 			  <table class="table">
 				<thead>
 				</thead>
-				<tbody ng-repeat ="val in web">
+				<tbody ng-repeat ="val in web | orderBy:'-hits'">
 					<tr>
 						 <td> {{val['category']}} </td>
 						 <td> {{val['hits']}} </td>
@@ -253,7 +253,7 @@
 			  <table class="table">
 				<thead>
 				</thead>
-				<tbody ng-repeat ="val in sip">
+				<tbody ng-repeat ="val in sip | orderBy:'-hits'">
 					<tr>
 						 <td> {{val['category']}} </td>
 						 <td> {{val['hits']}} </td>
@@ -302,9 +302,6 @@
 			 <button class="btn btn-sm btn-info" ng-click="showGraphs()" ng-show="$parent.showMap === true;"> View Graph  </button>
 			</div>
 			 <div class="panel panel-default" ng-show="$parent.showPie === true;">
-				<div class="panel-heading font-bold">
-				  Hashes 
-				</div>
 				<div class="table-responsive">
 			  <table class="table" ng-show="hashes[0]">
 				<thead>

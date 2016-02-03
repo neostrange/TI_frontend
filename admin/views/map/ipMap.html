@@ -123,7 +123,7 @@
         </thead>
         <tbody>
 			 <tr ng-repeat="val in data">
-                 <td>{{val['dateTime']}}</td>
+                 <td>{{val['dateTime'] | dateTimeFilter}}</td>
                  <td>{{val['attackType']}}</td>
 				 
             </tr>

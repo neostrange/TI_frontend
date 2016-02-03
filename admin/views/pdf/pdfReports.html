@@ -44,30 +44,40 @@
 					<h4 class="font-bold"> Malware Attacks </h4> 
 					<div ng-repeat="employee in malware">
 						<div class="action-checkbox">
-							<input id="{{employee.name}}" type="checkbox" value="{{employee.name}}" ng-checked="selection.indexOf(employee.name) > -1" ng-click="toggleSelection(employee.name)" />
+							<input id="{{employee.name}}" type="checkbox" value="{{employee.value}}" ng-checked="selection.indexOf(employee.name) > -1" ng-click="toggleSelection(employee)" />
 							<label for="{{employee.name}}"></label>
 							{{employee.name}}
 						</div>
 					</div>
+					
+						<h4 class="font-bold"> Probing Attacks  </h4> 
+						<div ng-repeat="prob in probing">
+						<div class="action-checkbox">
+							<input id="{{prob.name}}" type="checkbox" value="{{prob.value}}" ng-checked="selection.indexOf(prob.name) > -1" ng-click="toggleSelection(prob)" />
+							<label for="{{prob.name}}"></label>
+							{{prob.name}}
+						</div>
+						</div>
+					
 				</div>
 			</div>
 			
 			<div class="col-xs-4">
 				<div class="m-md">
 					<h4 class="font-bold">  Sip Attacks  </h4> 
-					<div ng-repeat="employee in sip">
+					<div ng-repeat="sp in sip">
 						<div class="action-checkbox">
-							<input id="{{employee.name}}" type="checkbox" value="{{employee.name}}" ng-checked="selection.indexOf(employee.name) > -1" ng-click="toggleSelection(employee.name)" />
-							<label for="{{employee.name}}"></label>
-							{{employee.name}}
+							<input id="{{sp.name}}" type="checkbox" value="{{sp.name}}" ng-checked="selection.indexOf(sp.name) > -1" ng-click="toggleSelection(sp)" />
+							<label for="{{sp.name}}"></label>
+							{{sp.name}}
 						</div>
 					</div>
 					<h4 class="font-bold"> Web Attacks </h4>
-					<div ng-repeat="employee in web">
+					<div ng-repeat="wb in web">
 						<div class="action-checkbox">
-							<input id="{{employee.name}}" type="checkbox" value="{{employee.name}}" ng-checked="selection.indexOf(employee.name) > -1" ng-click="toggleSelection(employee.name)" />
-							<label for="{{employee.name}}"></label>
-							{{employee.name}}
+							<input id="{{wb.name}}" type="checkbox" value="{{wb.name}}" ng-checked="selection.indexOf(wb.name) > -1" ng-click="toggleSelection(wb)" />
+							<label for="{{wb.name}}"></label>
+							{{wb.name}}
 						</div>
 					</div>	
 				</div>
@@ -76,14 +86,30 @@
 			<div class="col-xs-4">
 				<div class="m-md">
 				<h4 class="font-bold">  Brute-Force Attacks  </h4> 
-					<div ng-repeat="employee in brute">
+					<div ng-repeat="brt in brute">
 						<div class="action-checkbox">
-							<input id="{{employee.name}}" type="checkbox" value="{{employee.name}}" ng-checked="selection.indexOf(employee.name) > -1" ng-click="toggleSelection(employee.name)" />
-							<label for="{{employee.name}}"></label>
-							{{employee.name}}
+							<input id="{{brt.name}}" type="checkbox" value="{{brt.name}}" ng-checked="selection.indexOf(brt.name) > -1" ng-click="toggleSelection(brt)" />
+							<label for="{{brt.name}}"></label>
+							{{brt.name}}
 						</div>
 					</div>
-				</div>
+					<h4 class="font-bold">  Global Attack  </h4> 	
+					<div ng-repeat="glob in global">
+						<div class="action-checkbox">
+							<input id="{{glob.name}}" type="checkbox" value="{{glob.name}}" ng-checked="selection.indexOf(glob.name) > -1" ng-click="toggleSelection(glob)" />
+							<label for="{{glob.name}}"></label>
+							{{glob.name}}
+						</div>
+					</div>
+					
+					<div class="action-checkbox">
+							<input  type="checkbox"  ng-model = "checkboxModel.attackedOSs"   />
+							<label for="Test"></label>
+							TOP OS
+							{{checkboxModel.attackedOSs}}
+					</div>
+
+					</div>
 			</div>
 			
 		</div>
@@ -92,7 +118,7 @@
 		<div class="bg-light lter b-b wrapper-sm">
 			<div class="row">
 				<div class="col-sm-3">
-					<a href="http://115.186.132.19:8333/report.pdf"><button class="btn m-b-xs w-xs btn-default btn-rounded" > Download </button> </a>
+					<a ng-click="produceReport() "><button class="btn m-b-xs w-xs btn-default btn-rounded" > Download </button> </a>
 					<button class="btn m-b-xs w-xs btn-default btn-rounded"> cancel  </button>
 				</div>	
 			</div> 

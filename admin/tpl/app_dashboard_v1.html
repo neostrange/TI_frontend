@@ -11,6 +11,8 @@
           <h1 class="m-n font-thin h3 text-black">Dashboard</h1>
           <small class="text-muted">Threat Intelligence </small>
         </div>	 
+		
+		<!--
 		   <div class="col-md-4 col-lg-4 col-sm-4 col-xs-12">	  
 				<div class="dropdown">
 					<a class="dropdown-toggle" id="dropdown1" role="button" data-toggle="dropdown" data-target="#"
@@ -46,7 +48,7 @@
 					</li>
 				</ul>
 			</div>
-		
+		  -->
       </div>
     </div>
     <!-- / main header -->
@@ -54,7 +56,7 @@
       <!-- stats -->
 	<div class="row row-sm text-center">
 		<div class="col-xs-2 col-md-2">
-              <a href="#/app/dashboardAttack/probing/counts/{{prob}}" target="_blank" class="block bg-orange dker item" title="Probing attempts">
+              <a href="#/app/dashboardAttack/probing/counts/{{prob}}" target="_blank" class="block bg-orange dker item" title="Probing Attacks">
                 <div class="h1 text-white font-thin h1">{{prob}}</div>
                  <i class="fa fa-user-secret fa-5"></i>
 			  </a>
@@ -89,8 +91,8 @@
         </div>
 			
 		<div class="col-xs-2 col-md-2 m-b-md">
-			<div class="r bg-light dker item hbox no-border">          
-			<div class="text-primary-dk font-thin h1"><a href="#/app/dashboardAttack/db/counts/{{db}}" target="_blank"> <span>{{db}} </a> </span></div>
+			<div class="bg-dark lter">          
+			<div class="text-primary-dk font-thin h1"><a href="#/app/dashboardAttack/db/counts/{{db}}" title="Database Attacks" target="_blank"> <span>{{db}} </a> </span></div>
 				<i class="fa fa-database"></i>
             </div>
         </div>
@@ -126,7 +128,8 @@
         <div class="col wrapper">
 			<nvd3 options="lineChartOptions" data="lineChartData" api="apis" config="config" class="with-3d-shadow with-transitions"></nvd3>
         </div>
-        <div class="col wrapper-lg w-lg bg-light dk r-r">
+		
+        <div class="col wrapper-md w-md bg-light dk r-r">
           <h4 class="font-thin m-t-none m-b">Attacks</h4>
           <div class="">
             <div class="">
@@ -144,9 +147,30 @@
               <span>Web </span>
             </div>
             <progressbar value="webPerct" class="progress-xs m-t-sm bg-white" animate="true" type="info"></progressbar>
-          </div>
+         
+			<div class="">
+              <span class="pull-right text-orange">{{probPerct}}%</span>
+              <span> Probing </span>
+            </div>
+			<progressbar value="probPerct" class="progress-xs m-t-sm bg-white" animate="true" type="orange"></progressbar>
+
+			<div class="">
+              <span class="pull-right text-black">{{sshPerct}}%</span>
+              <span> Ssh </span>
+            </div>
+			<progressbar value="sshPerct" class="progress-xs m-t-sm bg-white" animate="true" type="black"></progressbar>
+			
+			
+			<div class="">
+              <span class="pull-right text-db">{{dbPerct}}%</span>
+              <span> Database </span>
+            </div>
+			<progressbar value="dbPerct" class="progress-xs m-t-sm bg-white" animate="true" type="db"></progressbar>
+			
+		 </div>
        
         </div>
+		
       </div>
       <!-- / service -->
 	 
@@ -227,6 +251,253 @@
 		</div>
       <!-- / tasks -->
     </div>
+	
+	<div modal="showModals" close="showModalHide()">
+		<div class="modal-dialog modal-md">
+			<div class="modal-content mode_bor">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="table-responsive" ng-show="modalType == 'SIP'">
+							<table class="table b-light">
+								<thead>
+									<th><span ng-show="modalType"> {{modalType}} </span> Attacks Detail </th>
+								</thead>
+								
+								<tbody>
+								
+								<tr>  <td> Source IP </td>
+								<td>{{detail['srcIP']}}</td>
+								</tr>
+								
+								
+								<tr>  <td>Country </td>
+								<td>{{detail['origin']['srcCountry']}}</td>
+								</tr>
+								<tr> <td>Destination IP</td>
+								<td>{{detail['dstIP']}}</td>
+								</tr>
+								
+								<tr>  <td>SIP Method</td>
+								<td>{{detail['sipMethod']}}</td>
+								</tr>
+								<tr> <td>SIP Call Id</td>
+								<td>{{detail['sipCallId']}}</td>
+								</tr>
+								
+								<tr>  <td>App Layer Protocol</td>
+								<td>{{detail['appLayerProtocol']}}</td>
+								</tr>
+								
+								<tr>  <td>User Agent</td>
+								<td>{{detail['sipUserAgent']}}</td>								
+								</tr>
+								</tbody>
+								</table>
+						</div>
+						
+						<div class="table-responsive" ng-show="modalType == 'PROBING'">
+							<table class="table b-light">
+								<thead>
+								 
+									<th><span ng-show="modalType"> {{modalType}} </span> Attacks Detail </th>
+									
+								</thead>
+								
+								<tbody>
+								
+								<tr>  <td> Source IP </td>
+								<td>{{detail['srcIP']}}</td>
+								</tr>
+								
+								<tr>  <td>Country </td>
+								<td>{{detail['origin']['srcCountry']}}</td>
+								</tr>
+								<tr> <td>Destination IP</td>
+								<td>{{detail['dstIP']}}</td>
+								</tr>
+								
+								<tr>  <td>Destination Protocol</td>
+								<td>{{detail['dstPort']}}</td>
+								</tr>
+								
+								<tr> <td> Service </td>
+								<td>{{detail['service']}}</td>								
+								</tr>
+								</tbody>
+								</table>
+						</div>
+						
+						<div class="table-responsive" ng-show="modalType == 'WEB'">
+							<table class="table b-light">
+								<thead>
+								  <tr>
+									<th><span ng-show="modalType"> {{modalType}} </span> Attacks Detail </th>
+									</tr>
+								</thead>	
+								<tbody>
+								
+								<tr>  <td> Source IP </td>
+								<td>{{detail['srcIP']}}</td>
+								</tr>
+								
+								
+								<tr>  <td>Country </td>
+								<td>{{detail['origin']['srcCountry']}}</td>
+								</tr>
+								<tr> <td>Destination IP</td>
+								<td>{{detail['dstIP']}}</td>
+								</tr>
+								<tr> <td> Service </td>
+								<td>{{detail['service']}}</td>								
+								</tr>
+								
+								<tr> <td> Http Method </td>
+									<td>{{detail['httpMethod']}}</td>
+								</tr>
+								
+
+								<tr> <td> User Agent </td>
+									<td>{{detail['userAgent']}}</td>
+								</tr>								
+								
+								</tbody>
+								</table>
+						</div>
+						
+						
+						<div class="table-responsive" ng-show="modalType == 'MALWARE'">
+							<table class="table b-light">
+								<thead>
+								  <tr>
+									<th><span ng-show="modalType"> {{modalType}} </span> Attacks Detail </th>
+									</tr>
+								</thead>	
+								<tbody>
+								
+								
+								
+								<tr>  <td> Source IP </td>
+								<td>{{detail['srcIP']}}</td>
+								</tr>
+								
+								
+								<tr>  <td>Country </td>
+								<td>{{detail['origin']['srcCountry']}}</td>
+								</tr>
+								<tr> <td>Destination IP</td>
+								<td>{{detail['dstIP']}}</td>
+								</tr>
+								<tr> <td> Service </td>
+								<td>{{detail['service']}}</td>								
+								</tr>
+								
+								<tr> <td> Hash </td>
+									<td>{{detail['md5Hash']}}</td>
+								</tr>
+								
+								
+								<tr> <td> URL </td>
+									<td>{{detail['url']}}</td>
+								</tr>
+
+																
+								
+								</tbody>
+								</table>
+						</div>
+						
+						<div class="table-responsive" ng-if="modalType == 'DATABASE'">
+							<table class="table b-light">
+								<thead>
+								  <tr>
+									<th><span ng-show="type"> {{modalType | getCapitilize}} </span> Attacks Detail </th>
+									</tr>
+								</thead>	
+								<tbody ng-show="detail.service == 'mssql'">
+								<tr > 
+									<td> Mssql Client Name </td>
+									<td>{{detail['mssqlClientName']}}</td>
+								</tr>
+
+								<tr ng-show="detail.service == 'mssql'">
+								<td> Mssql Host Name </td>
+								<td>{{detail['mssqlHostName']}}</td>
+								</tr>								
+								</tbody>
+								
+								<tbody ng-show="detail.mysqlCommands[0]" ng-repeat ="val in value.mysqlCommands">
+								<tr ng-show= "val.mysqlQuery"> 
+								<td> Mysql Query </td>
+								<td>{{val['mysqlQuery']}}</td>
+								</tr>
+								
+								<tr ng-show="val.mysqlOp"> 
+								<td> Mysql OP </td>
+								<td>{{val['mysqlOp']}}</td>
+								</tr>
+								</tbody>
+								</table>
+						</div>
+						
+						<div class="table-responsive" ng-show="modalType == 'SSH'">
+							<table class="table b-light">
+								<thead>
+								  <tr>
+									<th><span ng-show="modalType"> {{modalType}} </span> Attacks Detail </th>
+									</tr>
+								</thead>	
+								
+								<tbody>
+								
+								
+								
+								<tr>  <td> Source IP </td>
+								<td>{{detail['srcIP']}}</td>
+								</tr>
+								
+								
+								<tr>  <td>Country </td>
+								<td>{{detail['origin']['srcCountry']}}</td>
+								</tr>
+								<tr> <td>Destination IP</td>
+								<td>{{detail['dstIP']}}</td>
+								</tr>
+								<tr> <td> Service </td>
+								<td>{{detail['service']}}</td>								
+								</tr>
+								
+								<tr> <td> Tool </td>
+									<td>{{detail['tool']}}</td>
+								</tr>
+								
+								<tr ng-repeat = "val in detail['authList']"> 
+								<td> Password </td>
+								<td>{{val['password']}}</td>
+								<td> UserName </td>
+								<td>{{val['username']}}</td>
+								<td> dateTime </td>
+								<td>{{value['dateTime']}}</td>
+								<td> Auth Success </td>
+								<td>{{val['success']}}</td>
+								
+								</tr>						
+								</tbody>
+								</table>
+						</div>
+						
+						<div class="clear"></div>
+						<div class="modal-footer del_pop_footer">
+							<button ng-click="showModalHide()" type="button" class="btn btn-default" style="height:25px; border-radius:20px; margin:10px 0; line-height:10px;"> OK </button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	
+	
   </div>
   <!-- / main -->
   <!-- right col -->
@@ -239,49 +510,56 @@
         <div class="sl-item b-danger b-l" ng-show="item.data.type == 'malware'">
           <div class="m-l">
             <div class="text-muted">  <a href="#/app/CountryIps/{{item.data['name']}}/cCode/{{item.data['country-code']}}" >{{item['data']['name']}} </a></div>
-            <p> <a href="#/app/CountryIps/{{item.data['name']}}/ip/{{item.data['Ip']}}" target="_blank"> {{item.data['Ip']}} </a> <a href="" class="text-danger"> {{item.data['type']}}</a> <a href="" ng-click="showIP(item)"> .detail </a> </p>
+            <p> <a href="#/app/CountryIps/{{item.data['name']}}/ip/{{item.data['Ip']}}" target="_blank"> {{item.data['Ip']}} </a> <a href="" class="text-danger"> {{item.data['type']}}</a> <a data-popup-open="popup-1" href="" ng-click="showModal(item)" > detail </a> </p>
           </div>
         </div>
    
 		<div class="sl-item b-info b-l" ng-if="item.data.type == 'web'">
           <div class="m-l">
             <div class="text-muted"> <a href="#/app/CountryIps/{{item.data['name']}}/cCode/{{item.data['country-code']}}" >{{item['data']['name']}} </a> </div>
-            <p> <a href="#/app/CountryIps/{{item.data['name']}}/ip/{{item.data['Ip']}}" target="_blank"> {{item.data['Ip']}} </a> <a href="" class="text-info"> {{item.data['type']}} </a> <a href="" ng-click="showIP(item)"> .detail </a> </p>
+            <p> <a href="#/app/CountryIps/{{item.data['name']}}/ip/{{item.data['Ip']}}" target="_blank"> {{item.data['Ip']}} </a> <a href="" class="text-info"> {{item.data['type']}} </a> <a data-popup-open="popup-1" href="" ng-click="showModal(item)" > detail </a> </p>
           </div>
         </div>
 
 		<div class="sl-item b-orange b-l" ng-if="item.data.type =='probing'">
           <div class="m-l">
             <div class="text-muted"> <a href="#/app/CountryIps/{{item.data['name']}}/cCode/{{item.data['country-code']}}" >{{item['data']['name']}} </a> </div>
-            <p> <a href="#/app/CountryIps/{{item.data['name']}}/ip/{{item.data['Ip']}}" target="_blank"> {{item.data['Ip']}} </a> <a href="" class="text-orange"> {{item.data['type']}} </a> <a href="" ng-click="showIP(item)"> .detail </a> </p>
+            <p> <a href="#/app/CountryIps/{{item.data['name']}}/ip/{{item.data['Ip']}}" target="_blank"> {{item.data['Ip']}} </a> <a href="" class="text-orange"> {{item.data['type']}} </a> <a data-popup-open="popup-1" href="" ng-click="showModal(item)" > detail </a> </p>
           </div>
         </div>
 		
 		<div class="sl-item b-success b-l" ng-if="item.data.type =='sip'">
           <div class="m-l">
             <div <a href="#/app/CountryIps/{{item.data['name']}}/cCode/{{item.data['country-code']}}" >{{item['data']['name']}} </a> </div>
-            <p> <a href="#/app/CountryIps/{{item.data['name']}}/ip/{{item.data['Ip']}}" target="_blank"> {{item.data['Ip']}} </a> <a href="" class="text-success"> {{item.data['type']}} </a> <a href="" ng-click="showIP(item)"> .detail </a> </p>
+            <p> <a href="#/app/CountryIps/{{item.data['name']}}/ip/{{item.data['Ip']}}" target="_blank"> {{item.data['Ip']}} </a> <a href="" class="text-success"> {{item.data['type']}} </a> <a data-popup-open="popup-1" href="" ng-click="showModal(item)" > detail </a> </p>
           </div>
         </div>
 		
 		<div class="sl-item b-black dker b-l" ng-if="item.data.type =='ssh'">
           <div class="m-l">
             <div class="text-muted"> <a href="#/app/CountryIps/{{item.data['name']}}/cCode/{{item.data['country-code']}}" >{{item['data']['name']}} </a> </div>
-            <p> <a href="#/app/CountryIps/{{item.data['name']}}/ip/{{item.data['Ip']}}" target="_blank"> {{item.data['Ip']}} </a> <a href="" class="text-black"> {{item.data['type']}} </a> <a href="" ng-click="showIP(item)"> .detail </a> </p>
+            <p> <a href="#/app/CountryIps/{{item.data['name']}}/ip/{{item.data['Ip']}}" target="_blank"> {{item.data['Ip']}} </a> <a href="" class="text-black"> {{item.data['type']}} </a> <a data-popup-open="popup-1" href="" ng-click="showModal(item)" > detail </a> </p>
           </div>
         </div>
       
-		<div class="sl-item b-black dker b-l" ng-if="item.data.type =='database'">
+		<div class="sl-item b-db lter b-l" ng-if="item.data.type == 'database'">
           <div class="m-l">
             <div class="text-muted"> <a href="#/app/CountryIps/{{item.data['name']}}/cCode/{{item.data['country-code']}}" >{{item['data']['name']}} </a> </div>
-            <p> <a href="#/app/CountryIps/{{item.data['name']}}/ip/{{item.data['Ip']}}" target="_blank"> {{item.data['Ip']}} </a> <a href="" class="text-black"> {{item.data['type']}} </a> <a href="" ng-click="showIP(item)"> .detail </a> </p>
+            <p> <a href="#/app/CountryIps/{{item.data['name']}}/ip/{{item.data['Ip']}}" target="_blank"> {{item.data['Ip']}} </a> <a href="" class="text-db"> {{item.data['type']}} </a> <a data-popup-open="popup-1" href="" ng-click="showModal(item)" > detail </a> </p>
           </div>
         </div>
 	  
 	  </div>
 	  </div>
       <!-- / streamline -->
-    </div>
+    </div>	
   </div>
   <!-- / right col -->
-</div>
+  
+  
+  
+
+
+       
+    	
+   

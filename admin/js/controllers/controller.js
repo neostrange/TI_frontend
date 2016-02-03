@@ -1,7 +1,9 @@
 app.controller('MainCtrl', function($scope, $rootScope, crudSrv, utilityMethods, ngProgress, rootURL, $timeout, $websocket, $interval, $state) {
 	$scope.message = 'This is our Home Page';
-	var format;
-	var i, cint;
+	$scope.showModals = false;
+	var stompClient;
+	var format, typeobj;
+	var i, cint, starts;
 	$scope.safeApply = function(fn) {
 		var phase = this.$root.$$phase;
 		if (phase == '$apply' || phase == '$digest') {
@@ -12,6 +14,19 @@ app.controller('MainCtrl', function($scope, $rootScope, crudSrv, utilityMethods,
 			this.$apply(fn);
 		}
 	};
+	$scope.showModal = function(item){
+			$scope.modalType = item.data.type.toUpperCase();
+			console.log($scope.modalType);
+			$scope.showModals = true;
+			$scope.detail = item.data.obj;
+			console.log($scope.detail);
+		};
+		$scope.showModalHide = function(){
+			$scope.showModals = false;
+			$scope.detail = undefined;
+			$scope.modalType = undefined;
+		};
+	
 	crudSrv.getResults(rootURL.url.baseURL + "global/attacking-countries?size=10", function(data, status) {
 		ngProgress.complete();
 		console.log(data);
@@ -19,7 +34,7 @@ app.controller('MainCtrl', function($scope, $rootScope, crudSrv, utilityMethods,
 	}, function(error) {
 		console.log(error);
 	});
-
+	
 	function getCountries(data) {
 		$scope.obj = [];
 		$scope.categories = [];
@@ -34,15 +49,13 @@ app.controller('MainCtrl', function($scope, $rootScope, crudSrv, utilityMethods,
 		});
 
 		$scope.chartSeries = [{
-			name: "Countries hits",
+			name: "Countries",
 			colorByPoint: true,
 			data: $scope.obj
 		}];
-		$scope.chartConfig = utilityMethods.chartDot($scope.chartSeries, 'Top Attacking Countries ', '<br/><span style="font-size:10px">{series.name}: {point.y}</span>', false, $scope.categories);
-
+		$scope.chartConfig = utilityMethods.chartDot($scope.chartSeries, 'Top Attacking Countries ', '<br/><span style="font-size:10px"> Attacks : {point.y}</span>', false, $scope.categories, "Attacks");
 	};
-
-
+   
 	crudSrv.getResults(rootURL.url.baseURL + "attacks/all/ips?size=10", function(data, status) {
 		console.log(data);
 		getIPs(data);
@@ -61,15 +74,15 @@ app.controller('MainCtrl', function($scope, $rootScope, crudSrv, utilityMethods,
 
 			$scope.combs.push(elem['ip']);
 		});
-
+		
 		console.log($scope.ob);
 		$scope.chartSeries = [{
-			name: "Attacks",
+			name: "IP Addresses",
 			colorByPoint: true,
 			data: $scope.ob
 		}];
 
-		$scope.difference = utilityMethods.chartObjs($scope.chartSeries, 'Top Attacking  IPs', '<span style="font-size:10px"></span> <br/><span style="font-size:10px">{series.name}: {point.y}</span>', false, $scope.combs);
+		$scope.difference = utilityMethods.chartObjs($scope.chartSeries, 'Top Attacking  IP Addresses', '<span style="font-size:10px"></span> <br/><span style="font-size:10px"> Attacks: {point.y}</span>', false, $scope.combs, "Attacks");
 		$scope.difference['options']['plotOptions']['column']['events'] = {
 			click: function(event) {
 				var malwareName = {
@@ -83,8 +96,9 @@ app.controller('MainCtrl', function($scope, $rootScope, crudSrv, utilityMethods,
 			}
 		};
 	};
-
-
+	
+	
+	$scope.ops ={};
 	var increment = 0;
 	$scope.total = 0;
 	$scope.db = 0;
@@ -94,8 +108,6 @@ app.controller('MainCtrl', function($scope, $rootScope, crudSrv, utilityMethods,
 	$scope.ssh = 0;
 	$scope.sp = 0;
 	$scope.items = [];
-	$scope.limitTo = 30;
-
 
 	function compares(a, b) {
 		if (a.hits < b.hits) {
@@ -110,25 +122,30 @@ app.controller('MainCtrl', function($scope, $rootScope, crudSrv, utilityMethods,
 	var increment = 0;
 	var malware = [],
 		sip = [],
-		web = [];
+		probing = [],
+		ssh = [],
+		web = [], database = [];
+		
 	var data = [];
 	var allAttack = [];
 	var x = 0;
 	$scope.items = [];
-	$scope.limitTo = 30;
+	$scope.limitTo = 50;
 	$scope.malPerct = 0;
 	$scope.sipPerct = 0;
 	$scope.webPerct = 0;
+	$scope.probPerct = 0;
+	$scope.sshPerct = 0;
+	$scope.dbPerct = 0;
 	$scope.lineChartData = [];
-
 
 	$scope.lineChartOptions = {
 		chart: {
 			type: 'lineChart',
-			height: 270,
+			height: 330,
 			margin: {
 				top: 40,
-				right: 20,
+				right: 15,
 				bottom: 55,
 				left: 30
 			},
@@ -154,7 +171,7 @@ app.controller('MainCtrl', function($scope, $rootScope, crudSrv, utilityMethods,
 				}
 			},
 			xAxis: {
-				axisLabel: 'Attack Value (m)',
+				axisLabel: 'Time(M)',
 				tickFormat: function(d) {
 					return d3.time.format('%X')(new Date(d))
 				}
@@ -162,8 +179,7 @@ app.controller('MainCtrl', function($scope, $rootScope, crudSrv, utilityMethods,
 			yAxis: {
 				axisLabel: 'Attacks (no)',
 				tickFormat: function(d) {
-
-					return d3.format('.01f')(d);
+					return d3.format('d')(d);
 				},
 				axisLabelDistance: 30
 			},
@@ -173,22 +189,13 @@ app.controller('MainCtrl', function($scope, $rootScope, crudSrv, utilityMethods,
 		},
 		title: {
 			enable: true,
-			text: 'Types of Attacks'
+			text: 'Types of Attacks',
+			"css":{
+				"text-align": "center",
+				"color":"black"
+			}
 		}
 	};
-
-
-	$scope.$on("$destroy", function(event) {
-		//	$scope.apis.refresh();
-		if (stompClient != null) {
-                stompClient.disconnect();
-            }
-		$interval.cancel(i);
-		$scope.apis.clearElement();
-		ws.onclose = function(ev) {
-			console.log('Connection closed.');
-		};
-	});
 
 	function getType (service , ob){
 			var type ;
@@ -213,32 +220,54 @@ app.controller('MainCtrl', function($scope, $rootScope, crudSrv, utilityMethods,
 		return type;
 	};
 	
+	typeobj = {sip:0, malware:0, web:0, probing:0, ssh:0, database:0};
+	console.log(typeobj);
 	var check = function(type) {
 	//	$scope.total = $scope.total + 1;
 		if (type == "malware") {
 			$scope.mal = $scope.mal + 1;
+			typeobj.malware++;
 		} else if (type == "sip") {
 			$scope.sp = $scope.sp + 1;
+			typeobj.sip++;
 		} else if (type == "web") {
 			$scope.wb = $scope.wb + 1;
+			typeobj.web++;
 		}else if(type == "database"){
 				$scope.db = $scope.db +1;
+				typeobj.database++;
 		} else if (type == "ssh") {
 			$scope.ssh = $scope.ssh + 1;
+			typeobj.ssh++;
 		} else if (type == "probing") {
 			$scope.prob = $scope.prob + 1;
+			typeobj.probing++;
 		} else {
 
 		}
+		console.log(typeobj);
 	};
 
+	function start(){
+		starts = $interval(function() {
+		console.log("start here ...............");
+		var d = new Date();
+		var e = d.getTime();
+		var m = typeobj;
+		console.log(typeobj);
+		getCountTime(m, e);
+		typeobj = {sip:0, malware:0, web:0, probing:0, ssh:0, database:0};
+		console.log(typeobj);
+		}, 60000);
+	};
+	
+	start();
+	
 	var socket = new SockJS("http://115.186.132.18:8080/TI/rt/");
 	stompClient = Stomp.over(socket);
 	stompClient.connect({}, function(frame) {
-
 		stompClient.subscribe('/live/incidents', function(greeting) {
 			var mm = JSON.parse(greeting.body);
-			console.log(mm);
 			var obj =[];
 			if(mm.length > 0){
 				mm.forEach(function(m){
@@ -248,24 +277,22 @@ app.controller('MainCtrl', function($scope, $rootScope, crudSrv, utilityMethods,
 					"name": m['origin']['srcCountry'],
 					"lat": m.origin.geoPoint.lat,
 					"longs": m.origin.geoPoint.lon,
-					"type": m.getType(m.service, m),
+					"type": getType(m.service, m),
 					"port": m.dstPort,
 					"affected": {
 						"lat": 33.36,
 						"longs": 73.66
 					},
 					"obj":m
-				};
-				obj.push(ob);
+					};
+					obj.push(ob);
 			});	
-			
-				console.log(ojb);
 				getRealTime(obj);
 			
 			}
 		});
-
 		
+		/*
 		stompClient.subscribe('/live/counts', function(greeting) {
 			console.log(JSON.parse(greeting.body));
 			console.log(greeting.body);
@@ -273,17 +300,25 @@ app.controller('MainCtrl', function($scope, $rootScope, crudSrv, utilityMethods,
 			var d = new Date();
 			var e = d.getTime();
 			getCountTime(m, e);
-
 		});
-
-		;
-
-
+		*/
+	
 	});
 
-
+	$scope.$on("$destroy", function(event) {
+		//	$scope.apis.refresh();
+		if (stompClient != null) {
+                stompClient.disconnect();
+            }
+		$interval.cancel(starts);
+		$scope.apis.clearElement();
+	});
+	
 	function getCountTime(val, date) {
-		console.log(typeof val.malware);
+		console.log(typeof val.database);
+		if( val.malware + val.sip + val.web + val.probing + val.ssh + val.database == 0 ){
+		}
+		else{
 		malware.push({
 			x: date,
 			y: val.malware
@@ -296,14 +331,35 @@ app.controller('MainCtrl', function($scope, $rootScope, crudSrv, utilityMethods,
 			x: date,
 			y: val.web
 		});
+		
+		probing.push({
+			x: date,
+			y: val.probing
+		});
+		
+		ssh.push({
+			x: date,
+			y: val.ssh
+		});
+		
+		database.push({
+			x: date,
+			y: val.database
+		});
+		
 		allAttack.push({
 			x: date,
-			y: val.malware + val.sip + val.web
+			y:val.malware + val.sip + val.web + val.probing + val.ssh + val.database
 		});
-		var all = val.malware + val.sip + val.web;
-		$scope.malPerct = Math.floor((val.malware / all) * 100);
-		$scope.sipPerct = Math.floor((val.sip / all) * 100);
-		$scope.webPerct = Math.floor((val.web / all) * 100);
+		if( all != 0){
+			var all = val.malware + val.sip + val.web + val.probing + val.ssh;
+			$scope.malPerct = Math.floor((val.malware / all) * 100);
+			$scope.sipPerct = Math.floor((val.sip / all) * 100);
+			$scope.webPerct = Math.floor((val.web / all) * 100);
+			$scope.probPerct = Math.floor((val.probing / all) * 100);
+			$scope.sshPerct = Math.floor((val.ssh / all) * 100);
+			$scope.dbPerct = Math.floor((val.database / all) * 100);
+		}
 		var obj = [{
 			values: malware, //values - represents the array of {x,y} data points
 			key: 'Malware Attacks', //key  - the name of the series.
@@ -318,14 +374,31 @@ app.controller('MainCtrl', function($scope, $rootScope, crudSrv, utilityMethods,
 			color: '#23b7e5'
 
 		}, {
+			values: probing,
+			key: 'Probing Attacks',
+			color: '#FFA07A'
+
+		}, {
+			values: ssh,
+			key: 'Ssh Attacks',
+			color: '#141719'
+
+		},
+		 {
+			values: database,
+			key: 'Database Attacks',
+			color: '#54596a'
+
+		},{
 			values: allAttack,
 			key: 'Total Attacks',
-			color: '#54596a'
+			color: '#999'
 		}];
-
+		
 		$scope.lineChartData = obj;
 		$scope.safeApply();
 		$scope.apis.update();
+		}
 	};
 
 	
@@ -340,9 +413,8 @@ app.controller('MainCtrl', function($scope, $rootScope, crudSrv, utilityMethods,
 					data: elem,
 					hits: increment
 				});
-					
-					increment++;
-					check(elem.type);
+				increment++;
+				check(elem.type);
 			});
 			
 			$scope.items.sort(compares);
@@ -357,7 +429,7 @@ app.controller('MainCtrl', function($scope, $rootScope, crudSrv, utilityMethods,
 				hits: increment
 				});
 					increment++;
-				    check(elem);
+				    check(elem.type);
 				});
 				
 				if($scope.items.length >= 2){
@@ -368,48 +440,38 @@ app.controller('MainCtrl', function($scope, $rootScope, crudSrv, utilityMethods,
 					$scope.value = data;
 					$scope.safeApply();
 				}
-				
-			    
-			
 		}
 	};
 
-
+	
 });
 app.controller('AppSearchCtrl', function($scope, $rootScope, $location, utilityMethods, $state, $cookies) {
 	
 	  $scope.header ={};
 	  $scope.chooseValue = function(criteria){
-		$state.go("app.searchIp", {ID:criteria});		
+		
+		var ip = /^(([1-9]?\d|1\d\d|2[0-5][0-5]|2[0-4]\d)\.){3}([1-9]?\d|1\d\d|2[0-5][0-5]|2[0-4]\d)$/
+		
+		var te = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/
+		var p = ip.test(criteria);
+			if(p == true){
+				 	$state.go("app.showIp", {ID: "ct", IP: criteria});  
+			}else{
+				//$state.go("app.", {ID: "ct", IP: criteria});  
+			}		
 		};
-	  
+	   
+	   
+	   $scope.clearSearch = function()
+	   {
+		   $scope.selected = undefined;
+	   };
+	   
 	  
 	  $scope.logout = function(){
 		delete $cookies['token'];
 		  $state.go('app.dashboard-v1');
 	};
-	  
-	  console.log($state);
-	  if($state.params.ID != undefined){
-		 
-		 // $scope.ips = $state.Ip;
-		  var query ={
-			"query": {"match": {
-			"srcIP": $state.params.ID
-				}
-			}
-		};
-			
-		utilityMethods.commonElasticWithoutCount(query, "", function(resp){
-				
-				var data = resp.hits.hits;
-				console.log(data);	
-				$scope.ips = data;
-				
-			},function(fail){
-				alert(fail);
-			});
-	  }
 	  
 });
 
@@ -478,9 +540,20 @@ app.controller('ProbingCountriesUniqueIPCtrl', function($scope, $rootScope, crud
 			}	
 		};
 	
+			function compares(a, b) {
+				if (a.uniqueIPCount < b.uniqueIPCount) {
+					return 1;
+				}
+				if (a.uniqueIPCount > b.uniqueIPCount) {
+					return -1;
+				}
+				return 0;
+			};
 			crudSrv.getResults(rootURL.url.baseURL +"attacks/probing/unique-ips-per-country?size=10",function(data, status){
 				console.log(data);
+				
 				ngProgress.complete();
+					data.sort(compares);
 				getData(data);
 			}, function(error){
 			console.log(error);
@@ -492,7 +565,7 @@ app.controller('ProbingCountriesUniqueIPCtrl', function($scope, $rootScope, crud
 				data.forEach(function(elem, i) {
 					$scope.pieChartArray.push({
 						name: elem['country'],
-						y: parseInt(elem['uniqueIps'].length)
+						y: parseInt(elem['uniqueIPCount'])
 						});
 				});
 							
@@ -549,6 +622,8 @@ app.controller('ProbingIPCtrl', function($scope, $rootScope, crudSrv, utilityMet
 			}	
 		};
 	
+	
+	
 		$scope.onD2Set = function (newDate,oldDate) {
 			console.log(newDate);		
 			var d = new Date();
@@ -572,6 +647,7 @@ app.controller('ProbingIPCtrl', function($scope, $rootScope, crudSrv, utilityMet
 		crudSrv.getResults(rootURL.url.baseURL +"attacks/probing/ips?size=10",function(data, status){
 				console.log(data);
 				ngProgress.complete();
+			
 				getData(data);
 			}, function(error){
 			console.log(error);
@@ -2935,8 +3011,9 @@ app.controller('MostUsedPasswordCtrl', function($scope, $rootScope, crudSrv, uti
 	
 	$scope.obj ={};
 	
-		crudSrv.getResults(rootURL.url.baseURL + "global/attacking-countries?size=10",function(data, status){
+		crudSrv.getResults(rootURL.url.baseURL + "global/attacking-countries",function(data, status){
 			ngProgress.complete();
+			console.log(data.length);
 			getData(data);
 		}, function(error){
 			console.log(error);
@@ -2951,6 +3028,8 @@ app.controller('MostUsedPasswordCtrl', function($scope, $rootScope, crudSrv, uti
 			},function(error){console.log(error)});
 			*/	
 	  		function getData (data){
+				$scope.map = {};
+				$scope.mapPlugins = undefined;
 				 var objs ={};
 				$scope.countries = [];
 				$scope.countries = [];
@@ -2967,7 +3046,8 @@ app.controller('MostUsedPasswordCtrl', function($scope, $rootScope, crudSrv, uti
 				"#e699ff",
 				"#ecb3ff",
 				"#f2ccff",
-				"#f9e5ff"
+				"#ffccff",
+				"#f7e5ff"
 				];
 				for(var i in data)
 		(function(i){
@@ -2976,9 +3056,15 @@ app.controller('MostUsedPasswordCtrl', function($scope, $rootScope, crudSrv, uti
 				console.log("eu"); 
 			 }
 			 else{
-			var obj ={
-				 color:colors[i], numberOfThings: data[i].hits, country:data[i].country, countryCode:data[i].countryCode.toLowerCase()
-			 };
+				 if( i <= 9){
+					var obj ={
+					 color:colors[i], numberOfThings: data[i].hits, country:data[i].country, countryCode:data[i].countryCode.toLowerCase()
+					};
+				 }else{
+					 var obj ={
+					 color:colors[10], numberOfThings: data[i].hits, country:data[i].country, countryCode:data[i].countryCode.toLowerCase()
+					};
+				 }
 			 console.log(obj);
 		//	 console.log(data[i].code['buckets'][0]['key']);
 			
@@ -2994,7 +3080,7 @@ app.controller('MostUsedPasswordCtrl', function($scope, $rootScope, crudSrv, uti
 		scope: 'world',
 				  options: {
 					 width:750,
-					 staticGeoData : true,
+					 staticGeoData : false,
 					legendHeight: 200,
 					legendwidth: 300					// optionally set the padding for the legend
 				  },fills: {
@@ -3027,18 +3113,18 @@ app.controller('MostUsedPasswordCtrl', function($scope, $rootScope, crudSrv, uti
 				$scope.mapPlugins = {
 					bubbles: null,
 					customLegend: function(layer, data, options) {
-					
 						var html = ['<ul class="list-inline">'],
 						label = '';
 						for (var fillKey in $scope.countries) {
-							
-						html.push('<li class="key" ',
+							if(fillKey <= 9){
+								html.push('<li class="key" ',
 								  'style="border-top: 10px solid ' + $scope.countries[fillKey].color + '">',
 								  $scope.countries[fillKey].numberOfThings,
 								  '</li>');
+							}
 						}
 						html.push('</ul>');
-						d3.select(".datamaps-legend").html("");
+						d3.selectAll(".datamaps-legend").html("");
 						d3.select(this.options.element).append('div')
 					  .attr('class', 'datamaps-legend')
 					  .html(html.join(''));
@@ -3052,7 +3138,6 @@ app.controller('MostUsedPasswordCtrl', function($scope, $rootScope, crudSrv, uti
 	  
 	  $scope.searchDate = function(){
 		 
-		
 		var d = new Date($scope.date.startDate);
 		var a = $filter('date')($scope.date.startDate ,"yyyy-MM-dd HH:mm:ss");
 		var d1 = utilityMethods.addTInDateTime(a);
@@ -3063,10 +3148,11 @@ app.controller('MostUsedPasswordCtrl', function($scope, $rootScope, crudSrv, uti
 		console.log(d2);
 						$scope.countries,$scope.obj = undefined;
 						$scope.countries = []; $scope.obj ={};
-		crudSrv.getResults(rootURL.url.baseURL + "global/attacking-countries?size=10&from="+d1+"&to="+d2,function(data, status){
+		crudSrv.getResults(rootURL.url.baseURL + "global/attacking-countries?from="+d1+"&to="+d2,function(data, status){
 			ngProgress.complete();
 			$scope.countries,$scope.obj = undefined;
 			$scope.countries = []; $scope.obj ={};
+			$scope.map = undefined;
 			getData(data);
 		}, function(error){
 			console.log(error);
@@ -4254,7 +4340,7 @@ app.controller('DetailIpCtrl', [ '$scope', '$http', '$location', '$stateParams',
 			data: $scope.pieChartArray
 			}];
 		
-		$scope.barConfig = utilityMethods.chartObjs($scope.chartSeries, 'Activity Summary', '<span style="font-size:10px"></span> <br/><span style="font-size:10px">{series.name}: {point.y}</span>',false, $scope.categories);
+		$scope.barConfig = utilityMethods.chartObjs($scope.chartSeries, 'Activity Summary', '<span style="font-size:10px"></span> <br/><span style="font-size:10px"> {point.y}</span>',false, $scope.categories);
 		};
 			
 
@@ -4270,13 +4356,16 @@ app.controller('DetailIpCtrl', [ '$scope', '$http', '$location', '$stateParams',
 			$scope.pieChartArray = [];
 			$scope.categories = [];
 			data.forEach(function(elem, i) {
-							var a = $filter('date')(elem['x-time'] ,"yyyy-MM-dd HH:mm");
+						//	var a = $filter('date')(elem['x-time'] ,"yyyy-MM-dd HH:mm");
+						var date = new XDate(elem['x-time']);
+			      		date = date.toString('hh:mm tt, dd MMM yyyy');
+						console.log(date);
 						$scope.pieChartArray.push({
 						
-							name: a,
+							name: elem['x-time'],
 							y: parseInt(elem['y-hits'])
 						});
-						$scope.categories.push(a);
+						$scope.categories.push(elem['x-time']);
 					});
 		
 		$scope.chartSeries = [{
@@ -4285,7 +4374,7 @@ app.controller('DetailIpCtrl', [ '$scope', '$http', '$location', '$stateParams',
 			data: $scope.pieChartArray
 		}];
 		
-		$scope.chartConfig = utilityMethods.chartLineWithoutArea($scope.chartSeries, 'Activity Pulse', '<span style="font-size:10px"></span> <br/><span style="font-size:10px">{series.name}: {point.y}</span>',false, $scope.categories);
+		$scope.chartConfig = utilityMethods.chartLineWithoutArea($scope.chartSeries, 'Activity Pulse', '<span style="font-size:10px"></span> <br/><span style="font-size:10px">{point.y}</span>',false, $scope.categories);
 		
 		};
 				
@@ -4686,9 +4775,9 @@ app.controller('MainHashCtrl', function($scope, $rootScope, $stateParams, $locat
 	crudSrv.getResults(rootURL.url.baseURL + "attacks/malware/cuckoo-analysis?hash="+$stateParams.hash, function(data, status) {
 		ngProgress.complete();
 		console.log(data);
-		$scope.data = data[0];
-		data = data[0];
 		if(data.length !=0){
+			$scope.data = data[0];
+		data = data[0];	
 		$scope.target = data['target']['file'];
 		$scope.behavior = data['behavior'];
 		$scope.network = data['network'];
@@ -4742,25 +4831,56 @@ app.controller('MainHashCtrl', function($scope, $rootScope, $stateParams, $locat
 	});
 });
 
-
 //  -------------------------------------------   PDF Controller  ------------------------------
 app.controller('MainReportCtrl', function($scope, $rootScope, $stateParams, $location, $http, $timeout, ngProgress, crudSrv, utilityMethods, rootURL,$state) {
 
-		$scope.employees=[{name:'John', age:25, gender:'boy'},
-		{name:'Jessie', age:30, gender:'girl'},
-		{name:'Johanna', age:28, gender:'girl'},
-		{name:'Joy', age:15, gender:'girl'},
-		{name:'Mary', age:28, gender:'girl'},
-		{name:'Peter', age:95, gender:'boy'},
-		{name:'Sebastian', age:50, gender:'boy'},
-		{name:'Erika', age:27, gender:'girl'},
-		{name:'Patrick', age:40, gender:'boy'},
-		{name:'Samantha', age:60, gender:'girl'}];
 		$scope.selection=[];
+		$scope.ob = true;
+		$scope.obj = {};
 		// toggle selection for a given employee by name
 		$scope.toggleSelection = function toggleSelection(employeeName) {
+		for (name in employeeName.val) {
+                      nam = name;
+					  console.log(nam);
+				};
+		   $scope.obj.nam;
+		   console.log($scope.obj);
+		
+		$scope.checkboxModel = {
+			attackedOSs :true
+		};
+		
+		
+		if($scope.selection.length == 0){
 			
+			 var ob = {"employeeName":true};
+			$scope.selection.push(employeeName.val);
+			console.log(employeeName.val);
+			console.log($scope.selection);
+		}else{
+			var nam;
+				for (name in employeeName.val) {
+                      nam = name;
+				}
+			for(var i = 0, len = $scope.selection.length; i < len; i++) {
+				for (names in $scope.selection[i]) {
+						if(names === nam){
+							$scope.ob = false;
+							 $scope.selection.splice(i,1);
+							 break;
+						}
+					}
+				}
+			if( $scope.ob == true){
+				$scope.selection.push(employeeName.val);
+				console.log($scope.selection);
+			}	
+		}
+			
+			/*
+			var ob = {employeeName : true};
 	    var idx = $scope.selection.indexOf(employeeName);
+		console.log(idx);
 	    // is currently selected
 	    if (idx > -1) {
 	      $scope.selection.splice(idx, 1);
@@ -4768,37 +4888,57 @@ app.controller('MainReportCtrl', function($scope, $rootScope, $stateParams, $loc
 
 	    // is newly selected
 	    else {
+			console.log(employeeName);
+			
 	      $scope.selection.push(employeeName);
 	    }
+		*/
 	  };
-	   /*
-	  **
-	  */
-	  	$scope.malware=[{name:'Most probing Countries', age:25, gender:'boy'},
-							{name:'Most IP Countries', age:30, gender:'girl'},
-							{name:'Most probing IPs', age:28, gender:'girl'},
-							{name:'Most Attacking IPs', age:15, gender:'girl'},
-							{name:'Most Attacking Countries', age:28, gender:'girl'},
-							{name:'Attacking Ips 10 Attacks', age:95, gender:'boy'},
-							{name:'Top Vulnerabilities', age:50, gender:'boy'},
-							{name:'Top Few Malware Detected', age:27, gender:'girl'},
-							{name:'CNC Ips and Domains', age:40, gender:'boy'},
-							{name:'Attacked Protocols', age:60, gender:'girl'}];
+	   
+	   $scope.probing = [
+							{name:'Probed Countries', val:"probedCountries"},
+							{name:'Probed Countries Unique IP', val:"probedCountriesUniqueIPs"},
+							{name:'Probed IP', val:"probedIPs"}
+						];
+	 
+	  	$scope.malware=[{name:'Malware Countries', val:{"malwareCountries":true}},
+							{name:'Malware IP', val:{"malwareIPs":true}},
+							{name:'Malware IP 10', val:{"malwareIPs10":true}},
+							{name:'Detected Malwares', val:{"detectedMalware":true}},
+							{name:'Detected Malware Hashes', val:{"detectedMalwareHashes":true}},
+							{name:'Cnc IP', val:{"cncIPs":true} },
+							{name:'Cnc Domains', val:{"cncDomains":true} }
+						];
 							
-		$scope.sip = [{name:'Attack Division', age:25, gender:'boy'},
-							{name:'Register Server Attacks', age:30, gender:'girl'},
-							{name:'Option Flooding Attacks', age:28, gender:'girl'},
-							{name:'Flooding Proxy Server Attacks', age:15, gender:'girl'},
-							{name:'Sip Tools', age:28, gender:'girl'}];
+		$scope.sip = [{name:'SIP Countries', val:{"sipCountries":true}},
+							{name:'SIP Attacks', val:{"sipAttacks":true}},
+							{name:'SIP Registrar IP', val:{"sipRegistrarIPs":true}},
+							{name:'SIP Option IP', val:{"sipOptionIPs":true}},
+							{name:'SIP Proxy IP', val:{"sipProxyIPs":true}},
+							{name:'SIP Tools', val:{"sipTools":true} }
+						];
 
-		$scope.web = [{name:'Attack Division', age:25, gender:'boy'},
-							{name:'Top Few Countries', age:30, gender:'girl'},
-							{name:'Top Few IP Attacks', age:28, gender:'girl'},
-							{name:'Top Few Web Attacks', age:28, gender:'girl'}];
+		$scope.web = [
+						{name:'Web Countries', val:{"webCountries":true}},
+						{name:'Web IP', val:{"webIPs":true}},
+						{name:'Web Severities', val:{"webSeverities":true}},
+						{name:'Web Attacks', val:{"webAttacks":true}}
+					];
 
-		$scope.brute = [{name:'Most username used', age:25, gender:'boy'},
-							{name:'Most Password Used', age:30, gender:'girl'},
-							{name:'Ip Conducting SSh ', age:28, gender:'girl'}];
+		$scope.brute = [
+						{name:'SSH Countries', val:{"sshCountries":true}},
+						{name:'SSH IP', val:{"sshIPs":true}},
+						{name:'SSH Username', val:{"sshUsernames":true}},
+						{name:'SSH Password', val:{"sshPasswords":true}},
+						{name:'SSH Tools', val:{"sshTools":true}}
+					];
+					
+			
+		$scope.global = [
+						{name:'Attacked OS', val:{"attackedOSs":true}},
+						{name:'Vulnerabilities', val:{"vulnerabilities":true}},
+						{name:'Attacked Protocols', val:{"attackedProtocols":true}}
+					];		
 																
 		moment.locale('en');
       	$scope.data = {
@@ -4814,6 +4954,23 @@ app.controller('MainReportCtrl', function($scope, $rootScope, $stateParams, $loc
         ]
       };
 
+	  $scope.produceReport = function(){
+		  console.log($scope.checkboxModel);
+		  
+		  var resultObject = $scope.selection.reduce(function(result, currentObject) {
+			for(var key in currentObject) {
+				if (currentObject.hasOwnProperty(key)) {
+				result[key] = currentObject[key];
+				}
+			}
+				return result;
+		}, {});
+
+		console.log(resultObject);
+		  
+			console.log(JSON.stringify($scope.selection));
+	  };
+	  
       $scope.checkboxOnTimeSet = function () {
         $scope.data.checked = false;
       };
@@ -4884,19 +5041,244 @@ app.controller('DashBoardMalware', function($scope, $rootScope, $stateParams, $l
 });
 
 app.controller('DashBoardAttackInfo', function($scope, $rootScope, $stateParams, $location, $http, $timeout, ngProgress, crudSrv, utilityMethods, rootURL,$state) {
+		$scope.deleteModal = false;
+		$scope.counts = $stateParams.counts;
+		$scope.type = $stateParams.type;
+		var limit = 20;
+		if ($scope.counts == 0) {
+			$scope.type = "no";
+		} else {
+			$scope.type = $stateParams.type;
+			$scope.types = $stateParams.type;
+			if ($scope.type == "db")
+				$scope.type = "database";
+		}
 
-	$scope.countryName = $stateParams.country;
-	console.log($stateParams.hash);
-	$scope.pieChartArray = [];
-	var ip = "58.65.179.176";
-	ngProgress.start();
-	$scope.markers = {};
-	$scope.nav = [];
+		$scope.sort = function(keyname) {
+			$scope.sortKey = keyname; //set the sortKey to the param passed
+			$scope.reverse = !$scope.reverse; //if true make it false and vice versa
+		}
+
+		$scope.showModal = function(item) {
+			$scope.modalType = $scope.type;
+			console.log()
+			$scope.deleteModal = true;
+			$scope.value = item;
+			console.log(item);
+		};
+
+		$scope.showModalHide = function() {
+			$scope.deleteModal = false;
+			$scope.value = undefined;
+			$scope.modalType = undefined;
+		};
+		$scope.data = [];
+		if ($scope.counts <= 20) {
+			$scope.totalPerPage = 20;
+			var pageNumber = 0;
+			crudSrv.getResults(rootURL.url.baseURL + "attacks/" + $scope.types + "/recent-attack-count?page=" + pageNumber + "&limit=" + $scope.counts, function(data, status) {
+				$scope.data = data;
+				console.log(data);
+				ngProgress.complete();
+			}, function(error) {
+				console.log(error);
+			});
+		} else {
+
+			$scope.pagination = {
+				current: 1
+			};
+
+			$scope.totalCount = 0;
+			$scope.totalPerPage = 20;
+			getResultsPage(1);
+		}
+
+		$scope.pageChanged = function(newPage) {
+			getResultsPage(newPage);
+		};
+
+		function getResultsPage(pageNum) {
+			pageNum = pageNum - 1;
+			if (pageNum >= 1) {
+				var diff = $scope.counts - (pageNum * 20);
+				console.log(diff);
+				if (diff <= 19) {
+					limit = diff;
+				} else {
+					limit = 20;
+				}
+			} else {
+				limit = 20;
+
+			}
+
+			crudSrv.getResults(rootURL.url.baseURL + "attacks/" + $scope.types + "/recent-attack-count?page=" + pageNum + "&limit=" + limit, function(data, status) {
+				ngProgress.complete();
+				$scope.totalCount = $scope.counts;
+				console.log($scope.totalCount, $scope.pagination.current);
+				$scope.data = [];
+				$scope.data = data;
+
+				$scope.safeApply();
+				console.log(data);
+			}, function(error) {
+				console.log(error);
+			});
+
+		};
+		$scope.safeApply = function(fn) {
+			var phase = this.$root.$$phase;
+			if (phase == '$apply' || phase == '$digest') {
+				if (fn && (typeof(fn) === 'function')) {
+					fn();
+				}
+			} else {
+				this.$apply(fn);
+			}
+		};
+
+	/*
+	$scope.deleteModal = false;
+	$scope.counts = $stateParams.counts;
+	$scope.type = $stateParams.type;
+	if($scope.counts == 0){		
+		$scope.type = "no";	
+	}else{
+			$scope.type = $stateParams.type;
+			$scope.types = $stateParams.type;
+		if($scope.type == "db")
+				$scope.type =  "database";
+		}
 	
-	crudSrv.getResults("json/Malware_IP_dashInfo.json", function(data, status) {
-		console.log(data);
-		ngProgress.complete();
-		$scope.val = data;
+		$scope.sort = function(keyname){
+			$scope.sortKey = keyname;   //set the sortKey to the param passed
+			$scope.reverse = !$scope.reverse; //if true make it false and vice versa
+		}
+	
+		$scope.showModal = function(item){
+			$scope.modalType = $scope.type;
+			console.log()
+			$scope.deleteModal = true;
+			$scope.value = item;
+			console.log(item);
+		};
+
+		$scope.showModalHide = function(){
+			$scope.deleteModal = false;
+			$scope.value = undefined;
+			$scope.modalType = undefined;
+			
+		};
+			ngProgress.start();
+			var pageNumber = 0;
+		   crudSrv.getResults(rootURL.url.baseURL +"attacks/"+ $scope.types+"/recent-attack-count?page="+ pageNumber+"&limit="+$scope.counts,function(data, status){
+			$scope.data = data;
+				console.log(data);
+				ngProgress.complete();
+			}, function(error){
+			console.log(error);
+			});
+		*/
+});
+
+app.controller('TestDashBoard', function($scope, $rootScope, $stateParams, $location, $http, $timeout, ngProgress, crudSrv, utilityMethods, rootURL,$state) {
+	$scope.deleteModal = false;
+	$scope.counts = $stateParams.counts;
+	$scope.type = $stateParams.type;
+	var limit = 20;
+	if($scope.counts == 0){		
+		$scope.type = "no";	
+	}else{
+			$scope.type = $stateParams.type;
+			$scope.types = $stateParams.type;
+		if($scope.type == "db")
+				$scope.type =  "database";
+		}
+	
+		$scope.sort = function(keyname){
+			$scope.sortKey = keyname;   //set the sortKey to the param passed
+			$scope.reverse = !$scope.reverse; //if true make it false and vice versa
+		}
+	
+		$scope.showModal = function(item){
+			$scope.modalType = $scope.type;
+			console.log()
+			$scope.deleteModal = true;
+			$scope.value = item;
+			console.log(item);
+		};
+
+		$scope.showModalHide = function(){
+			$scope.deleteModal = false;
+			$scope.value = undefined;
+			$scope.modalType = undefined;			
+		};
+				$scope.data = [];
+			if($scope.counts <= 20){
+				$scope.totalPerPage = 20; 
+				var pageNumber = 0;
+				 crudSrv.getResults(rootURL.url.baseURL +"attacks/"+ $scope.types+"/recent-attack-count?page="+ pageNumber+"&limit="+$scope.counts,function(data, status){
+			$scope.data = data;
+			console.log(data);
+				ngProgress.complete();
+			}, function(error){
+			console.log(error);
+			});
+			}else{
+				
+				$scope.pagination = {
+					current: 1
+				};
+				
+				$scope.totalCount = 0;
+				$scope.totalPerPage = 20; 
+				getResultsPage(1);
+			}
+			
+			
+			$scope.pageChanged = function(newPage) {
+				getResultsPage(newPage);
+			};
+			
+			function getResultsPage(pageNum) {
+				  pageNum = pageNum -1;
+				  if( pageNum >= 1){
+					  var diff = $scope.counts -(pageNum * 20);
+					  console.log(diff);
+					  if(diff <= 19){
+						  limit = diff;
+					  }else{
+						  limit = 20;
+					  }
+				  }else{
+					  limit = 20;
+					  
+				  }
+
+			 crudSrv.getResults(rootURL.url.baseURL +"attacks/"+ $scope.types+"/recent-attack-count?page="+ pageNum+"&limit="+limit ,function(data, status){
+				ngProgress.complete();
+				 $scope.totalCount = $scope.counts;
+				 console.log($scope.totalCount , $scope.pagination.current);
+				$scope.data = [];
+				$scope.data = data;
+			 
+			  	$scope.safeApply();
+				console.log(data);
+				}, function(error){
+				console.log(error);
+				});
 		
-	});
+			};
+		$scope.safeApply = function(fn) {
+		var phase = this.$root.$$phase;
+		if (phase == '$apply' || phase == '$digest') {
+			if (fn && (typeof(fn) === 'function')) {
+				fn();
+			}
+		} else {
+			this.$apply(fn);
+		}
+		};
+		
 });

@@ -260,12 +260,7 @@ app.service('utilityMethods', function($timeout, $rootScope, ngProgress, crudSrv
 				text: chartTitle
 			},
 			 xAxis: {
-				categories:categories,
-				plotBands: [{ // visualize the weekend
-                from: 3.5,
-                to: 4.5,
-                color: 'rgba(68, 170, 213, .2)'
-				}]
+				categories:categories
 			},yAxis: {
 			     title:{
 					 text:yTitle,
@@ -307,6 +302,9 @@ app.service('utilityMethods', function($timeout, $rootScope, ngProgress, crudSrv
 					type: 'area'
 				},
 				cursor: 'pointer',
+					global: {
+					useUTC: false
+				}
 			},
 			series: chartSeries,
 			title: {
@@ -350,6 +348,12 @@ app.service('utilityMethods', function($timeout, $rootScope, ngProgress, crudSrv
 					type: 'line'
 				},
 				cursor: 'pointer',
+				global: {
+					useUTC: false
+				}
+			},
+			global:{
+					useUTC: false
 			},
 			series: chartSeries,
 			title: {
@@ -362,7 +366,8 @@ app.service('utilityMethods', function($timeout, $rootScope, ngProgress, crudSrv
 			     title:{
 					 text:yTitle,
 					 style:{ "color": "#000", "fontWeight": "bold", "font-size":"12px" }
-				 }	
+				 },
+				min:0	
 			},
 			credits: {
 				enabled: false

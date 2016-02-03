@@ -12,3 +12,33 @@ app.filter('getPercent', function() {
     return num + "%";
   }
 });
+
+app.filter('getCapitilize', function() {
+  return function(str) {
+     var num;
+	  if(str =="ssh"){
+		num = str.toUpperCase();  
+	  }else{
+	  num = str.substr(0, 1).toUpperCase() + str.substr(1);
+	  }
+	  console.log(num);
+	  return num;
+  }
+});
+
+app.filter('dateTimeFilter', function() { 
+   return function (date){
+	      	if((date != undefined) && (date != "")){
+	      		if((typeof date == "string") || (typeof date == "number")){
+	//				date = date.replace("T", " ");
+	//				date = date.substring(0, date.length - 3);
+			      		date = new XDate(date);
+			      		date = date.toString('hh:mm tt, dd MMM yyyy');
+		      		
+	      		} else {
+	      			date = "";
+	      		}
+	      	} 
+			return date;
+	      };
+});

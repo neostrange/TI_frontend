@@ -1,0 +1,68 @@
+<div class="bg-light lter b-b wrapper-sm">
+  <h1 class="m-n font-thin h3"> Sensor Information   </h1>
+ </div>  
+
+<div class="wrapper-md">
+		<div class="row">
+			<div class="col-lg-12">
+        <div ng-controller="addSensorCTRL">
+         <form name="userForm" ng-submit="submitForm()" novalidate>
+		 
+        <!-- NAME -->
+      
+		<div class="form-group" ng-class="{ 'has-error' : userForm.sensorName.$invalid && !userForm.sensorName.$pristine }">
+            <label>Sesnor Name</label>
+            <input type="text" name="sensorName" class="form-control" ng-model="user.sensorName" required>
+            <p ng-show="userForm.sensorName.$invalid && !userForm.sensorName.$pristine" class="help-block">Sensor name is required.</p>
+        </div>
+		
+      
+        <!-- IP -->
+		
+        <div class="form-group " ng-class="{ 'has-error' : userForm.sensorIP.$invalid && !userForm.sensorIP.$pristine }">
+            <label> Sensor IP</label>
+            <input type="text" name="sensorIP" class="form-control" ng-model="user.sensorIP">
+              <p ng-show="userForm.sensorIP.$invalid && !userForm.sensorIP.$pristine" class="help-block">IP Address is required.</p>
+        </div>
+       
+        <!-- Country -->
+        <div class="form-group" ng-class="{ 'has-error' : userForm.sensorCountry.$invalid && !userForm.sensorCountry.$pristine }">
+            <label>Country Name</label>
+            <input type="text" name="sensorCountry" class="form-control" ng-model="user.sensorCountry" ng-minlength="3" ng-maxlength="12">
+           <p ng-show="userForm.sensorCountry.$error.minlength" class="help-block">Location is too short.</p>
+            <p ng-show="userForm.sensorCountry.$error.maxlength" class="help-block">Location is too long.</p>
+        </div>
+		
+		 <!-- City -->
+		<div class="form-group" ng-class="{ 'has-error' : userForm.sensorCity.$invalid && !userForm.sensorCity.$pristine }">
+            <label> City Name</label>
+            <input type="text" name="sensorCity" class="form-control" ng-model="user.sensorCity" required>
+            <p ng-show="userForm.sensorCity.$invalid && !userForm.sensorCity.$pristine" class="help-block">CityName is required.</p>
+        </div>
+        
+		<div class="form-group" ng-class="{ 'has-error' : userForm.sensorPlacement.$invalid && !userForm.sensorPlacement.$pristine }">
+            <label> Sensor Placement</label>
+            <input type="text" name="sensorPlacement" class="form-control" ng-model="user.sensorPlacement" required>
+            <p ng-show="userForm.sensorPlacement.$invalid && !userForm.sensorPlacement.$pristine" class="help-block">SensorPlacement Address is required.</p>
+        </div>
+		
+		<div class="form-group" ng-class="{ 'has-error' : userForm.lat.$invalid && !userForm.lat.$pristine }">
+            <label> Latitudede </label>
+            <input type="text" name="lat" class="form-control" ng-model="user.lat" required>
+            <p ng-show="userForm.lat.$invalid && !userForm.lat.$pristine" class="help-block">Latitudede is required.</p>
+        </div>
+		
+		<div class="form-group" ng-class="{'has-error':userForm.lon.$invalid && !userForm.lon.$pristine }">
+            <label> Longitude</label>
+            <input type="text" name="lon" class="form-control" ng-model="user.lon" required>
+            <p ng-show="userForm.lon.$invalid && !userForm.lon.$pristine" class="help-block">Longitude Name is required.</p>
+        </div>
+		
+		
+        <button type="submit" class="btn btn-primary" ng-disabled="userForm.$invalid">Submit</button>
+        
+		</form>
+        </div>
+ </div>
+</div>
+</div> 

@@ -76,18 +76,22 @@
 		
 		<div class="col-lg-4 col-md-12">
 			<div class="panel wrapper">
-				<h4 class="font-thin m-t-none m-b"> Top few Attacks </h4>
-				  <p class="text-muted">Following figure shows the list of
-						individual IP addresses that are found
-						to be making connections and doing
-						probing. </p>
+				<h4 class="font-thin m-t-none m-b"> Attacking Countries </h4>
+				  <form class="form-inline m-sm" ng-show = "type != 'no'">
+					<div class="form-group ">
+					<label><b> Search </b> </label>
+					<input type="text" ng-model="search" class="form-control" placeholder="Search Country">
+					</div>
+					</form>
+						
+						
 				<div class="panel panel-default">
 					<div class="table-responsive">
 					  <table class="table b-t b-light">
 						<thead>
 						</thead>
 						<tbody>
-							<tr dir-paginate="val in countries | itemsPerPage:23">
+							<tr dir-paginate="val in countries | filter:search | itemsPerPage:23">
 								 <td><span ng-show="!val['country']"> </span>  <img src="img/gif/{{val['countryCode']}}.gif" height="12px" /> <a href="#/app/CountryIps/{{val.country}}/cCode/{{val.countryCode}}" >{{val['country']}} ({{val['numberOfThings']}}) </a> </td>
 								 
 							 </tr>

@@ -69,6 +69,27 @@ angular.module('app')
 				controller : 'InternalThreatCtrl'
               })
 			  
+			    .state('app.addInternalThreatForm', {
+                url: '/addInternalThreatForm',
+                templateUrl : 'views/map/addInternalThreatForm.html',
+				resolve: {
+                      deps: ['uiLoad',
+                        function( uiLoad ){
+                          return uiLoad.load( ['js/controllers/AddInternalThreatController.js'] );
+                      }]
+                  }
+              })
+			  
+			   .state('app.addSensorForm', {
+                url: '/addSensorForm',
+                templateUrl : 'views/addSensorForm.html',
+				resolve: {
+                      deps: ['uiLoad',
+                        function( uiLoad ){
+                          return uiLoad.load( ['js/controllers/AddInternalThreatController.js'] );
+                      }]
+                  }
+              })
 		 			  
 			   .state('app.CountryIps', {
                 url: '/CountryIps/:cName/cCode/:cCode',

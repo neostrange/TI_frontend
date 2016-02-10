@@ -1,5 +1,9 @@
 <div class="wrapper-md" ng-class="{'bg-orange':type == 'probing', 'bg-info':type == 'web' , 'bg-dark':type =='ssh', 'bg-success':type =='sip', 'bg-dark lter':type == 'database' , 'bg-danger':type== 'malware'}">
-	<h1 class="m-n font-thin h3">  <span ng-show="type"> <b> {{type | getCapitilize}} </b> </span> Attacks </h1>
+	 	
+	<h1 class="m-n font-thin h3">  <img ng-show ="type == 'malware'"  src ="img/Malware-2.png" height="20px"/>	 <img ng-show ="type == 'ssh'"  src ="img/brute.png" height="20px"/> 
+	 <img ng-show ="type == 'web'"  src ="img/web/web-2.png" height="20px"/>
+	 <img ng-show ="type == 'sip'"  src ="img/sip/sip-2.png" height="25px"/>
+	<span ng-show="type">  <b> {{type | getCapitilize}} </b> </span> Attacks </h1>
 </div>
 
 <div class="wrapper-md">
@@ -388,28 +392,41 @@
 						<div class="table-responsive" ng-if="modalType == 'ssh'">
 							<table class="table b-light">
 								<thead>
-								  <tr>
+									<tr>
 									<th><span ng-show="type"> {{modalType | getCapitilize}} </span> Attacks Detail </th>
 									</tr>
-								</thead>	
+								</thead>
 								
 								<tbody>
 								
-								<tr> <td> Tool </td>
-									<td>{{value['tool']}}</td>
+								<tr>
+								<td> Tool </td>
+								<td> {{value['tool']}} <td>
 								</tr>
+								</tbody>
 								
-								<tr ng-repeat = "val in value['authList']"> 
+								<tbody ng-repeat="val in value['authList']">
+							
+								<tr> 
 								<td> Password </td>
 								<td>{{val['password']}}</td>
-								<td> UserName </td>
+								</tr>
+								
+								<tr><td> UserName </td>
 								<td>{{val['username']}}</td>
+								</tr>
+								
+								<tr>
 								<td> dateTime </td>
 								<td>{{value['dateTime']}}</td>
+								</tr>
+								
+								<tr>
 								<td> Auth Success </td>
 								<td>{{val['success']}}</td>
 								</tr>
 								</tbody>
+								
 								</table>
 						</div>
 						

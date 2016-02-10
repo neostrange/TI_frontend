@@ -515,3 +515,22 @@ text {
   
 .new_sear button.btn_del{position: absolute;
     right: 4px; top: -2px;}
+
+.onMap{
+	position: relative;
+    top: 0px;
+    z-index: 2;
+}
+
+.mapTop{
+	position:relative;
+    top:-50px;
+}
+
+.dbCol{color:white;}
+
+.ipRiskfactor{
+	position:relative;
+	float:right;
+	padding-bottom:12px;
+}

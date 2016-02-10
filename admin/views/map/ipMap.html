@@ -14,12 +14,11 @@
 				
 			<div class="upfront_sec">
 					<h2 class="head">Analysis Result for:</h2>
-				
 					<p>   <span class="ipAddress"> {{ipAddress}} <span></p>
 					<p> <span class="cityName">{{country.city}}</span> <span class="countryName"><img src="img/gif/{{country.srcCountryCode}}.gif"> <span>{{country.srcCountry}} </span>  </p>  
-					
-					
+						
 			</div>
+			
 			<div class="upfront_sec activeIP">	
 					<!--<img src="img/logo.png" class="logo_main" style="float: left; margin:10px 5px 0 5px; width:18px;" /> -->
 					<div ng-show = "analysis.activity == 'Active'">
@@ -46,6 +45,14 @@
 					<h2>Attacks <span class="badge bg-danger"> {{country.attacks}}</h2>
 					-->
 					
+					<h3> Risk Factor <span class="badge" ng-class="{ 'bg-warning': analysis.riskFactor >=0 || analysis.riskFactor <=2 , 'bg-warning':analysis.riskFactor >=3 || analysis.riskFactor <=4, 'bg-danger':analysis.riskFactor >=5 || analysis.riskFactor <=9}"> {{analysis.riskFactor}}  </span> </h3>
+					<h3> Confidence <span class="badge bg-info">  {{analysis.confidence}} </h3>
+					<!--
+					<div class = "block" ng-class="{ 'bg-warning': analysis.riskFactor >=0 || analysis.riskFactor <=2 , 'bg-warning':analysis.riskFactor >=3 || analysis.riskFactor <=4, 'bg-danger':analysis.riskFactor >=5 || analysis.riskFactor <=9}">
+					<p class="font-thin h1 text-center">{{analysis.riskFactor}} </p>
+					<span class="text-muted text-xs">Risk Factor</span>
+					</div>
+					-->
 	
 			</div>
 		  
@@ -62,7 +69,7 @@
 
 	
         <div class="col wrapper" >
-         <div class="wrapper-md">
+         <div class="wrapper-sm">
 		 <div class="row">
 		 
 		 <div ng-show="showMap" class="col-md-6">
@@ -85,7 +92,23 @@
 		</div>	
 		</div>
 		 <div ng-show="showIp" >
-			<div calss="row">
+		 <!--
+			<div clsss="row">
+			<div class = "col-xs-2 block" ng-class="{ 'bg-warning': analysis.riskFactor >=0 || analysis.riskFactor <=2 , 'bg-warning':analysis.riskFactor >=3 || analysis.riskFactor <=4, 'bg-danger':analysis.riskFactor >=5 || analysis.riskFactor <=9}">
+			<p class="font-thin h1 text-center">{{analysis.riskFactor}} </p>
+			<span class="text-muted text-xs">Risk Factor</span>
+			</div>
+			
+			<div class="col-xs-2 ipRiskfactor">
+					<div class="panel item">
+					<div class="font-thin h1"> {{analysis.confidence}}</div>
+					<span class="text-muted text-xs"> Confidence</span>
+               
+              </div>
+            </div>
+			</div>	
+			-->
+			<!--
 			<div class="col-xs-6">
 					<div class="panel padder-v item">
 					<div class="font-thin h1 text-center" ng-class="{ 'bg-warning': analysis.riskFactor >=0 || analysis.riskFactor <=2 , 'bg-warning':analysis.riskFactor >=3 || analysis.riskFactor <=4, 'bg-danger':analysis.riskFactor >=5 || analysis.riskFactor <=9}">{{analysis.riskFactor}}</div>
@@ -96,6 +119,7 @@
               </div>
             </div>
 			
+			
 			<div class="col-xs-6">
 					<div class="panel padder-v item">
 					<div class="font-thin h1"> {{analysis.confidence}}</div>
@@ -105,8 +129,8 @@
                 </div>
               </div>
             </div>
-			
-		</div>
+			-->
+		
 		<div class="clear"> </div>
 
 		   
@@ -132,6 +156,7 @@
       </table>
 	  </div>
     </div>
+	
     </div>
   </div>
   

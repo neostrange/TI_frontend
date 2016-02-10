@@ -30,7 +30,6 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 						 $scope.d_one_error.date_two = false;
 					}
 				}
-				
 			}	
 		};
 	
@@ -61,7 +60,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 	
 		crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attack-counts?size=10",function(data, status){
 			ngProgress.complete();
-			console.log(data);
+		//	console.log(data);
 			getAttackTypes(data);
 		}, function(error){
 			console.log(error);
@@ -78,33 +77,21 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 							$scope.country['attacks'] = elem['total'];
 						}else{	
 						
-							console.log($scope.country['attackTypes']['attacks']);	
+						//	console.log($scope.country['attackTypes']['attacks']);	
 							$scope.country['attackTypes'].push({exploit:elem.category, hits:elem.hits});	
 							}
 						});
-						
-					//	$scope.country['attacks'] = count;
-						/*
-						 function compare(a,b) {
-								if (a.hits > b.hits)
-								return -1;
-								if (a.hits < b.hits)
-								return 1;
-								return 0;
-							};
-			$scope.country['attackTypes'].sort(compare);
-*/			
-	 };
+		};
 	 
 			 $scope.searchDate = function(){
 					var d = new Date($scope.date.startDate);
 					var a = $filter('date')($scope.date.startDate ,"yyyy-MM-dd HH:mm:ss");
 					var d1 = utilityMethods.addTInDateTime(a);
-					console.log(d1, $scope.date.startDate);
+				//	console.log(d1, $scope.date.startDate);
 					var dd = new Date($scope.date.endDate);
 					var a2 = $filter('date')($scope.date.endDate ,"yyyy-MM-dd HH:mm:ss");
 					var d2 = utilityMethods.addTInDateTime(a2);
-					console.log(d2);
+				//	console.log(d2);
 					gd1 = d1;
 					gd2 = d2;
 					crudSrv.getResults(rootURL.url.baseURL +"global/country/"+$scope.stateCode+"/attack-counts?size=10&from="+d1+"&to="+d2,function(data, status){
@@ -171,7 +158,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 								$scope.markers.push(obj);
 						});
 						
-					console.log($scope.markers);
+				//	console.log($scope.markers);
 						if($scope.markers.length > 1){
 					var lat = parseFloat($scope.markers[1]['lat']);
 					var lon = parseFloat($scope.markers[1]['lng']);
@@ -191,7 +178,6 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 	$scope.countryName = $stateParams.cName;
 	//alert($scope.countryName);
 		
-   
 	$scope.$on("leafletDirectiveMarker.click", function(event, args) {
 		console.log(event);
 		console.log(args);
@@ -203,12 +189,14 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 		});
 	});
 	
-	$scope.changeView = function (view){
-			//alert(view);
+	$scope.changeView = function (view, hit){
+		console.log(view);
+			console.log(hit);
+			if(hit >= 1){
 			if(view == 'Reconnaissance'){
-		
+				$scope.rec(view);
 			}
-				//$scope.rec(view);
+			//$scope.rec(view);
 			if(view == "SSH Attacks"){
 				$scope.sshAttacks(view);
 			}
@@ -218,13 +206,28 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 				$scope.applicationAttempt(view);
 			if(view == 'Malware Infection')
 				$scope.showvirusMap(view);
+			
+			if(view == 'DOS Attacks'){
+				$scope.dosAttacks(view);
+			}			
+			if(view == 'Network Policy Violation'){
+				$scope.networkPolicyViolation(view);
+			}
+			
+			if(view == 'Possible Compromise'){
+				$scope.possibleCompromise(view)
+			}
+			
 			};
-	
-	/*
-	*  Reconn function complete logic here 
+			
+		}
+		
+		
+			/*
+	*   function Policy compromise logic here 
 	*/
-	$scope.rec = function(rec){
-		$scope.view = "rec";
+	$scope.possibleCompromise= function(rec){
+		$scope.view = "compromise";
 		ngProgress.start();
 		$scope.center ={
 				lat: 42.5061,
@@ -234,26 +237,22 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 			
 		$scope.layers = {
 			baselayers: {
-				mapbox_light: {
-					name: 'Mapbox Light',
-					url: 'http://api.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}.png?access_token={apikey}',
-					type: 'xyz',
-					layerOptions: {
-						apikey: 'pk.eyJ1Ijoic2FtaTE2MTYiLCJhIjoiY2loeWY3eGxoMDNzYnQzbTF0bXBidWl2ZSJ9.zPBRQZ_zPlcW5lAnEamzZA',
-						mapid: 'mapbox.light'
-					}
-				},
-				osm: {
-					name: 'OpenStreetMap',
-					url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-					type: 'xyz'
-				}
+			  googleRoadmap: {
+                    name: 'Google Streets',
+                    layerType: 'ROADMAP',
+                    type: 'google'
+                },
+                googleTerrain: {
+                    name: 'Google Terrain',
+                    layerType: 'TERRAIN',
+                    type: 'google'
+                }
 			}
 		};
 		
-		$scope.markers = {};
+		$scope.markers = [];
 		if(gd1 != undefined && gd2 != undefined){
-					crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/probing/ip-geopoints?size=100&from="+gd1+"&to="+gd2,function(data, status){
+					crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/compromise/ip-geopoints?size=150&from="+gd1+"&to="+gd2,function(data, status){
 					console.log(data);
 					ngProgress.complete();
 					data.forEach(function(elem,i){
@@ -279,8 +278,191 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 				console.log(error);
 			});
 			}else{
-				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/probing/ip-geopoints?size=100",function(data, status){
+				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/compromise/ip-geopoints?size=150",function(data, status){
 				console.log(data);
+				data.forEach(function(elem,i){
+							 // console.log(elem['fields']['origin.geoPoint.lat'],elem['fields']['origin.geoPoint.lon'], elem['fields']['srcIP']);
+								var obj = {lat:parseFloat(elem['lat']), lng: parseFloat(elem['long']), label: {
+								message: elem['ip'] }};
+								$scope.markers.push(obj);
+						});
+						
+						console.log($scope.markers);
+						if($scope.markers.length > 1){
+						var lat = parseFloat($scope.markers[1]['lat']);
+						var lon = parseFloat($scope.markers[1]['lng']);
+						
+						$scope.center = {
+									lat: lat,
+									lng: lon,
+									zoom: 4
+								};
+						}								
+			}, function(error){
+			console.log(error);
+			});
+			}
+		
+		$scope.$on("leafletDirectiveMarker.click", function(event, args){
+			console.log(event);
+		//	console.log(args);
+			 var title = args['model']['label']['message'];
+		//	$location.path("/CountryIps/" + $state.country + "/ip/" + title);
+		 
+			$state.go("app.showIp", {ID: $scope.countryName, IP: title});
+		});
+	};	
+		
+		
+		
+		/*
+	*   function complete network policy logic here 
+	*/
+	$scope.networkPolicyViolation = function(rec){
+		$scope.view = "policy";
+		ngProgress.start();
+		$scope.center ={
+				lat: 42.5061,
+				lng: 13.85,
+				zoom: 6
+			};
+			
+		$scope.layers = {
+			baselayers: {
+			  googleRoadmap: {
+                    name: 'Google Streets',
+                    layerType: 'ROADMAP',
+                    type: 'google'
+                },
+                googleTerrain: {
+                    name: 'Google Terrain',
+                    layerType: 'TERRAIN',
+                    type: 'google'
+                }
+			}
+		};
+		
+		$scope.markers = [];
+		if(gd1 != undefined && gd2 != undefined){
+					crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/policy/ip-geopoints?size=150&from="+gd1+"&to="+gd2,function(data, status){
+					//console.log(data);
+					ngProgress.complete();
+					data.forEach(function(elem,i){
+							 // console.log(elem['fields']['origin.geoPoint.lat'],elem['fields']['origin.geoPoint.lon'], elem['fields']['srcIP']);
+								var obj = {lat:parseFloat(elem['lat']), lng: parseFloat(elem['long']), label: {
+								message: elem['ip'] }};
+								$scope.markers.push(obj);
+						});
+						
+						console.log($scope.markers);
+						if($scope.markers.length > 1){
+						var lat = parseFloat($scope.markers[1]['lat']);
+						var lon = parseFloat($scope.markers[1]['lng']);
+						
+						$scope.center = {
+									lat: lat,
+									lng: lon,
+									zoom: 4
+								};
+						}	
+					
+			}, function(error){
+				console.log(error);
+			});
+			}else{
+				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/policy/ip-geopoints?size=150",function(data, status){
+				console.log(data);
+				data.forEach(function(elem,i){
+							 // console.log(elem['fields']['origin.geoPoint.lat'],elem['fields']['origin.geoPoint.lon'], elem['fields']['srcIP']);
+								var obj = {lat:parseFloat(elem['lat']), lng: parseFloat(elem['long']), label: {
+								message: elem['ip'] }};
+								$scope.markers.push(obj);
+						});
+						
+					//	console.log($scope.markers);
+						if($scope.markers.length > 1){
+						var lat = parseFloat($scope.markers[1]['lat']);
+						var lon = parseFloat($scope.markers[1]['lng']);
+						
+						$scope.center = {
+									lat: lat,
+									lng: lon,
+									zoom: 4
+								};
+						}								
+			}, function(error){
+			console.log(error);
+			});
+			}
+		
+		$scope.$on("leafletDirectiveMarker.click", function(event, args){
+			console.log(event);
+		//	console.log(args);
+			 var title = args['model']['label']['message'];
+		//	$location.path("/CountryIps/" + $state.country + "/ip/" + title);
+		 
+			$state.go("app.showIp", {ID: $scope.countryName, IP: title});
+		});
+	};	
+		
+		
+	/*
+	*   function complete Dos Attack logic here 
+	*/
+	$scope.dosAttacks = function(rec){
+		$scope.view = "dos";
+		ngProgress.start();
+		$scope.center ={
+				lat: 42.5061,
+				lng: 13.85,
+				zoom: 6
+			};
+			
+		$scope.layers = {
+			baselayers: {
+			  googleRoadmap: {
+                    name: 'Google Streets',
+                    layerType: 'ROADMAP',
+                    type: 'google'
+                },
+                googleTerrain: {
+                    name: 'Google Terrain',
+                    layerType: 'TERRAIN',
+                    type: 'google'
+                }
+			}
+		};
+		
+		$scope.markers = [];
+		if(gd1 != undefined && gd2 != undefined){
+					crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/dos/ip-geopoints?size=150&from="+gd1+"&to="+gd2,function(data, status){
+					console.log(data);
+					ngProgress.complete();
+					data.forEach(function(elem,i){
+							 // console.log(elem['fields']['origin.geoPoint.lat'],elem['fields']['origin.geoPoint.lon'], elem['fields']['srcIP']);
+								var obj = {lat:parseFloat(elem['lat']), lng: parseFloat(elem['long']), label: {
+								message: elem['ip'] }};
+								$scope.markers.push(obj);
+						});
+						
+					//	console.log($scope.markers);
+						if($scope.markers.length > 1){
+						var lat = parseFloat($scope.markers[1]['lat']);
+						var lon = parseFloat($scope.markers[1]['lng']);
+						
+						$scope.center = {
+									lat: lat,
+									lng: lon,
+									zoom: 4
+								};
+						}	
+					
+			}, function(error){
+				console.log(error);
+			});
+			}else{
+				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/dos/ip-geopoints?size=150",function(data, status){
+				//console.log(data);
 				data.forEach(function(elem,i){
 							 // console.log(elem['fields']['origin.geoPoint.lat'],elem['fields']['origin.geoPoint.lon'], elem['fields']['srcIP']);
 								var obj = {lat:parseFloat(elem['lat']), lng: parseFloat(elem['long']), label: {
@@ -312,14 +494,107 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 		 
 			$state.go("app.showIp", {ID: $scope.countryName, IP: title});
 		});
+	};	
+		
+		
+	
+	/*
+	*  Reconn function complete logic here 
+	*/
+	$scope.rec = function(rec){
+		$scope.view = "rec";
+		ngProgress.start();
+		$scope.center ={
+				lat: 42.5061,
+				lng: 13.85,
+				zoom: 6
+			};
+			
+		$scope.layers = {
+			baselayers: {
+			  googleRoadmap: {
+                    name: 'Google Streets',
+                    layerType: 'ROADMAP',
+                    type: 'google'
+                },
+                googleTerrain: {
+                    name: 'Google Terrain',
+                    layerType: 'TERRAIN',
+                    type: 'google'
+                }
+			}
+		};
+		
+		$scope.markers = [];
+		if(gd1 != undefined && gd2 != undefined){
+					crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/probing/ip-geopoints?size=100&from="+gd1+"&to="+gd2,function(data, status){
+					//console.log(data);
+					ngProgress.complete();
+					data.forEach(function(elem,i){
+							 // console.log(elem['fields']['origin.geoPoint.lat'],elem['fields']['origin.geoPoint.lon'], elem['fields']['srcIP']);
+								var obj = {lat:parseFloat(elem['lat']), lng: parseFloat(elem['long']), label: {
+								message: elem['ip'] }};
+								$scope.markers.push(obj);
+						});
+						
+					//	console.log($scope.markers);
+						if($scope.markers.length > 1){
+						var lat = parseFloat($scope.markers[1]['lat']);
+						var lon = parseFloat($scope.markers[1]['lng']);
+						
+						$scope.center = {
+									lat: lat,
+									lng: lon,
+									zoom: 4
+								};
+						}	
+					
+			}, function(error){
+				console.log(error);
+			});
+			}else{
+				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/probing/ip-geopoints?size=100",function(data, status){
+				console.log(data);
+				data.forEach(function(elem,i){
+							 // console.log(elem['fields']['origin.geoPoint.lat'],elem['fields']['origin.geoPoint.lon'], elem['fields']['srcIP']);
+								var obj = {lat:parseFloat(elem['lat']), lng: parseFloat(elem['long']), label: {
+								message: elem['ip'] }};
+								$scope.markers.push(obj);
+						});
+						
+					//	console.log($scope.markers);
+						if($scope.markers.length > 1){
+						var lat = parseFloat($scope.markers[1]['lat']);
+						var lon = parseFloat($scope.markers[1]['lng']);
+						
+						$scope.center = {
+									lat: lat,
+									lng: lon,
+									zoom: 4
+								};
+						}								
+			}, function(error){
+			console.log(error);
+			});
+			}
+		
+		$scope.$on("leafletDirectiveMarker.click", function(event, args){
+			console.log(event);
+			console.log(args);
+			 var title = args['model']['label']['message'];
+		//	$location.path("/CountryIps/" + $state.country + "/ip/" + title);
+		 
+			$state.go("app.showIp", {ID: $scope.countryName, IP: title});
+		});
 	};
+	
 	
 	/*
 	*  SSH function complete logic here 
 	*/
 	$scope.sshAttacks = function(rec){
 		$scope.view = "ssh";
-		console.log(gd1, gd2);
+		//console.log(gd1, gd2);
 		ngProgress.start();
 			$scope.center ={
 				lat: 42.5061,
@@ -351,16 +626,18 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 	
 		if(gd1 != undefined && gd2 != undefined){
 			// withDate Time summary	
-			crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/ssh/summary?size=10&from="+gd1+"&to="+gd2,function(data, status){
-					console.log(data);
+				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/ssh/summary?size=10&from="+gd1+"&to="+gd2,function(data, status){
+				//	console.log(data);
 					$scope.ssh = data;
+					getSshSummary(data);
+				
 			}, function(error){
 				console.log(error);
 			});
 			
 			// withDate Time usernames	
 			crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/ssh/username?size=100&from="+gd1+"&to="+gd2,function(data, status){
-					console.log(data);
+				//	console.log(data);
 					getUsername(data);
 			}, function(error){
 				console.log(error);
@@ -368,7 +645,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 			
 			// withDate Time passwords	
 			crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/ssh/password?size=10&from="+gd1+"&to="+gd2,function(data, status){
-					console.log(data);
+				//	console.log(data);
 					getPassword(data);
 			}, function(error){
 				console.log(error);
@@ -376,7 +653,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 			
 			// withDate Time inputs	
 			crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/ssh/input?size=10&from="+gd1+"&to="+gd2,function(data, status){
-					console.log(data);
+				//	console.log(data);
 					getInput(data);
 			}, function(error){
 				console.log(error);
@@ -385,7 +662,8 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 			}else{
 				// without dateTime ssh summary 
 				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/ssh/summary?size=10",function(data, status){
-				console.log(data);
+			//	console.log(data);
+				getSshSummary(data);
 				$scope.ssh = data;	
 				}, function(error){
 				console.log(error);
@@ -393,7 +671,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 				
 				// without dateTime ssh username 
 				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/ssh/usernames?size=10",function(data, status){
-				console.log(data);
+			//	console.log(data);
 				getUsername(data);	
 				}, function(error){
 				console.log(error);
@@ -401,7 +679,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 				
 				// without dateTime ssh password 
 				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/ssh/passwords?size=10",function(data, status){
-				console.log(data);
+			//	console.log(data);
 				getPassword(data);	
 				}, function(error){
 				console.log(error);
@@ -410,7 +688,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 				
 				// without dateTime ssh input 
 				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/ssh/inputs?size=10",function(data, status){
-				console.log(data);
+			//	console.log(data);
 					getInput(data);	
 				}, function(error){
 				console.log(error);
@@ -428,7 +706,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 								$scope.markers.push(obj);
 						});
 						
-					console.log($scope.markers);
+				//	console.log($scope.markers);
 						if($scope.markers.length > 1){
 					var lat = parseFloat($scope.markers[1]['lat']);
 					var lon = parseFloat($scope.markers[1]['lng']);
@@ -444,7 +722,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 			});
 			}else{
 				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/ssh/ip-geopoints?size=100",function(data, status){
-				console.log(data);
+			//	console.log(data);
 				data.forEach(function(elem,i){
 							 // console.log(elem['fields']['origin.geoPoint.lat'],elem['fields']['origin.geoPoint.lon'], elem['fields']['srcIP']);
 								var obj = {lat:parseFloat(elem['lat']), lng: parseFloat(elem['long']), label: {
@@ -452,7 +730,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 								$scope.markers.push(obj);
 						});
 						
-					console.log($scope.markers);
+				//	console.log($scope.markers);
 						if($scope.markers.length > 1){
 					var lat = parseFloat($scope.markers[1]['lat']);
 					var lon = parseFloat($scope.markers[1]['lng']);
@@ -467,19 +745,46 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 			});
 			}
 		
+		
+			function getSshSummary(sumary){
+			//Password object
+			$scope.sshSummary = [];
+			$scope.sshSummaryLabel = [];
+			
+			sumary.forEach(function(elem,i) {
+				$scope.sshSummary.push([
+					elem['category'],
+					parseInt(elem['hits'])
+				]);
+				
+			$scope.sshSummaryLabel.push(elem['category']);
+			});
+			
+		$scope.chartSeries = [{
+			name: "SSH Summary",
+			colorByPoint: true,
+			data: $scope.sshSummary
+		}];
+		
+			$scope.sshSummaryConfig = utilityMethods.chartLine($scope.chartSeries, 'SSH Summary', '<span style="font-size:10px"></span> <br/><span style="font-size:10px">{series.name}: {point.y}</span>',false , $scope.sshSummaryLabel);
+		
+		};
+		
+		
+		
 		function getPassword (passwords){
 			//Password object
-		$scope.passwords = [];
-		$scope.passwordLabel = [];
-		console.log($scope.passwords);
-		passwords.forEach(function(elem,i) {
+			$scope.passwords = [];
+			$scope.passwordLabel = [];
+			console.log($scope.passwords);
+			passwords.forEach(function(elem,i) {
 			$scope.passwords.push([
 				elem['password'],
 				parseInt(elem['hits'])
 			]);
 			$scope.passwordLabel.push(elem['password']);
-		});
-		console.log($scope.passwords);
+			});
+		//console.log($scope.passwords);
 		$scope.chartSeries = [{
 			name: "Passwords",
 			colorByPoint: true,
@@ -538,7 +843,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 		
 		crudSrv.getResults("json/ssh_attacks.json", function(data, status){
 			ngProgress.complete();
-			console.log(data);
+		//	console.log(data);
 			$scope.userPassword = data['username_password'];
 		//Combination of passwords and Usernames
 		$scope.combination = [];
@@ -564,7 +869,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 		
 		$scope.$on("leafletDirectiveMarker.click", function(event, args){
 			console.log(event);
-			console.log(args);
+		//	console.log(args);
 			 var title = args['model']['label']['message'];
 		//	$location.path("/CountryIps/" + $state.country + "/ip/" + title);
 		 
@@ -572,6 +877,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 		});
 	
 	};
+	
 	
 	/*
 	*  DB function complete logic here 
@@ -607,15 +913,17 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 		
 		if(gd1 != undefined && gd2 != undefined){
 					crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/db/summary?size=10&from="+gd1+"&to="+gd2,function(data, status){
-					console.log(data);
+			//		console.log(data);
 					$scope.db = data;
+					getDBSummary(data);
 			}, function(error){
 				console.log(error);
 			});
 			}else{
 				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/db/summary?size=10",function(data, status){
 				console.log(data);
-				$scope.db = data;
+				//$scope.db = data;
+				getDBSummary(data);
 				ngProgress.complete();	
 			}, function(error){
 			console.log(error);
@@ -650,7 +958,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 			});
 			}else{
 				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/db/ip-geopoints?size=100",function(data, status){
-				console.log(data);
+			//	console.log(data);
 				data.forEach(function(elem,i){
 							 // console.log(elem['fields']['origin.geoPoint.lat'],elem['fields']['origin.geoPoint.lon'], elem['fields']['srcIP']);
 								var obj = {lat:parseFloat(elem['lat']), lng: parseFloat(elem['long']), label: {
@@ -673,7 +981,30 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 			console.log(error);
 			});
 			}
+			
+			function getDBSummary(sumary){
+			//	console.log(sumary);
+			//DB object
+				$scope.dbSummary = [];
+				$scope.dbSummaryLabel = [];
+				sumary.forEach(function(elem,i) {
+				$scope.dbSummary.push([
+					elem['category'],
+					parseInt(elem['hits'])
+				]);
+				
+			$scope.dbSummaryLabel.push(elem['category']);
+			});
+			
+		$scope.chartSeries = [{
+			name: "Database Summary",
+			colorByPoint: true,
+			data: $scope.dbSummary
+		}];
 		
+			$scope.dbSummaryConfig = utilityMethods.chartLine($scope.chartSeries, 'Database Summary', '<span style="font-size:10px"></span> <br/><span style="font-size:10px">{series.name}: {point.y}</span>',false , $scope.dbSummaryLabel);
+		
+		};
 		
 		
 		$scope.$on("leafletDirectiveMarker.click", function(event, args){
@@ -720,15 +1051,17 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 		
 		if(gd1 != undefined && gd2 != undefined){
 					crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/web/summary?size=10&from="+gd1+"&to="+gd2,function(data, status){
-					console.log(data);
+				//	console.log(data);
 					$scope.web = data;
+					getwebSummary(data);
 			}, function(error){
 				console.log(error);
 			});
 			
 			crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/sip/summary?size=10&from="+gd1+"&to="+gd2,function(data, status){
-					console.log(data);
+				//	console.log(data);
 					$scope.sip = data;
+					getSipSummary(data);
 			}, function(error){
 				console.log(error);
 			});
@@ -736,14 +1069,16 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 			}else{
 				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/web/summary?size=10",function(data, status){
 				console.log(data);
-				$scope.web = data;
+				//$scope.web = data;
+				getwebSummary(data);
 				ngProgress.complete();
 			}, function(error){
 			console.log(error);
 			});
 			
 			crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/sip/summary?size=10",function(data, status){
-				console.log(data);
+			//	console.log(data);
+				getSipSummary(data);
 				$scope.sip = data;
 			}, function(error){
 			console.log(error);
@@ -753,7 +1088,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 		
 		if(gd1 != undefined && gd2 != undefined){
 					crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/application/ip-geopoints?size=100&from="+gd1+"&to="+gd2,function(data, status){
-					console.log(data);
+				//	console.log(data);
 					ngProgress.complete();
 					data.forEach(function(elem,i){
 							 // console.log(elem['fields']['origin.geoPoint.lat'],elem['fields']['origin.geoPoint.lon'], elem['fields']['srcIP']);
@@ -761,7 +1096,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 								message: elem['ip'] }};
 								$scope.markers.push(obj);
 						});
-					console.log($scope.markers);
+				//	console.log($scope.markers);
 						var lat = parseFloat($scope.markers[1]['lat']);
 						var lon = parseFloat($scope.markers[1]['lng']);
 						$scope.center = {
@@ -774,7 +1109,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 			});
 			}else{
 				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/web/ip-geopoints?size=100",function(data, status){
-				console.log(data);
+			//	console.log(data);
 				data.forEach(function(elem,i){
 							 // console.log(elem['fields']['origin.geoPoint.lat'],elem['fields']['origin.geoPoint.lon'], elem['fields']['srcIP']);
 								var obj = {lat:parseFloat(elem['lat']), lng: parseFloat(elem['long']), label: {
@@ -794,17 +1129,64 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 			});
 		}
 		
+		
+		function getwebSummary(sumary){
+			//	console.log(sumary);
+			//DB object
+				$scope.webSummary = [];
+				$scope.webSummaryLabel = [];
+				sumary.forEach(function(elem,i) {
+				$scope.webSummary.push([
+					elem['category'],
+					parseInt(elem['hits'])
+				]);
+			 $scope.webSummaryLabel.push(elem['category']);
+			});
+			
+			$scope.chartSeries = [{
+				name: "Web Summary",
+				colorByPoint: true,
+				data: $scope.webSummary
+			}];
+		
+			$scope.webConfig = utilityMethods.chartLine($scope.chartSeries, 'Web Summary', '<span style="font-size:10px"></span> <br/><span style="font-size:10px">{series.name}: {point.y}</span>',false , $scope.webSummaryLabel);
+		
+		};
+		
+		
+		function getSipSummary(sumary){
+			//	console.log(sumary);
+			//DB object
+				$scope.sipSummary = [];
+				$scope.sipSummaryLabel = [];
+				sumary.forEach(function(elem,i) {
+				$scope.sipSummary.push([
+					elem['category'],
+					parseInt(elem['hits'])
+				]);
+				
+			$scope.sipSummaryLabel.push(elem['category']);
+			});
+			
+		$scope.chartSeries = [{
+			name: "SIP Summary",
+			colorByPoint: true,
+			data: $scope.sipSummary
+		}];
+		
+			$scope.sipConfig = utilityMethods.chartLine($scope.chartSeries, 'SIP Summary', '<span style="font-size:10px"></span> <br/><span style="font-size:10px">{series.name}: {point.y}</span>',false , $scope.sipSummaryLabel);
+		
+		};
 	
 		$scope.$on("leafletDirectiveMarker.click", function(event, args){
-			console.log(event);
-			console.log(args);
+		//	console.log(event);
+		//	console.log(args);
 			 var title = args['model']['label']['message'];
 		//	$location.path("/CountryIps/" + $state.country + "/ip/" + title);
 		
 			$state.go("app.showIp", {ID: $scope.countryName, IP: title});
 		});
 	};
-	
 	
 	/*
 	*  Virus complete logic here 
@@ -854,16 +1236,16 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 			$scope.data_file ;
 		if(gd1 != undefined && gd2 != undefined){
 					crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/malware/summary?size=5&from="+gd1+"&to="+gd2,function(data, status){
-				console.log(data);
+			//	console.log(data);
 				getData(data);
 			}, function(error){
 				console.log(error);
 			});
 			}else{
 				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/malware/summary?size=5",function(data, status){
-				console.log(data);
+			//	console.log(data);
 				$scope.vals = data;
-				console.log($scope.data_file);
+			//	console.log($scope.data_file);
 				ngProgress.complete();
 				var d = {};
 				d.node = [];
@@ -883,7 +1265,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 		
 			if(gd1 != undefined && gd2 != undefined){
 					crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/db/ip-geopoints?size=100&from="+gd1+"&to="+gd2,function(data, status){
-					console.log(data);
+				//	console.log(data);
 					ngProgress.complete();
 					data.forEach(function(elem,i){
 							 // console.log(elem['fields']['origin.geoPoint.lat'],elem['fields']['origin.geoPoint.lon'], elem['fields']['srcIP']);
@@ -891,7 +1273,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 								message: elem['ip'] }};
 								$scope.markers.push(obj);
 						});
-						console.log($scope.markers);
+					//	console.log($scope.markers);
 						if($scope.markers.length > 1){
 						var lat = parseFloat($scope.markers[1]['lat']);
 						var lon = parseFloat($scope.markers[1]['lng']);
@@ -914,7 +1296,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 								$scope.markers.push(obj);
 						});
 						
-						console.log($scope.markers);
+					//	console.log($scope.markers);
 						if($scope.markers.length > 1){
 						var lat = parseFloat($scope.markers[1]['lat']);
 						var lon = parseFloat($scope.markers[1]['lng']);
@@ -930,16 +1312,17 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 			}	
 		
 			
-				
-		
 		  function getData (virus){
 			$scope.obj = [];
+			$scope.malwareLabel = [];
 			$scope.ob = [];
 			virus.forEach(function(elem, i) {
 			$scope.obj.push([
 				elem['malware'],
 				parseInt(elem['hits'])
 			]);
+			$scope.malwareLabel.push(elem['malware']);
+			
 			});
 			$scope.chartSeries = [{
 			name: "Malwares",
@@ -947,8 +1330,8 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 			data: $scope.obj
 		}];
 
-		$scope.chartConfig = utilityMethods.chartObjs($scope.chartSeries, 'Most Malwares ', '<span style="font-size:10px">{series.name}(%): {point.percentage:.2f}%</span> <br/><span style="font-size:10px">{series.name}: {point.y}</span>');
-			$scope.chartConfig['options']['plotOptions']['column']['events'] = {
+		$scope.chartConfig = utilityMethods.chartLine($scope.chartSeries, 'Most Malwares ', '<span style="font-size:10px">{series.name}: {point.y}</span>', false, $scope.malwareLabel);
+			$scope.chartConfig['options']['plotOptions']['area']['events'] = {
 				click: function(event) {
 					console.log(event);
 				var malwareName = {
@@ -969,7 +1352,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 		
 		$scope.$on("leafletDirectiveMarker.click", function(event, args){
 			console.log(event);
-			console.log(args);
+		//	console.log(args);
 			 var title = args['model']['label']['message'];
 		//	$location.path("/CountryIps/" + $state.country + "/ip/" + title);
 		

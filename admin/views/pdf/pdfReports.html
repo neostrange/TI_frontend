@@ -1,42 +1,7 @@
-<div class="bg-light lter b-b wrapper-md">
-  <h1 class="m-n font-thin h3"> PDF Report 
- 
-</div>
+<div ng-include="'views/dateBar.html'"> </div>
 
  <div class="panel hbox hbox-auto-xs no-border wrapper-md">
 		<div class="check-box-panel">
-		<div class="row">
-			<div class="col-sm-4">
-				<div class="dropdown">
-					<a class="dropdown-toggle" id="dropdown1" role="button" data-toggle="dropdown" data-target="#"
-					   href="">
-						<div class="input-group">
-							<input type="text" class="form-control" ng-model="data.dateDropDownInputNoFormatting"  placeholder="startDateTime">
-							<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-						</div>
-					</a>
-					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-						<datetimepicker data-ng-model="data.dateDropDownInputNoFormatting"
-										data-datetimepicker-config="{ dropdownSelector: '#dropdown1' }"></datetimepicker>
-					</ul>
-				</div>
-			</div>
-			<div class="col-sm-4">
-			<div class="dropdown">
-                <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#"
-                   href="">
-                    <div class="input-group">
-                        <input type="text" class="form-control" ng-model="data.dateDropDownInput"  placeholder="EndDateTime">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                    </div>
-                </a>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                    <datetimepicker data-ng-model="data.dateDropDownInput"
-                                    data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }"></datetimepicker>
-                </ul>
-			</div>
-			</div>
-		</div>
 		
 		 <div class="row">
 			<div class="col-xs-4">
@@ -118,8 +83,8 @@
 		<div class="bg-light lter b-b wrapper-sm">
 			<div class="row">
 				<div class="col-sm-3">
-					<a ng-click="produceReport() "><button class="btn m-b-xs w-xs btn-default btn-rounded" > Download </button> </a>
-					<button class="btn m-b-xs w-xs btn-default btn-rounded"> cancel  </button>
+				<button type="button" class="btn m-b-xs w-xs btn-default" ng-disabled="(selection.length ==0) || (!request)" ng-click="produceReport()"> Download </button>
+				<button class="btn m-b-xs w-xs btn-default btn-rounded"> cancel  </button>
 				</div>	
 			</div> 
 		</div>

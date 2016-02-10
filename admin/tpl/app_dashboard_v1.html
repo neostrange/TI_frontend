@@ -55,62 +55,63 @@
     <div class="wrapper-md">
       <!-- stats -->
 	<div class="row row-sm text-center">
-		<div class="col-xs-2 col-md-2">
-              <a href="#/app/dashboardAttack/probing/counts/{{prob}}" target="_blank" class="block bg-orange dker item" title="Probing Attacks">
-                <div class="h1 text-white font-thin h1">{{prob}}</div>
-                 <i class="fa fa-user-secret fa-5"></i>
+		<div class="col-xs-2 col-md-2 onMap">
+              <a href="#/app/dashboardAttack/probing/counts/{{prob}}" target="_blank" title="Probing Attacks">
+				 <img src = "img/dashboard/Dashboard-4.png" height="18px" />
+			    <p class="text-white font-thin h3 "> {{prob}} </p>
 			  </a>
          </div>
 		 
-		 <div class="col-xs-2 col-md-2 rotate" ng-class="mal" title="Malware Attacks">
-              <a href="#/app/dashboardAttack/malware/counts/{{mal}}" target="_blank" class="block bg-danger item">
-                <span class="text-white font-thin h1 block"> {{mal}}</span>
-                <span> <i class="glyphicon glyphicon-fire"> </i> </span>
+		 <div class="col-xs-2 col-md-2 rotate onMap" ng-class="mal" title="Malware Attacks">
+              <a href="#/app/dashboardAttack/malware/counts/{{mal}}" target="_blank">
+				<img src ="img/malware/Malware-2.png" height="18px"/> 
+			   <p class="text-white font-thin h3 "> {{mal}} </p>
+			 
+               <!-- <span> <i class="glyphicon glyphicon-fire"> </i> </span> -->
               </a>
          </div>
 		 
-         <div class="col-xs-2 col-md-2">
-              <a href="#/app/dashboardAttack/web/counts/{{wb}}" target="_blank" class="block bg-info item" title="web Attacks">
-                <span class="text-white font-thin h1 block" >{{wb}}</span>
-                    <span> <i class="glyphicon glyphicon-globe"></i> </span> 
+         <div class="col-xs-2 col-md-2 onMap">
+              <a href="#/app/dashboardAttack/web/counts/{{wb}}" target="_blank" title="web Attacks">
+			   <img src ="img/web/web-2.png" height="18px"/>
+          	   <p class="text-white font-thin h3 "> {{wb}} </p>
+                    <!--<span> <i class="glyphicon glyphicon-globe"></i> </span>  -->
                </a>
          </div>
             
-		<div class="col-xs-2 col-md-2">
-            <a href="#/app/dashboardAttack/ssh/counts/{{ssh}}" target="_blank" class="block bg-black" title="SSH Attacks">
-              <span class="text-white font-thin h1 block">{{ssh}} </span>
-              <span><i class="glyphicon glyphicon-eye-close"></i> </span>   
+		<div class="col-xs-2 col-md-2 onMap">
+            <a href="#/app/dashboardAttack/ssh/counts/{{ssh}}" target="_blank" title="SSH Attacks">
+				<img src ="img/ssh/SSH-3.png" height="18px"/> 
+			   <p class="text-white font-thin h3 "> {{ssh}} </p>
+             <!-- <span><i class="glyphicon glyphicon-eye-close"></i> </span>   -->
              </a>
         </div>
 			
-		<div class="col-xs-2 col-md-2">
-             <a href="#/app/dashboardAttack/sip/counts/{{sp}}" target="_blank" class="block bg-success" title="SIP Attacks">
-               <span class="text-white font-thin h1 block">{{sp}} </span>
-               <span><i class="glyphicon glyphicon-earphone"></i> </span> 
+		<div class="col-xs-2 col-md-2 onMap">
+             <a href="#/app/dashboardAttack/sip/counts/{{sp}}" target="_blank" title="SIP Attacks">
+				<img src ="img/sip/sip-2.png" height="18px"/>
+               <p class="text-white font-thin h3 "> {{sp}} </p>
+             <!--  <span><i class="glyphicon glyphicon-earphone"></i> </span> -->
              </a>
         </div>
 			
-		<div class="col-xs-2 col-md-2 m-b-md">
-			<div class="bg-dark lter">          
-			<div class="text-primary-dk font-thin h1"><a href="#/app/dashboardAttack/db/counts/{{db}}" title="Database Attacks" target="_blank"> <span>{{db}} </a> </span></div>
-				<i class="fa fa-database"></i>
-            </div>
+		<div class="col-xs-2 col-md-2 onMap">
+			 <a href="#/app/dashboardAttack/db/counts/{{db}}" title="Database Attacks" target="_blank">
+              <!-- <img src = "img/dashboard/Dashboard-4.png" height="18px" /> -->
+			   <i class="fa fa-database fa-2 dbCol"></i>
+			 <p class="text-white font-thin h3 "> {{db}} </p>
+			      
+             <!--  <span><i class="glyphicon glyphicon-earphone"></i> </span> -->
+             </a>
         </div>
 		
-	</div>	
-      <div class="row">
-		<!--
-        <div class="col-md-5">
-          <div class="row row-sm ">
-            
-          </div>
-        </div>
-		-->
+	</div>
+	
+      <div class="row mapTop">
         <div class="col-md-12 col-xs-12 col-sm-12">
-          <div class="panel bg-dark">
+          <div class="panel bg-black">
           <div d3-maps vals="value" id="container"> </div>
            <!-- <datamap map="map" </datamap>  -->
-           
           </div>
         </div>
       </div>
@@ -410,11 +411,35 @@
 							<table class="table b-light">
 								<thead>
 								  <tr>
-									<th><span ng-show="type"> {{modalType | getCapitilize}} </span> Attacks Detail </th>
+									<th><span ng-show="modalType"> {{modalType | getCapitilize}} </span> Attacks Detail </th>
 									</tr>
-								</thead>	
+								</thead>
+								
+								<tr>  <td> Source IP </td>
+								<td>{{detail['srcIP']}}</td>
+								</tr>
+								
+								<tr>  <td>Country </td>
+								<td>{{detail['origin']['srcCountry']}}</td>
+								</tr>
+								<tr> <td>Destination IP</td>
+								<td>{{detail['dstIP']}}</td>
+								</tr>
+								<tr> <td> Service </td>
+								<td>{{detail['service']}}</td>	
+									
+								<tr ng-show="detail['signature']">
+								<td> Signature </td>
+								<td> {{detail['signature']}}</td>
+								</tr>	
+								
+								<tr ng-show="detail['signatureClass]">
+								<td> Signature Class </td>
+								<td> {{detail['signatureClass']}}</td>
+								</tr>
+								
 								<tbody ng-show="detail.service == 'mssql'">
-								<tr > 
+								<tr> 
 									<td> Mssql Client Name </td>
 									<td>{{detail['mssqlClientName']}}</td>
 								</tr>
@@ -436,6 +461,7 @@
 								<td>{{val['mysqlOp']}}</td>
 								</tr>
 								</tbody>
+								
 								</table>
 						</div>
 						
@@ -445,43 +471,50 @@
 								  <tr>
 									<th><span ng-show="modalType"> {{modalType}} </span> Attacks Detail </th>
 									</tr>
-								</thead>	
+								</thead>
 								
 								<tbody>
-								
-								
 								
 								<tr>  <td> Source IP </td>
 								<td>{{detail['srcIP']}}</td>
 								</tr>
 								
+								<tr>
+								<td> Tool </td>
+								<td> {{detail['tool']}} <td>
+								</tr>
 								
-								<tr>  <td>Country </td>
-								<td>{{detail['origin']['srcCountry']}}</td>
-								</tr>
-								<tr> <td>Destination IP</td>
-								<td>{{detail['dstIP']}}</td>
-								</tr>
 								<tr> <td> Service </td>
 								<td>{{detail['service']}}</td>								
 								</tr>
 								
-								<tr> <td> Tool </td>
-									<td>{{detail['tool']}}</td>
-								</tr>
+								</tbody>
 								
-								<tr ng-repeat = "val in detail['authList']"> 
+								<tbody ng-repeat="val in detail['authList']">
+							
+								<tr> 
 								<td> Password </td>
 								<td>{{val['password']}}</td>
-								<td> UserName </td>
+								</tr>
+								
+								<tr><td> UserName </td>
 								<td>{{val['username']}}</td>
+								</tr>
+								
+								<tr>
 								<td> dateTime </td>
 								<td>{{value['dateTime']}}</td>
+								</tr>
+								
+								<tr>
 								<td> Auth Success </td>
 								<td>{{val['success']}}</td>
-								
-								</tr>						
+								</tr>
 								</tbody>
+								
+								
+								<tbody>
+								
 								</table>
 						</div>
 						

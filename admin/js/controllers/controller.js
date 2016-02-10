@@ -845,7 +845,7 @@ app.controller('AttackingIPFixCtrl', function($scope, $rootScope, crudSrv, utili
 			}	
 		};
 		
-		crudSrv.getResults(rootURL.url.baseURL +"attacks/malware/ips?minCount=10&size=100",function(data, status){
+		crudSrv.getResults(rootURL.url.baseURL +"attacks/malware/ips?minCount=20&size=0",function(data, status){
 				console.log(data);
 				ngProgress.complete();
 				$scope.data = data;
@@ -862,7 +862,7 @@ app.controller('AttackingIPFixCtrl', function($scope, $rootScope, crudSrv, utili
 		var a2 = $filter('date')($scope.date.endDate ,"yyyy-MM-dd HH:mm:ss");
 		var d2 = utilityMethods.addTInDateTime(a2);
 				console.log(d2);
-				crudSrv.getResults(rootURL.url.baseURL +"attacks/malware/ips?minCount=10&size=10&from="+d1+"&to="+d2,function(data, status){
+				crudSrv.getResults(rootURL.url.baseURL +"attacks/malware/ips?minCount=20&size=0&from="+d1+"&to="+d2,function(data, status){
 				console.log(data);
 				ngProgress.complete();
 				$scope.data = data;
@@ -2967,6 +2967,7 @@ app.controller('MostUsedPasswordCtrl', function($scope, $rootScope, crudSrv, uti
  app.controller('GlobalThreatCtrl', function($scope, $rootScope, $stateParams, $location, $http, $timeout, ngProgress, crudSrv, utilityMethods, $window, $state, $filter, rootURL) {
 	
 	$scope.countries = [];
+	ngProgress.start();
 	$scope.date ={};
 	$scope.d_one_error = { today: false, date_two :false };
 	$scope.d_two_error = { today: false , date_one : false};
@@ -4834,71 +4835,125 @@ app.controller('MainHashCtrl', function($scope, $rootScope, $stateParams, $locat
 //  -------------------------------------------   PDF Controller  ------------------------------
 app.controller('MainReportCtrl', function($scope, $rootScope, $stateParams, $location, $http, $timeout, ngProgress, crudSrv, utilityMethods, rootURL,$state) {
 
-		$scope.selection=[];
-		$scope.ob = true;
-		$scope.obj = {};
-		// toggle selection for a given employee by name
-		$scope.toggleSelection = function toggleSelection(employeeName) {
-		for (name in employeeName.val) {
-                      nam = name;
-					  console.log(nam);
-				};
-		   $scope.obj.nam;
-		   console.log($scope.obj);
-		
-		$scope.checkboxModel = {
-			attackedOSs :true
+			$scope.date = {};
+		$scope.d_one_error = { today: false, date_two :false };
+		$scope.d_two_error = { today: false , date_one : false};
+		$scope.onD1Set = function (newDate,oldDate) {
+			console.log(newDate);		
+			var d = new Date();
+			if(newDate >= d){
+			  $scope.d_one_error.today = true;
+			}else
+			{
+				$scope.d_one_error.today = false;
+				if($scope.date.endDate != undefined){
+					if(newDate >= $scope.date.endDate){
+						 $scope.d_one_error.date_two = true;
+					}else{
+						 $scope.d_one_error.date_two = false;
+					}
+				}
+				
+			}	
 		};
 		
+		$scope.onD2Set = function (newDate,oldDate) {
+			console.log(newDate);		
+			var d = new Date();
+			if(newDate >= d){
+			  $scope.d_two_error.today = true;
+			}else
+			{
+				$scope.d_two_error.today = false;
+				if($scope.date.startDate != undefined){
+					if(newDate <= $scope.date.startDate){
+						 $scope.d_two_error.date_one = true;
+					}else{
+						$scope.d_two_error.date_one = false;
+						$scope.d_one_error.date_two =false ;
+					}
+				}
+				
+			}	
+		};
+	
 		
+		$scope.searchDate = function(){
+				var d = new Date($scope.date.startDate);
+		var a = $filter('date')($scope.date.startDate ,"yyyy-MM-dd HH:mm:ss");
+		var d1 = utilityMethods.addTInDateTime(a);
+		console.log(d1, $scope.date.startDate);
+		var dd = new Date($scope.date.endDate);
+		var a2 = $filter('date')($scope.date.endDate ,"yyyy-MM-dd HH:mm:ss");
+		var d2 = utilityMethods.addTInDateTime(a2);
+			/*
+			crudSrv.getResults(rootURL.url.baseURL + "attacks/ssh/countries?size=10&from="+d1+"&to="+d2, function(data, status){
+			ngProgress.complete();
+			 getData(data);
+			},function(error){
+				
+			});
+			*/
+				
+		};
+		
+		$scope.heading = "PDF Report";
+		
+		
+		
+		
+		$scope.selection=[];
+		
+		$scope.ob = true;
+		$scope.obj = {};
+		$scope.request = true;
+		// toggle selection for a given employee by name
+		$scope.toggleSelection = function toggleSelection(employeeName) {
+			$scope.ob = true;
+			console.log($scope.ob);
+		for (name in employeeName.val) {
+				$scope.obj.nam = name;
+					  console.log($scope.obj.nam);
+				};
+		  
+		  // console.log($scope.obj);
+		
+	    console.log($scope.selection.length);
 		if($scope.selection.length == 0){
 			
-			 var ob = {"employeeName":true};
+			// var ob = {"employeeName":true};
 			$scope.selection.push(employeeName.val);
 			console.log(employeeName.val);
 			console.log($scope.selection);
 		}else{
 			var nam;
-				for (name in employeeName.val) {
-                      nam = name;
-				}
 			for(var i = 0, len = $scope.selection.length; i < len; i++) {
 				for (names in $scope.selection[i]) {
-						if(names === nam){
+					  console.log(names);
+					   console.log(nam);
+						if(names == $scope.obj.nam){
 							$scope.ob = false;
 							 $scope.selection.splice(i,1);
-							 break;
+						   console.log("match");
 						}
 					}
 				}
-			if( $scope.ob == true){
+				
+					console.log($scope.ob);
+			if($scope.ob == true){
+				console.log($scope.selection.length);
 				$scope.selection.push(employeeName.val);
 				console.log($scope.selection);
 			}	
 		}
 			
-			/*
-			var ob = {employeeName : true};
-	    var idx = $scope.selection.indexOf(employeeName);
-		console.log(idx);
-	    // is currently selected
-	    if (idx > -1) {
-	      $scope.selection.splice(idx, 1);
-	    }
 
-	    // is newly selected
-	    else {
-			console.log(employeeName);
-			
-	      $scope.selection.push(employeeName);
-	    }
-		*/
 	  };
 	   
 	   $scope.probing = [
-							{name:'Probed Countries', val:"probedCountries"},
-							{name:'Probed Countries Unique IP', val:"probedCountriesUniqueIPs"},
-							{name:'Probed IP', val:"probedIPs"}
+							{name:'Probed Countries', val:{"probedCountries":true}},
+							{name:'Probed Countries Unique IP', val:{"probedCountriesUniqueIPs":true}},
+							{name:'Probed IP', val:{"probedIPs":true}}
 						];
 	 
 	  	$scope.malware=[{name:'Malware Countries', val:{"malwareCountries":true}},
@@ -4941,18 +4996,7 @@ app.controller('MainReportCtrl', function($scope, $rootScope, $stateParams, $loc
 					];		
 																
 		moment.locale('en');
-      	$scope.data = {
-        guardians: [
-          {
-            name: 'Peter Quill',
-            dob: null
-          },
-          {
-            name: 'Groot',
-            dob: null
-          }
-        ]
-      };
+      	
 
 	  $scope.produceReport = function(){
 		  console.log($scope.checkboxModel);
@@ -4965,60 +5009,26 @@ app.controller('MainReportCtrl', function($scope, $rootScope, $stateParams, $loc
 			}
 				return result;
 		}, {});
+		
+             createPostRequest(resultObject);		
 
 		console.log(resultObject);
 		  
 			console.log(JSON.stringify($scope.selection));
 	  };
 	  
-      $scope.checkboxOnTimeSet = function () {
-        $scope.data.checked = false;
-      };
-
-      $scope.inputOnTimeSet = function (newDate) {
-        // If you are not using jQuery or bootstrap.js,
-        // this will throw an error.
-        // However, can write this function to take any
-        // action necessary once the user has selected a
-        // date/time using the picker
-        $log.info(newDate);
-        $('#dropdown3').dropdown('toggle');
-      };
-
-      $scope.getLocale = function () {
-        return moment.locale();
-      };
-
-      $scope.setLocale = function (newLocale) {
-        moment.locale(newLocale);
-      };
-
-
-      $scope.guardianOnSetTime = function ($index, guardian, newDate, oldDate) {
-        $log.info($index);
-        $log.info(guardian.name);
-        $log.info(newDate);
-        $log.info(oldDate);
-        angular.element('#guardian' + $index).dropdown('toggle');
-      };
-
-      $scope.beforeRender = function ($dates) {
-        var index = Math.ceil($dates.length / 2);
-        $log.info(index);
-        $dates[index].selectable = false;
-      };
-
-      $scope.config = {
-        datetimePicker: {
-          startView: 'year'
-        }
-      };
-
-      $scope.configFunction = function configFunction() {
-        return {startView: 'month'};
-      };
-		
-
+		function createPostRequest(data){
+			
+			crudSrv.createRequest(rootURL.url.baseURL + "report", data ,function(data, status){
+			ngProgress.complete();
+			 getData(data);
+			},function(error){
+				
+			});
+			
+				
+		};
+    
 });
 
 //  -------------------------------------------   dashboard Attack  ------------------------------

@@ -1,6 +1,7 @@
-app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams, $location, $http, $timeout, ngProgress, crudSrv, utilityMethods,rootURL, $state, $filter) {
+app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams, $location, $http, $timeout, ngProgress, crudSrv, utilityMethods,rootURL, $state, $filter, $anchorScroll) {
 	$scope.message = 'Global Data Analysis';
 	ngProgress.start();
+	
 	$scope.heading = "Global Threat";
 	$scope.mar = [];
 	$scope.markers = [];
@@ -57,6 +58,16 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 			 $state.go("app.CountryIps", {cName: $scope.countryName, cCode:$scope.stateCode},{reload:true});
 		};
 	
+		$scope.safeApply = function(fn) {
+		var phase = this.$root.$$phase;
+		if (phase == '$apply' || phase == '$digest') {
+			if (fn && (typeof(fn) === 'function')) {
+				fn();
+			}
+		} else {
+			this.$apply(fn);
+		}
+		};
 	
 		crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attack-counts?size=10",function(data, status){
 			ngProgress.complete();
@@ -171,7 +182,56 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 			}, function(error){
 				console.log(error);
 			});		
-	
+			
+			
+			
+			// pagination works here for All Attack Lists  
+			$scope.pagination = {
+					current: 1
+			};
+				$scope.totalCount = 0;
+				$scope.totalPerPage = 20; 
+				getResultsPage(1);
+			
+			$scope.pageChanged = function(newPage) {
+				getResultsPage(newPage);
+			};
+			
+			
+			
+			function getResultsPage(pageNum) {
+				  pageNum = pageNum -1;
+				  ngProgress.start();
+				  if( pageNum >= 1){
+					  var diff = $scope.totalCount -(pageNum * 20);
+					  console.log(diff);
+					  if(diff <= 19){
+						  limit = diff;
+					  }else{
+						  limit = 20;
+					  }
+				  }else{
+					  limit = 20;
+					  
+				  }
+
+			 crudSrv.getResults(rootURL.url.baseURL +"attacks/all/ip-hits?page="+pageNum+"&limit="+limit+"&cc="+$scope.stateCode ,function(data, status){
+				ngProgress.complete();
+				 
+				 $scope.totalCount = data.total;
+				 console.log($scope.totalCount , $scope.pagination.current);
+				$scope.data = [];
+				$scope.data = data.list;
+			 
+			  	$scope.safeApply();
+				console.log(data);
+				}, function(error){
+				console.log(error);
+				});
+		
+			};		
+			
+	   
 	
 	var ip = "58.65.179.176";
 	$scope.view = "country";
@@ -188,6 +248,9 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 			IP: title
 		});
 	});
+	
+	
+	
 	
 	$scope.changeView = function (view, hit){
 		console.log(view);
@@ -252,7 +315,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 		
 		$scope.markers = [];
 		if(gd1 != undefined && gd2 != undefined){
-					crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/compromise/ip-geopoints?size=150&from="+gd1+"&to="+gd2,function(data, status){
+					crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/net-compromise/ip-geopoints?size=150&from="+gd1+"&to="+gd2,function(data, status){
 					console.log(data);
 					ngProgress.complete();
 					data.forEach(function(elem,i){
@@ -278,7 +341,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 				console.log(error);
 			});
 			}else{
-				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/compromise/ip-geopoints?size=150",function(data, status){
+				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/net-compromise/ip-geopoints?size=150",function(data, status){
 				console.log(data);
 				data.forEach(function(elem,i){
 							 // console.log(elem['fields']['origin.geoPoint.lat'],elem['fields']['origin.geoPoint.lon'], elem['fields']['srcIP']);
@@ -311,6 +374,52 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 		 
 			$state.go("app.showIp", {ID: $scope.countryName, IP: title});
 		});
+		
+			// pagination works here for All Attack Lists  net-compromise
+			$scope.pagination = {
+					current: 1
+			};
+				$scope.totalCount = 0;
+				$scope.totalPerPage = 20; 
+				
+				getResultsPage(1);
+			
+			$scope.pageChanged = function(newPage) {
+				 ngProgress.start();
+				 getResultsPage(newPage);
+			};
+			
+			function getResultsPage(pageNum) {
+				  pageNum = pageNum -1;
+				 
+				  if( pageNum >= 1){
+					  var diff = $scope.totalCount -(pageNum * 20);
+					  console.log(diff);
+					  if(diff <= 19){
+						  limit = diff;
+					  }else{
+						  limit = 20;
+					  }
+				  }else{
+					  limit = 20;
+					  
+				  }
+
+			 crudSrv.getResults(rootURL.url.baseURL +"attacks/net-compromise/ip-hits?page="+pageNum+"&limit="+limit+"&cc="+$scope.stateCode ,function(data, status){
+				ngProgress.complete();
+				 $scope.totalCount = data.total;
+				 console.log($scope.totalCount , $scope.pagination.current);
+				$scope.data = [];
+				$scope.data = data.list;
+			 
+			  	$scope.safeApply();
+				console.log(data);
+				}, function(error){
+				console.log(error);
+				});
+		
+			};		
+		
 	};	
 		
 		
@@ -344,7 +453,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 		
 		$scope.markers = [];
 		if(gd1 != undefined && gd2 != undefined){
-					crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/policy/ip-geopoints?size=150&from="+gd1+"&to="+gd2,function(data, status){
+					crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/net-policy/ip-geopoints?size=150&from="+gd1+"&to="+gd2,function(data, status){
 					//console.log(data);
 					ngProgress.complete();
 					data.forEach(function(elem,i){
@@ -370,7 +479,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 				console.log(error);
 			});
 			}else{
-				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/policy/ip-geopoints?size=150",function(data, status){
+				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/net-policy/ip-geopoints?size=150",function(data, status){
 				console.log(data);
 				data.forEach(function(elem,i){
 							 // console.log(elem['fields']['origin.geoPoint.lat'],elem['fields']['origin.geoPoint.lon'], elem['fields']['srcIP']);
@@ -394,6 +503,51 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 			console.log(error);
 			});
 			}
+		
+			// pagination works here for All Attack Lists  net-policy
+			$scope.pagination = {
+					current: 1
+			};
+				$scope.totalCount = 0;
+				$scope.totalPerPage = 20; 
+				
+				getResultsPage(1);
+			
+			$scope.pageChanged = function(newPage) {
+				 ngProgress.start();
+				 getResultsPage(newPage);
+			};
+			
+			function getResultsPage(pageNum) {
+				  pageNum = pageNum -1;
+				 
+				  if( pageNum >= 1){
+					  var diff = $scope.totalCount -(pageNum * 20);
+					  console.log(diff);
+					  if(diff <= 19){
+						  limit = diff;
+					  }else{
+						  limit = 20;
+					  }
+				  }else{
+					  limit = 20;
+					  
+				  }
+
+			 crudSrv.getResults(rootURL.url.baseURL +"attacks/net-policy/ip-hits?page="+pageNum+"&limit="+limit+"&cc="+$scope.stateCode ,function(data, status){
+				ngProgress.complete();
+				 $scope.totalCount = data.total;
+				 console.log($scope.totalCount , $scope.pagination.current);
+				$scope.data = [];
+				$scope.data = data.list;
+			 
+			  	$scope.safeApply();
+				console.log(data);
+				}, function(error){
+				console.log(error);
+				});
+		
+			};		
 		
 		$scope.$on("leafletDirectiveMarker.click", function(event, args){
 			console.log(event);
@@ -435,7 +589,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 		
 		$scope.markers = [];
 		if(gd1 != undefined && gd2 != undefined){
-					crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/dos/ip-geopoints?size=150&from="+gd1+"&to="+gd2,function(data, status){
+					crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/net-dos/ip-geopoints?size=150&from="+gd1+"&to="+gd2,function(data, status){
 					console.log(data);
 					ngProgress.complete();
 					data.forEach(function(elem,i){
@@ -461,7 +615,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 				console.log(error);
 			});
 			}else{
-				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/dos/ip-geopoints?size=150",function(data, status){
+				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/net-dos/ip-geopoints?size=150",function(data, status){
 				//console.log(data);
 				data.forEach(function(elem,i){
 							 // console.log(elem['fields']['origin.geoPoint.lat'],elem['fields']['origin.geoPoint.lon'], elem['fields']['srcIP']);
@@ -494,6 +648,53 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 		 
 			$state.go("app.showIp", {ID: $scope.countryName, IP: title});
 		});
+		
+		// pagination works here for All Attack Lists  net-Dos
+			$scope.pagination = {
+					current: 1
+			};
+				$scope.totalCount = 0;
+				$scope.totalPerPage = 20; 
+				
+				getResultsPage(1);
+			
+			$scope.pageChanged = function(newPage) {
+				 ngProgress.start();
+				 getResultsPage(newPage);
+			};
+			
+			function getResultsPage(pageNum) {
+				  pageNum = pageNum -1;
+				 
+				  if( pageNum >= 1){
+					  var diff = $scope.totalCount -(pageNum * 20);
+					  console.log(diff);
+					  if(diff <= 19){
+						  limit = diff;
+					  }else{
+						  limit = 20;
+					  }
+				  }else{
+					  limit = 20;
+					  
+				  }
+
+			 crudSrv.getResults(rootURL.url.baseURL +"attacks/net-dos/ip-hits?page="+pageNum+"&limit="+limit+"&cc="+$scope.stateCode ,function(data, status){
+				ngProgress.complete();
+				 $scope.totalCount = data.total;
+				 console.log($scope.totalCount , $scope.pagination.current);
+				$scope.data = [];
+				$scope.data = data.list;
+			 
+			  	$scope.safeApply();
+				console.log(data);
+				}, function(error){
+				console.log(error);
+				});
+		
+			};		
+		
+		
 	};	
 		
 		
@@ -554,7 +755,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 			});
 			}else{
 				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/probing/ip-geopoints?size=100",function(data, status){
-				console.log(data);
+				//console.log(data);
 				data.forEach(function(elem,i){
 							 // console.log(elem['fields']['origin.geoPoint.lat'],elem['fields']['origin.geoPoint.lon'], elem['fields']['srcIP']);
 								var obj = {lat:parseFloat(elem['lat']), lng: parseFloat(elem['long']), label: {
@@ -586,6 +787,52 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 		 
 			$state.go("app.showIp", {ID: $scope.countryName, IP: title});
 		});
+		
+		// pagination works here for All Attack Lists  REC
+			$scope.pagination = {
+					current: 1
+			};
+				$scope.totalCount = 0;
+				$scope.totalPerPage = 20; 
+				getResultsPage(1);
+			
+			$scope.pageChanged = function(newPage) {
+				getResultsPage(newPage);
+			};
+			
+			function getResultsPage(pageNum) {
+				  pageNum = pageNum -1;
+				  ngProgress.start();
+				  if( pageNum >= 1){
+					  var diff = $scope.totalCount -(pageNum * 20);
+					  console.log(diff);
+					  if(diff <= 19){
+						  limit = diff;
+					  }else{
+						  limit = 20;
+					  }
+				  }else{
+					  limit = 20;
+					  
+				  }
+
+			 crudSrv.getResults(rootURL.url.baseURL +"attacks/probing/ip-hits?page="+pageNum+"&limit="+limit+"&cc="+$scope.stateCode ,function(data, status){
+				ngProgress.complete();
+				 
+				 $scope.totalCount = data.total;
+				 console.log($scope.totalCount , $scope.pagination.current);
+				$scope.data = [];
+				$scope.data = data.list;
+			 
+			  	$scope.safeApply();
+				console.log(data);
+				}, function(error){
+				console.log(error);
+				});
+		
+			};		
+		
+		
 	};
 	
 	
@@ -659,6 +906,14 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 				console.log(error);
 			});
 			
+			// withDate Time Combination
+			crudSrv.getResults(rootURL.url.baseURL +"/attacks/ssh/credentials?size=10&from="+gd1+"&to="+gd2+"&cc="+$scope.stateCode,function(data, status){
+				//	console.log(data);
+					getCombination(data);
+			}, function(error){
+				console.log(error);
+			});
+			
 			}else{
 				// without dateTime ssh summary 
 				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/ssh/summary?size=10",function(data, status){
@@ -690,6 +945,14 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 				crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/ssh/inputs?size=10",function(data, status){
 			//	console.log(data);
 					getInput(data);	
+				}, function(error){
+				console.log(error);
+				});
+				
+				// without dateTime ssh Combination 
+				crudSrv.getResults(rootURL.url.baseURL + "attacks/ssh/credentials?size=10&cc="+$scope.stateCode,function(data, status){
+			//	console.log(data);
+					getCombination(data);	
 				}, function(error){
 				console.log(error);
 				});
@@ -840,17 +1103,18 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 	
 		};
         		
+		function getCombination(data){
 		
-		crudSrv.getResults("json/ssh_attacks.json", function(data, status){
 			ngProgress.complete();
+			$scope.userPassword = [];
 		//	console.log(data);
-			$scope.userPassword = data['username_password'];
+			$scope.userPassword = data;
 		//Combination of passwords and Usernames
 		$scope.combination = [];
 		$scope.ob = [];
 		$scope.userPassword.forEach(function(elem, i) {
 			$scope.combination.push([
-				elem['username']+ ":"+elem['passwords'],
+				elem['username']+ ":"+elem['password'],
 				parseInt(elem['hits'])
 			]);
 		});
@@ -861,11 +1125,7 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 			data: $scope.combination
 		}];
 		$scope.combinationConfig = utilityMethods.chartObjs($scope.chartSeries, 'Top Username & Passwords', '<span style="font-size:10px"></span> <br/><span style="font-size:10px">{series.name}: {point.y}</span>',false);
-		}, function(data,status){
-			ngProgress.complete();
-			utilityMethods.showMsgOnTop("Server responded with an error: " + status, "danger", 3000);
-		});
-		
+		};
 		
 		$scope.$on("leafletDirectiveMarker.click", function(event, args){
 			console.log(event);
@@ -875,6 +1135,50 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 		 
 			$state.go("app.showIp", {ID: $scope.countryName, IP: title});
 		});
+			// pagination works here for All Attack Lists  ssh
+			$scope.pagination = {
+					current: 1
+			};
+				$scope.totalCount = 0;
+				$scope.totalPerPage = 20; 
+				 
+				getResultsPage(1);
+			
+			$scope.pageChanged = function(newPage) {
+				 ngProgress.start();
+				 getResultsPage(newPage);
+			};
+			
+			function getResultsPage(pageNum) {
+				  pageNum = pageNum -1;
+				 
+				  if( pageNum >= 1){
+					  var diff = $scope.totalCount -(pageNum * 20);
+					  console.log(diff);
+					  if(diff <= 19){
+						  limit = diff;
+					  }else{
+						  limit = 20;
+					  }
+				  }else{
+					  limit = 20;
+					  
+				  }
+
+			 crudSrv.getResults(rootURL.url.baseURL +"attacks/ssh/ip-hits?page="+pageNum+"&limit="+limit+"&cc="+$scope.stateCode ,function(data, status){
+				ngProgress.complete();
+				 $scope.totalCount = data.total;
+				 console.log($scope.totalCount , $scope.pagination.current);
+				$scope.data = [];
+				$scope.data = data.list;
+			 
+			  	$scope.safeApply();
+				console.log(data);
+				}, function(error){
+				console.log(error);
+				});
+		
+			};		
 	
 	};
 	
@@ -1015,6 +1319,51 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 		
 			$state.go("app.showIp", {ID: $scope.countryName, IP: title});
 		});
+		
+			// pagination works here for All Attack Lists  net-policy
+			$scope.pagination = {
+					current: 1
+			};
+				$scope.totalCount = 0;
+				$scope.totalPerPage = 20; 
+				
+				getResultsPage(1);
+			
+			$scope.pageChanged = function(newPage) {
+				 ngProgress.start();
+				 getResultsPage(newPage);
+			};
+			
+			function getResultsPage(pageNum) {
+				  pageNum = pageNum -1;
+				 
+				  if( pageNum >= 1){
+					  var diff = $scope.totalCount -(pageNum * 20);
+					  console.log(diff);
+					  if(diff <= 19){
+						  limit = diff;
+					  }else{
+						  limit = 20;
+					  }
+				  }else{
+					  limit = 20;
+					  
+				  }
+
+			 crudSrv.getResults(rootURL.url.baseURL +"attacks/db/ip-hits?page="+pageNum+"&limit="+limit+"&cc="+$scope.stateCode ,function(data, status){
+				ngProgress.complete();
+				 $scope.totalCount = data.total;
+				 console.log($scope.totalCount , $scope.pagination.current);
+				$scope.data = [];
+				$scope.data = data.list;
+			 
+			  	$scope.safeApply();
+				console.log(data);
+				}, function(error){
+				console.log(error);
+				});
+		
+			};		
 	};
 	
 	
@@ -1186,6 +1535,52 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 		
 			$state.go("app.showIp", {ID: $scope.countryName, IP: title});
 		});
+		
+			// pagination works here for All Attack Lists  net-policy
+			$scope.pagination = {
+					current: 1
+			};
+				$scope.totalCount = 0;
+				$scope.totalPerPage = 20; 
+				
+				getResultsPage(1);
+			
+			$scope.pageChanged = function(newPage) {
+				 ngProgress.start();
+				 getResultsPage(newPage);
+			};
+			
+			function getResultsPage(pageNum) {
+				  pageNum = pageNum -1;
+				 
+				  if( pageNum >= 1){
+					  var diff = $scope.totalCount -(pageNum * 20);
+					  console.log(diff);
+					  if(diff <= 19){
+						  limit = diff;
+					  }else{
+						  limit = 20;
+					  }
+				  }else{
+					  limit = 20;
+					  
+				  }
+
+			 crudSrv.getResults(rootURL.url.baseURL +"attacks/application/ip-hits?page="+pageNum+"&limit="+limit+"&cc="+$scope.stateCode ,function(data, status){
+				ngProgress.complete();
+				 $scope.totalCount = data.total;
+				 console.log($scope.totalCount , $scope.pagination.current);
+				$scope.data = [];
+				$scope.data = data.list;
+			 
+			  	$scope.safeApply();
+				console.log(data);
+				}, function(error){
+				console.log(error);
+				});
+		
+			};		
+		
 	};
 	
 	/*
@@ -1343,19 +1738,65 @@ app.controller('DetailCountryIpsCtrl', function($scope, $rootScope, $stateParams
 					crudSrv.getResults(rootURL.url.baseURL + "global/country/"+$scope.stateCode+"/attacks/malware/hashes/"+malwareName.malware+"/?size=10",function(data, status){
 						console.log(data);
 						$scope.hashes = data;
+						var m = "placement";
+						 $location.hash(m);
+						 $anchorScroll();
 					});
-				
 				}	
-		};
+			};
 		
 		  };
+		  
+		 // pagination works here for All Malwares  net-policy
+			$scope.pagination = {
+					current: 1
+			};
+				$scope.totalCount = 0;
+				$scope.totalPerPage = 20; 
+				
+				getResultsPage(1);
+			
+			$scope.pageChanged = function(newPage) {
+				 ngProgress.start();
+				 getResultsPage(newPage);
+			};
+			
+			function getResultsPage(pageNum) {
+				  pageNum = pageNum -1;
+				 
+				  if( pageNum >= 1){
+					  var diff = $scope.totalCount -(pageNum * 20);
+					  console.log(diff);
+					  if(diff <= 19){
+						  limit = diff;
+					  }else{
+						  limit = 20;
+					  }
+				  }else{
+					  limit = 20;
+					  
+				  }
+
+			 crudSrv.getResults(rootURL.url.baseURL +"attacks/malware/ip-hits?page="+pageNum+"&limit="+limit+"&cc="+$scope.stateCode ,function(data, status){
+				ngProgress.complete();
+				 $scope.totalCount = data.total;
+				 console.log($scope.totalCount , $scope.pagination.current);
+				$scope.data = [];
+				$scope.data = data.list;
+			 
+			  	$scope.safeApply();
+				console.log(data);
+				}, function(error){
+				console.log(error);
+				});
+			};		
+		 
 		
 		$scope.$on("leafletDirectiveMarker.click", function(event, args){
 			console.log(event);
 		//	console.log(args);
 			 var title = args['model']['label']['message'];
 		//	$location.path("/CountryIps/" + $state.country + "/ip/" + title);
-		
 			$state.go("app.showIp", {ID: $scope.countryName, IP: title});
 		});
 

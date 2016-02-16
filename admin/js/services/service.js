@@ -390,6 +390,41 @@ app.service('utilityMethods', function($timeout, $rootScope, ngProgress, crudSrv
 		}, duration);
 	};
 	
+	this.getAttackTypePagination = function($scope, pageNum , url , success, fail){
+						  pageNum = pageNum -1;
+				 
+				  if( pageNum >= 1){
+					  var diff = $scope.totalCount -(pageNum * 20);
+					  console.log(diff);
+					  if(diff <= 19){
+						  limit = diff;
+					  }else{
+						  limit = 20;
+					  }
+				  }else{
+					  limit = 20;
+					  
+				  }
+
+				  var url = rootURL.url.baseURL +"attacks/net-dos/ip-hits?page="+pageNum+"&limit="+limit+"&cc="+$scope.stateCode;
+			 crudSrv.getResults( url,function(data, status){
+				ngProgress.complete();
+				success(data);
+				 $scope.totalCount = data.total;
+				 console.log($scope.totalCount , $scope.pagination.current);
+				$scope.data = [];
+				$scope.data = data.list;
+			 
+			  	$scope.safeApply();
+				console.log(data);
+				}, function(error){
+				console.log(error);
+				fail(error);
+				});
+		
+		
+	};
+	
 	this.countMarkers = function($scope, markerData){
 		
 		markerData.forEach(function(data, i) {
@@ -2276,6 +2311,37 @@ app.service('utilityMethods', function($timeout, $rootScope, ngProgress, crudSrv
 	
 	return query;
 	};
+	
+	
+	this.applicationHeader = function(){
+		return {
+				jsonConfig:{ 
+					headers:{ 
+						 'Content-Type': 'application/json',
+						'Accept': 'application/pdf'
+					}
+				},
+				
+				config:{
+					headers:{
+						'Content-Type' : 'application/ld+json',
+						'Authorization': 'Bearer '+ $cookies.api_id 
+					}
+
+				},
+				
+				tsConfig:{
+					headers:{
+						'Accept': 'application/ld+json',
+						'Authorization': 'Bearer '+ $cookies.ts_id 
+					}
+
+				}
+
+			}
+		};
+	
+	
 });
 	
 
@@ -2288,13 +2354,11 @@ app.service('crudSrv', function($http){
 		});
 	};
 	
-	this.createRequest = function(url, data, success, error){
+	this.createRequest = function(url, data,header,success, error){
 		var req = {
 		 method: 'POST',
 		 url: url,
-		 headers: {
-		   'Content-Type': 'application/json'
-		 },
+		 headers: header,
 		 data: data
 		};
 		
@@ -2398,13 +2462,13 @@ app.service('menuItemSrv', function($http){
 		 data: data
 		};
 		
-		
 		$http(req).success(function(data, status){
 			success(data, status);
 		}).error(function(data, status){
 			error(data, status);
 		});
 	};
+	
 	
 });
 

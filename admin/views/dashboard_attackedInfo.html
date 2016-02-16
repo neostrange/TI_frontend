@@ -2,7 +2,8 @@
 	 	
 	<h1 class="m-n font-thin h3">  <img ng-show ="type == 'malware'"  src ="img/Malware-2.png" height="20px"/>	 <img ng-show ="type == 'ssh'"  src ="img/brute.png" height="20px"/> 
 	 <img ng-show ="type == 'web'"  src ="img/web/web-2.png" height="20px"/>
-	 <img ng-show ="type == 'sip'"  src ="img/sip/sip-2.png" height="25px"/>
+	 <img ng-show ="type == 'sip'"  src ="img/sip/sip-2.png" height="25px"/> 
+	 <img ng-show ="type == 'probing'"  src ="img/probing/probing-4.png" height="25px"/> 
 	<span ng-show="type">  <b> {{type | getCapitilize}} </b> </span> Attacks </h1>
 </div>
 
@@ -322,14 +323,30 @@
 
 								<tr> <td> User Agent </td>
 									<td>{{value['userAgent']}}</td>
-								</tr>								
+								</tr>	
+
+								<tr> <td> Content Type </td>
+									<td>{{value['contentType']}}</td>
+								</tr>
+
+								
+								<tr> <td> Request Header </td>
+									<td>{{value['rawLog']['requestHeader']}}</td>
+								</tr>
+
+								
+								<tr> <td> Response Header </td>
+									<td>{{value['rawLog']['responseHeader']}}</td>
+								</tr>		
 								
 								</tbody>
 								</table>
 						</div>
 						
 						
-						<div class="table-responsive" ng-if="modalType == 'malware'">
+						
+							
+							<div class="table-responsive" ng-if="modalType == 'malware'">
 							<table class="table b-light">
 								<thead>
 								  <tr>
@@ -338,22 +355,27 @@
 								</thead>	
 								<tbody>
 								<tr> <td> Hash </td>
-									<td>{{value['md5Hash']}}</td>
+									<td>{{value['download']['md5Hash']}}</td>
 								</tr>
 								
 								<tr> <td> File Path </td>
-									<td>{{value['filePath']}}</td>
+									<td>{{value['download']['filePath']}}</td>
 								</tr>
 								
 								<tr> <td> URL </td>
-									<td>{{value['url']}}</td>
+									<td>{{value['download']['url']}}</td>
 								</tr>
 
 																
-								
 								</tbody>
 								</table>
-						</div>
+							</div>	
+							
+						
+							
+							
+							
+					
 						
 						<div class="table-responsive" ng-if="modalType == 'database'">
 							<table class="table b-light">

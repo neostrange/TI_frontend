@@ -17,7 +17,7 @@ angular.module('app')
 			$rootScope.$on('$stateChangeStart', 
 			function(event, toState, toParams, fromState, fromParams){ 
 			// do something
-				console.log(toState, toParams, fromState, fromParams);
+				
 			});
 
 		$rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
@@ -80,9 +80,31 @@ angular.module('app')
                   }
               })
 			  
+			   .state('app.listInternalThreats', {
+                url: '/listInternalThreats',
+                templateUrl : 'views/map/listInternalThreats.html',
+				resolve: {
+                      deps: ['uiLoad',
+                        function( uiLoad ){
+                          return uiLoad.load( ['js/controllers/AddInternalThreatController.js'] );
+                      }]
+                  }
+              })
+			  
 			   .state('app.addSensorForm', {
                 url: '/addSensorForm',
                 templateUrl : 'views/addSensorForm.html',
+				resolve: {
+                      deps: ['uiLoad',
+                        function( uiLoad ){
+                          return uiLoad.load( ['js/controllers/AddInternalThreatController.js'] );
+                      }]
+                  }
+              })
+			  
+			  .state('app.listAllSensors', {
+                url: '/listAllSensors',
+                templateUrl : 'views/listAllSensors.html',
 				resolve: {
                       deps: ['uiLoad',
                         function( uiLoad ){

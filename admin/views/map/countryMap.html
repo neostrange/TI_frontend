@@ -30,8 +30,8 @@
    	
  </div>
 
-
-        <div class="col wrapper-sm auto" ng-if="view == 'country'">
+		<div class="panel hbox hbox-auto-md no-border" ng-if="view == 'country'">
+        <div class="col wrapper-sm auto" >
 				<div class="row m-t-xs m-r-none m-b-none m-l-n">
 					<div class="col-sm-6">
 						<span class="font-bold label bg-danger font-14">Attacks: {{country.attacks}}</span>
@@ -47,10 +47,38 @@
 			</div>
 
 		</div>
-							
-		  
+		</div>					  
         </div>
+		
+		<div class="panel hbox hbox-auto-md no-border" ng-if="view == 'country'">
+		 <div class="panel panel-default">
+			<div class="table-responsive">
+			  <table class="table b-light">
+				<thead>
+				  <tr>
+						
+						 <th> Source IP</th>
+						 <th> Hits </th>
+				  </tr>
+				</thead>
+				<tbody>
+					 <tr dir-paginate="val in data | itemsPerPage:20" total-items="totalCount" current-page="pagination.current">
+									
+						<td><span ng-show="!val['ip']">-</span> <a href="#/app/CountryIps/country/ip/{{val['ip']}}" target="_blank" >{{val['ip']}} </a> </td>
+						<td>{{val['hits']}}</td>
+						
+					 </tr>
+				</tbody>
+			  </table>
+			 <div id="content">
+					<dir-pagination-controls on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
+			 </div>
+			 
+			</div>
 			
+			
+		</div>
+		</div>
 		
 		<div class="panel hbox hbox-auto-sm no-border" ng-if="view == 'rec'">
 		
@@ -66,7 +94,37 @@
           	 <leaflet defaults="defaults" layers="layers" center="center" markers="markers" width="100%" height="380px"></leaflet>
 		</div>
        
-		</div>			
+		</div>
+
+		<div class="panel hbox hbox-auto-md no-border" ng-if="view == 'rec'">
+		 <div class="panel panel-default">
+			<div class="table-responsive">
+			  <table class="table b-light">
+				<thead>
+				  <tr>
+						
+						 <th> Source IP</th>
+						 <th> Hits </th>
+				  </tr>
+				</thead>
+				<tbody>
+					 <tr dir-paginate="val in data | itemsPerPage:20" total-items="totalCount" current-page="pagination.current">
+									
+						<td><span ng-show="!val['ip']">-</span> <a href="#/app/CountryIps/country/ip/{{val['ip']}}" target="_blank" >{{val['ip']}} </a> </td>
+						<td>{{val['hits']}}</td>
+						
+					 </tr>
+				</tbody>
+			  </table>
+			 
+			</div>
+			
+			<div id="content">
+					<dir-pagination-controls on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
+			 </div>
+		</div>
+		</div>	
+		
 		
 		<!-- DOS Attacks -->
 		<div class="panel hbox hbox-auto-sm no-border" ng-if="view == 'dos'">
@@ -84,6 +142,34 @@
 		</div>
        
 		</div>		
+		<div class="panel hbox hbox-auto-md no-border" ng-if="view == 'dos'">
+		 <div class="panel panel-default">
+			<div class="table-responsive">
+			  <table class="table b-light">
+				<thead>
+				  <tr>
+						
+						 <th> Source IP</th>
+						 <th> Hits </th>
+				  </tr>
+				</thead>
+				<tbody>
+					 <tr dir-paginate="val in data | itemsPerPage:20" total-items="totalCount" current-page="pagination.current">
+									
+						<td><span ng-show="!val['ip']">-</span> <a href="#/app/CountryIps/country/ip/{{val['ip']}}" target="_blank" >{{val['ip']}} </a> </td>
+						<td>{{val['hits']}}</td>
+						
+					 </tr>
+				</tbody>
+			  </table>
+			 
+			</div>
+			
+			<div id="content">
+					<dir-pagination-controls on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
+			 </div>
+		</div>
+		</div>	
 		
 		
 		<!-- network policy Attacks -->
@@ -101,6 +187,34 @@
 		</div>
        
 		</div>
+		<div class="panel hbox hbox-auto-md no-border" ng-if="view == 'policy'">
+		 <div class="panel panel-default">
+			<div class="table-responsive">
+			  <table class="table b-light">
+				<thead>
+				  <tr>
+						
+						 <th> Source IP</th>
+						 <th> Hits </th>
+				  </tr>
+				</thead>
+				<tbody>
+					 <tr dir-paginate="val in data | itemsPerPage:20" total-items="totalCount" current-page="pagination.current">
+									
+						<td><span ng-show="!val['ip']">-</span> <a href="#/app/CountryIps/country/ip/{{val['ip']}}" target="_blank" >{{val['ip']}} </a> </td>
+						<td>{{val['hits']}}</td>
+						
+					 </tr>
+				</tbody>
+			  </table>
+			 
+			</div>
+			
+			<div id="content">
+					<dir-pagination-controls on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
+			 </div>
+		</div>
+		</div>	
 
 		<!-- network policy Attacks -->
 		<div class="panel hbox hbox-auto-sm no-border" ng-if="view == 'compromise'">
@@ -116,7 +230,37 @@
           	 <leaflet defaults="defaults" layers="layers" center="center" markers="markers" width="100%" height="380px"></leaflet>
 		</div>
        
-		</div>				
+		</div>
+		
+		<div class="panel hbox hbox-auto-md no-border" ng-if="view == 'compromise'">
+		 <div class="panel panel-default">
+			<div class="table-responsive">
+			  <table class="table b-light">
+				<thead>
+				  <tr>
+						
+						 <th> Source IP</th>
+						 <th> Hits </th>
+				  </tr>
+				</thead>
+				<tbody>
+					 <tr dir-paginate="val in data | itemsPerPage:20" total-items="totalCount" current-page="pagination.current">
+									
+						<td><span ng-show="!val['ip']">-</span> <a href="#/app/CountryIps/country/ip/{{val['ip']}}" target="_blank" >{{val['ip']}} </a> </td>
+						<td>{{val['hits']}}</td>
+						
+					 </tr>
+				</tbody>
+			  </table>
+			 
+			</div>
+			
+			<div id="content">
+					<dir-pagination-controls on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
+			 </div>
+		</div>
+		</div>	
+		
 		
 		<!-- SSH -->
 		<div class="panel hbox hbox-auto-md no-border" ng-if="view == 'ssh'">
@@ -133,8 +277,7 @@
 				<leaflet layers="layers" center="center" markers="markers" width="100%" height="350px"></leaflet>
           	 
 			</div>
-		
-	</div>
+		</div>
 	
 		 
 	   <div class="panel wrapper" ng-if="view == 'ssh'">
@@ -168,11 +311,41 @@
           <div class="col-md-6 b-r b-light no-border-xs" ng-show="passwords.length >=1">
 			<highchart id="chart1" config="passwordConfig" class="span9" ></highchart>
             </div>
-          <div class="col-md-6">            
+          <div class="col-md-6" ng-show="userPassword.length > 1">            
 				<highchart id="chart1" config="combinationConfig" class="span9" ></highchart>             
           </div>
         </div>
       </div>
+	  
+	  <div class="panel hbox hbox-auto-md no-border" ng-if="view == 'ssh'">
+		 <div class="panel panel-default">
+			<div class="table-responsive">
+			  <table class="table b-light">
+				<thead>
+				  <tr>
+						
+						 <th> Source IP</th>
+						 <th> Hits </th>
+				  </tr>
+				</thead>
+				<tbody>
+					 <tr dir-paginate="val in data | itemsPerPage:20" total-items="totalCount" current-page="pagination.current">
+									
+						<td><span ng-show="!val['ip']">-</span> <a href="#/app/CountryIps/country/ip/{{val['ip']}}" target="_blank" >{{val['ip']}} </a> </td>
+						<td>{{val['hits']}}</td>
+						
+					 </tr>
+				</tbody>
+			  </table>
+			 
+			</div>
+			
+			<div id="content">
+					<dir-pagination-controls on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
+			 </div>
+		</div>
+		</div>	
+	  
 	  
 	  <!--
 	   <div class="panel wrapper" ng-if="view == 'ssh'">
@@ -212,6 +385,34 @@
         </div>		
 		</div>
 		
+		<div class="panel hbox hbox-auto-md no-border" ng-if="view == 'db'">
+		 <div class="panel panel-default">
+			<div class="table-responsive">
+			  <table class="table b-light">
+				<thead>
+				  <tr>
+						
+						 <th> Source IP</th>
+						 <th> Hits </th>
+				  </tr>
+				</thead>
+				<tbody>
+					 <tr dir-paginate="val in data | itemsPerPage:20" total-items="totalCount" current-page="pagination.current">
+									
+						<td><span ng-show="!val['ip']">-</span> <a href="#/app/CountryIps/country/ip/{{val['ip']}}" target="_blank" >{{val['ip']}} </a> </td>
+						<td>{{val['hits']}}</td>
+						
+					 </tr>
+				</tbody>
+			  </table>
+			 
+			</div>
+			
+			<div id="content">
+					<dir-pagination-controls on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
+			 </div>
+		</div>
+		</div>	
 		   
 
 		
@@ -241,6 +442,35 @@
           </div>
         </div>
 		</div>
+		
+		<div class="panel hbox hbox-auto-md no-border" ng-if="view == 'aea'">
+		 <div class="panel panel-default">
+			<div class="table-responsive">
+			  <table class="table b-light">
+				<thead>
+				  <tr>
+						
+						 <th> Source IP</th>
+						 <th> Hits </th>
+				  </tr>
+				</thead>
+				<tbody>
+					 <tr dir-paginate="val in data | itemsPerPage:20" total-items="totalCount" current-page="pagination.current">
+									
+						<td><span ng-show="!val['ip']">-</span> <a href="#/app/CountryIps/country/ip/{{val['ip']}}" target="_blank" >{{val['ip']}} </a> </td>
+						<td>{{val['hits']}}</td>
+						
+					 </tr>
+				</tbody>
+			  </table>
+			 
+			</div>
+			
+			<div id="content">
+					<dir-pagination-controls on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
+			 </div>
+		</div>
+		</div>	
 		
 		<!--
 		<div class="col wrapper-sm w-md bg-auto dk r-r">
@@ -294,7 +524,8 @@
         <div class="col wrapper-sm w-xxl">
 			<div class="row">
 					<div class="col-sm-6">
-						
+						<button class="btn btn-sm btn-info" ng-click="showMaps()" ng-show="$parent.showPie === true;"> View MAP  </button>
+						<button class="btn btn-sm btn-info" ng-click="showGraphs()" ng-show="$parent.showMap === true;"> View Graph  </button>
 					</div>
 					<div class="col-sm-6">
 					<span class="font-bold label bg-success font-14 pull-right">{{countryName}}  <img src="img/gif/{{flag}}.gif" height="12px" /></span>
@@ -313,15 +544,47 @@
 			<!-- <account-details width="500" height="400" vals = "vals"></account-details > -->
 			</div>
 		</div>	
+		 </div>
+		 
+		 <div class="panel hbox hbox-auto-md no-border" ng-if="view == 'virusMap'">
+		 <div class="panel panel-default" ng-show="$parent.showMap === true;">
+			<div class="table-responsive">
+			  <table class="table b-light">
+				<thead>
+				  <tr>
+						
+						 <th> Source IP</th>
+						 <th> Hits </th>
+				  </tr>
+				</thead>
+				<tbody>
+					 <tr dir-paginate="val in data | itemsPerPage:20" total-items="totalCount" current-page="pagination.current">
+									
+						<td><span ng-show="!val['ip']">-</span> <a href="#/app/CountryIps/country/ip/{{val['ip']}}" target="_blank" >{{val['ip']}} </a> </td>
+						<td>{{val['hits']}}</td>
+						
+					 </tr>
+				</tbody>
+			  </table>
+			 
+			</div>
+			
+			<div id="content">
+					<dir-pagination-controls on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
+			 </div>
+		</div>
+		</div>	
 		
+		
+			<div class="panel hbox hbox-auto-md no-border" ng-if="view == 'virusMap'">
 			<div class="col wrapper-sm w-md bg-auto dk r-r">
 			<div class="m-xs">
-			 <button class="btn btn-sm btn-info" ng-click="showMaps()" ng-show="$parent.showPie === true;"> View MAP  </button>
-			 <button class="btn btn-sm btn-info" ng-click="showGraphs()" ng-show="$parent.showMap === true;"> View Graph  </button>
+			 
 			</div>
+			
 			 <div class="panel panel-default" ng-show="$parent.showPie === true;">
 				<div class="table-responsive">
-			  <table class="table" ng-show="hashes[0]">
+			  <table class="table" ng-show="hashes[0]" id="placement">
 				<thead>
 				 <th> Hash </th>
 				 <th> MalwareFamily </th>
@@ -339,12 +602,12 @@
 			  </table>
 				</div>	
 			
-			</div>
+				</div>
 		
-			</div>
+				</div>
+			</div>	
 			
 			
-		</div>		
 		
 			
 		<div class="panel hbox hbox-auto-md no-border" ng-if="view == 'virusMaps'">

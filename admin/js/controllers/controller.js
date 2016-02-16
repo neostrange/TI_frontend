@@ -200,9 +200,13 @@ app.controller('MainCtrl', function($scope, $rootScope, crudSrv, utilityMethods,
 	function getType (service , ob){
 			var type ;
 			if(service == "ssh"){
-				type = "ssh";
+				if(ob.hasOwnProperty('downloads')){
+					type = "malware";
+				}else{
+					type = "ssh";
+				}
 			}else if(service == "smb" || service == "microsoft-ds" ){
-				    if(ob.hasOwnProperty('md5Hash')){
+				    if(ob.hasOwnProperty('download')){
 							type  = "malware";
 					}else{
 						type = "probing";
@@ -245,7 +249,7 @@ app.controller('MainCtrl', function($scope, $rootScope, crudSrv, utilityMethods,
 		} else {
 
 		}
-		console.log(typeobj);
+	//	console.log(typeobj);
 	};
 
 	function start(){
@@ -258,7 +262,7 @@ app.controller('MainCtrl', function($scope, $rootScope, crudSrv, utilityMethods,
 		getCountTime(m, e);
 		typeobj = {sip:0, malware:0, web:0, probing:0, ssh:0, database:0};
 		console.log(typeobj);
-		}, 60000);
+		}, 30000);
 	};
 	
 	start();
@@ -280,8 +284,8 @@ app.controller('MainCtrl', function($scope, $rootScope, crudSrv, utilityMethods,
 					"type": getType(m.service, m),
 					"port": m.dstPort,
 					"affected": {
-						"lat": 33.36,
-						"longs": 73.66
+						"lat": m.destination.geoPoint.lat,
+						"longs": m.destination.geoPoint.lon
 					},
 					"obj":m
 					};
@@ -549,7 +553,7 @@ app.controller('ProbingCountriesUniqueIPCtrl', function($scope, $rootScope, crud
 				}
 				return 0;
 			};
-			crudSrv.getResults(rootURL.url.baseURL +"attacks/probing/unique-ips-per-country?size=10",function(data, status){
+			crudSrv.getResults(rootURL.url.baseURL +"attacks/probing/unique-country-ips?size=10",function(data, status){
 				console.log(data);
 				
 				ngProgress.complete();
@@ -4378,13 +4382,39 @@ app.controller('DetailIpCtrl', [ '$scope', '$http', '$location', '$stateParams',
 		$scope.chartConfig = utilityMethods.chartLineWithoutArea($scope.chartSeries, 'Activity Pulse', '<span style="font-size:10px"></span> <br/><span style="font-size:10px">{point.y}</span>',false, $scope.categories);
 		
 		};
+		
+		$scope.safeApply = function(fn) {
+		var phase = this.$root.$$phase;
+		if (phase == '$apply' || phase == '$digest') {
+			if (fn && (typeof(fn) === 'function')) {
+				fn();
+			}
+		} else {
+			this.$apply(fn);
+		}
+		};
+		
+		
+		// pagination works here for All Attack Lists  
+			$scope.pagination = {
+					current: 1
+			};
+				$scope.totalCount = 0;
+				$scope.totalPerPage = 20; 
+				
+			
+			$scope.pageChanged = function(newPage) {
+				getResultsPage(newPage);
+			};
 				
 			$scope.viewIPHistory = function(country, ip){
 				console.log(ip);
+				getResultsPage(1);
+				/*
 				crudSrv.getResults(rootURL.url.baseURL+"ip/"+$scope.ipAddress+"/history", function(data, status){
 				ngProgress.complete();
 				console.log(data);
-				$scope.data = data;
+				$scope.data = data.content;
 				$scope.showIp = true;
 				$scope.showMap = false;
 			}, function(data,status){
@@ -4392,8 +4422,45 @@ app.controller('DetailIpCtrl', [ '$scope', '$http', '$location', '$stateParams',
 				 console.log("fail");
 				utilityMethods.showMsgOnTop("Server responded with an error: " + status, "danger", 3000);
 				});
+				*/
 					
 			};
+			
+			
+			function getResultsPage(pageNum) {
+				  pageNum = pageNum -1;
+				 
+				  if( pageNum >= 1){
+					  var diff = $scope.totalCount -(pageNum * 20);
+					  console.log(diff);
+					  if(diff <= 19){
+						  limit = diff;
+					  }else{
+						  limit = 20;
+					  }
+				  }else{
+					  limit = 20;
+					  
+				  }
+
+			 crudSrv.getResults(rootURL.url.baseURL+"ip/"+$scope.ipAddress+"/history?page="+pageNum+"&limit="+limit ,function(data, status){
+				ngProgress.complete();
+				
+				 $scope.totalCount = data.totalElements;
+				 console.log($scope.totalCount , $scope.pagination.current);
+				$scope.data = [];
+				$scope.data = data.content;
+				$scope.showIp = true;
+				$scope.showMap = false;
+			 
+			  	$scope.safeApply();
+				console.log(data);
+				}, function(error){
+				console.log(error);
+				});
+			};		
+			
+			
 			
 			$scope.viewMap = function(){
 				$scope.showIp = false;
@@ -4833,12 +4900,21 @@ app.controller('MainHashCtrl', function($scope, $rootScope, $stateParams, $locat
 });
 
 //  -------------------------------------------   PDF Controller  ------------------------------
-app.controller('MainReportCtrl', function($scope, $rootScope, $stateParams, $location, $http, $timeout, ngProgress, crudSrv, utilityMethods, rootURL,$state) {
+app.controller('MainReportCtrl', function($scope, $rootScope, $stateParams, $location, $http, $timeout, ngProgress, crudSrv, utilityMethods, rootURL,$state, ngToast, toaster, $window , $sce) {
 
 			$scope.date = {};
-		$scope.d_one_error = { today: false, date_two :false };
-		$scope.d_two_error = { today: false , date_one : false};
-		$scope.onD1Set = function (newDate,oldDate) {
+			var jsonConfig={ 
+				 
+						 'Content-Type': 'application/json',
+						'Accept': 'application/pdf'
+					
+				};
+				
+			console.log(jsonConfig);
+			 var resultObject;
+			$scope.d_one_error = { today: false, date_two :false };
+			$scope.d_two_error = { today: false , date_one : false};
+			$scope.onD1Set = function (newDate,oldDate) {
 			console.log(newDate);		
 			var d = new Date();
 			if(newDate >= d){
@@ -4886,24 +4962,28 @@ app.controller('MainReportCtrl', function($scope, $rootScope, $stateParams, $loc
 		var dd = new Date($scope.date.endDate);
 		var a2 = $filter('date')($scope.date.endDate ,"yyyy-MM-dd HH:mm:ss");
 		var d2 = utilityMethods.addTInDateTime(a2);
-			/*
-			crudSrv.getResults(rootURL.url.baseURL + "attacks/ssh/countries?size=10&from="+d1+"&to="+d2, function(data, status){
-			ngProgress.complete();
-			 getData(data);
-			},function(error){
-				
-			});
-			*/
-				
+			 var ob = $scope.selection.reduce(function(result, currentObject) {
+			for(var key in currentObject) {
+				if (currentObject.hasOwnProperty(key)) {
+				result[key] = currentObject[key];
+				}
+			}
+				return result;
+		}, {});
+			
+			$scope.request = false;
+			$scope.toaster = {
+				type: 'wait',
+				title: 'PDF Report',
+				text: 'Please Wait for a Minute'
+			};
+			toaster.pop($scope.toaster.type, $scope.toaster.title, $scope.toaster.text , 10000);
+             createPostRequest(ob, "http://115.186.132.18:8080/BirtReporting/report?from="+d1+"&to="+d2);		
 		};
 		
+		
 		$scope.heading = "PDF Report";
-		
-		
-		
-		
 		$scope.selection=[];
-		
 		$scope.ob = true;
 		$scope.obj = {};
 		$scope.request = true;
@@ -4914,13 +4994,11 @@ app.controller('MainReportCtrl', function($scope, $rootScope, $stateParams, $loc
 		for (name in employeeName.val) {
 				$scope.obj.nam = name;
 					  console.log($scope.obj.nam);
-				};
+			};
 		  
 		  // console.log($scope.obj);
-		
 	    console.log($scope.selection.length);
 		if($scope.selection.length == 0){
-			
 			// var ob = {"employeeName":true};
 			$scope.selection.push(employeeName.val);
 			console.log(employeeName.val);
@@ -4990,6 +5068,7 @@ app.controller('MainReportCtrl', function($scope, $rootScope, $stateParams, $loc
 					
 			
 		$scope.global = [
+						{name:'Top 3 Global Attacking Countries', val:{"globalAttacks3":true}},
 						{name:'Attacked OS', val:{"attackedOSs":true}},
 						{name:'Vulnerabilities', val:{"vulnerabilities":true}},
 						{name:'Attacked Protocols', val:{"attackedProtocols":true}}
@@ -5001,33 +5080,69 @@ app.controller('MainReportCtrl', function($scope, $rootScope, $stateParams, $loc
 	  $scope.produceReport = function(){
 		  console.log($scope.checkboxModel);
 		  
-		  var resultObject = $scope.selection.reduce(function(result, currentObject) {
+		 resultObject = $scope.selection.reduce(function(result, currentObject) {
 			for(var key in currentObject) {
 				if (currentObject.hasOwnProperty(key)) {
 				result[key] = currentObject[key];
 				}
 			}
 				return result;
-		}, {});
+			}, {});
 		
-             createPostRequest(resultObject);		
-
-		console.log(resultObject);
-		  
-			console.log(JSON.stringify($scope.selection));
+			$scope.request = false;
+			 
+				$scope.toaster = {
+				type: 'wait',
+				title: 'PDF Report',
+				text: 'Please Wait for a Minute'
+			};
+			
+			console.log(utilityMethods.applicationHeader.jsonConfig);
+			toaster.pop($scope.toaster.type, $scope.toaster.title, $scope.toaster.text , 15000);
+			 console.log(resultObject);
+         
+			 console.log(JSON.stringify($scope.selection));
+			 createPostRequest(resultObject, "http://115.186.132.18:8080/BirtReporting/report");		
 	  };
 	  
-		function createPostRequest(data){
+		function createPostRequest(data , url){
+			console.log(jsonConfig);
 			
-			crudSrv.createRequest(rootURL.url.baseURL + "report", data ,function(data, status){
+			crudSrv.createRequest(url, data, jsonConfig ,function(data, status){
 			ngProgress.complete();
-			 getData(data);
+			 $scope.request = true;
+			 
+			 console.log(data);
+			 /*
+			 var blob = new Blob([data], {type: "application/pdf"}); 
+			 var fileURL = URL.createObjectURL(blob);
+			 $scope.pdfContent = $sce.trustAsHtml(data);
+			 */
+			 
+			// console.log(data);	 
+		/*	var zip = new Blob([data], {
+                         type: 'application/pdf' //or whatever you need, should match the 'accept headers' above
+                     });
+          
+		 
+			console.log(blob);
+		window.saveAs(blob, "ss.pdf");
+		*/        
+		
+		//var raw = window.atob(data);
+		//window.open("data:application/pdf;base64, " + raw);
+	//	window.open("data:application/pdf;base64, " + data);
+	//	var objectUrl = URL.createObjectURL(blob);
+	//	window.open(objectUrl);
+	
+			 
 			},function(error){
-				
+				 $scope.request = true;
 			});
-			
-				
 		};
+		
+		
+			
     
 });
 
@@ -5071,10 +5186,21 @@ app.controller('DashBoardAttackInfo', function($scope, $rootScope, $stateParams,
 
 		$scope.showModal = function(item) {
 			$scope.modalType = $scope.type;
-			console.log()
-			$scope.deleteModal = true;
-			$scope.value = item;
-			console.log(item);
+			
+			crudSrv.getResults(rootURL.url.baseURL + "attacks/network-detail?srcIP=" + item.srcIP + "&dstPort=" +item.dstPort+"&dateTime="+item.dateTime, function(data, status) {
+				$scope.network = data;
+				console.log(data);
+				ngProgress.complete();
+				$scope.deleteModal = true;
+				$scope.value = item;
+				console.log(item);
+			}, function(error) {
+				$scope.deleteModal = true;
+				$scope.value = item;
+				console.log(error);
+			});
+			
+			
 		};
 
 		$scope.showModalHide = function() {
@@ -5087,7 +5213,7 @@ app.controller('DashBoardAttackInfo', function($scope, $rootScope, $stateParams,
 			$scope.totalPerPage = 20;
 			var pageNumber = 0;
 			crudSrv.getResults(rootURL.url.baseURL + "attacks/" + $scope.types + "/recent-attack-count?page=" + pageNumber + "&limit=" + $scope.counts, function(data, status) {
-				$scope.data = data;
+				$scope.data = data.content;
 				console.log(data);
 				ngProgress.complete();
 			}, function(error) {
@@ -5128,7 +5254,7 @@ app.controller('DashBoardAttackInfo', function($scope, $rootScope, $stateParams,
 				$scope.totalCount = $scope.counts;
 				console.log($scope.totalCount, $scope.pagination.current);
 				$scope.data = [];
-				$scope.data = data;
+				$scope.data = data.content;
 
 				$scope.safeApply();
 				console.log(data);
@@ -5148,48 +5274,7 @@ app.controller('DashBoardAttackInfo', function($scope, $rootScope, $stateParams,
 			}
 		};
 
-	/*
-	$scope.deleteModal = false;
-	$scope.counts = $stateParams.counts;
-	$scope.type = $stateParams.type;
-	if($scope.counts == 0){		
-		$scope.type = "no";	
-	}else{
-			$scope.type = $stateParams.type;
-			$scope.types = $stateParams.type;
-		if($scope.type == "db")
-				$scope.type =  "database";
-		}
 	
-		$scope.sort = function(keyname){
-			$scope.sortKey = keyname;   //set the sortKey to the param passed
-			$scope.reverse = !$scope.reverse; //if true make it false and vice versa
-		}
-	
-		$scope.showModal = function(item){
-			$scope.modalType = $scope.type;
-			console.log()
-			$scope.deleteModal = true;
-			$scope.value = item;
-			console.log(item);
-		};
-
-		$scope.showModalHide = function(){
-			$scope.deleteModal = false;
-			$scope.value = undefined;
-			$scope.modalType = undefined;
-			
-		};
-			ngProgress.start();
-			var pageNumber = 0;
-		   crudSrv.getResults(rootURL.url.baseURL +"attacks/"+ $scope.types+"/recent-attack-count?page="+ pageNumber+"&limit="+$scope.counts,function(data, status){
-			$scope.data = data;
-				console.log(data);
-				ngProgress.complete();
-			}, function(error){
-			console.log(error);
-			});
-		*/
 });
 
 app.controller('TestDashBoard', function($scope, $rootScope, $stateParams, $location, $http, $timeout, ngProgress, crudSrv, utilityMethods, rootURL,$state) {
@@ -5246,8 +5331,8 @@ app.controller('TestDashBoard', function($scope, $rootScope, $stateParams, $loca
 				getResultsPage(1);
 			}
 			
-			
 			$scope.pageChanged = function(newPage) {
+				ngProgress.start();
 				getResultsPage(newPage);
 			};
 			
@@ -5271,7 +5356,7 @@ app.controller('TestDashBoard', function($scope, $rootScope, $stateParams, $loca
 				 $scope.totalCount = $scope.counts;
 				 console.log($scope.totalCount , $scope.pagination.current);
 				$scope.data = [];
-				$scope.data = data;
+				$scope.data = data.list;
 			 
 			  	$scope.safeApply();
 				console.log(data);

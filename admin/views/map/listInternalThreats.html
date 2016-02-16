@@ -1,0 +1,73 @@
+<div class="bg-light lter b-b wrapper-sm">
+  <h1 class="m-n font-thin h3"> Internal Threat   </h1>
+ </div>  
+<div class="bg-light lter b-b wrapper-sm">
+  
+  <div class="row">
+  <!--      
+		<div class="col-sm-2">
+		<mydatepicker ng-model="formData.date" date-options="dateOptions" opened="opened"/>
+		</div>
+		<div class="col-sm-2">
+			<mydatepicker ng-model="formData.date" date-options="dateOptions" opened="opened"/>   
+        </div>
+   -->
+    <div class="col-lg-6">
+     <a ui-sref="app.addInternalThreatForm">
+		 <i class="glyphicon glyphicon-file"></i>
+		<!-- <i class="glyphicon glyphicon-dashboard"></i> -->
+          <span> Add New Record </span>
+        </a>
+   
+	</div>
+	
+ </div>
+ 
+<div class="wrapper-md" ng-controller="ListInternalThreats">
+		<div class="row"> 
+	<div class="col-sm-12 col-xs-12 col-md-12">   
+		<div class="panel panel-default" ng-show="data.lengths == 0">
+			<p> Sorry No Record Found </p>
+		</div>
+		
+          <div class="panel panel-default">
+			<div class="table-responsive">
+			  <table class="table b-light">
+				<thead>
+				  <tr>
+						
+						 <th> Source IP</th>
+						 <th> User Name </th> 
+						 <th> Department </th> 
+						  <th> Location </th> 
+						 <th> Mac Address </th>
+						 <th> Hostname </th>
+						 <th> Operating System </th>
+						<th> Detail </th>
+				  </tr>
+				</thead>
+				<tbody>
+					 <tr dir-paginate="val in data | itemsPerPage:20" total-items="totalCount" current-page="pagination.current">
+						
+						
+						 <td><span ng-show="!val['hostIP']">-</span> <a href="#/app/CountryIps/country/ip/{{val['hostIP']}}" >{{val['hostIP']}} </a> </td>
+						<td>{{val['userAssigned']}}</td>
+						<td>{{val['department']}}</td>				
+						<td>{{val['location']}}</td>						
+						<td>{{val['hostMAC']}}</td>
+						 <td>{{val['hostname']}}</td>
+						  <td>{{val['hostOS']}}</td>
+						 <td> <a href="" ng-click="showModal(val)"> <span class="glyphicon glyphicon-eye-open"> </span> </a></td>
+					 </tr>
+				</tbody>
+			  </table>
+			 
+			</div>
+			
+			<div id="content">
+					<dir-pagination-controls on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
+			 </div>
+		</div>
+		</div>
+			
+</div>

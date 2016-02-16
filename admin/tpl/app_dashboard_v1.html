@@ -57,15 +57,15 @@
 	<div class="row row-sm text-center">
 		<div class="col-xs-2 col-md-2 onMap">
               <a href="#/app/dashboardAttack/probing/counts/{{prob}}" target="_blank" title="Probing Attacks">
-				 <img src = "img/dashboard/Dashboard-4.png" height="18px" />
-			    <p class="text-white font-thin h3 "> {{prob}} </p>
+				 <img src = "img/probing/probing-1.png" height="28px" />
+			    <p class="text-white font-thin h4"> {{prob}} </p>
 			  </a>
          </div>
 		 
 		 <div class="col-xs-2 col-md-2 rotate onMap" ng-class="mal" title="Malware Attacks">
               <a href="#/app/dashboardAttack/malware/counts/{{mal}}" target="_blank">
-				<img src ="img/malware/Malware-2.png" height="18px"/> 
-			   <p class="text-white font-thin h3 "> {{mal}} </p>
+				<img src ="img/malware/32/malware-1.png" height="28px"/> 
+			   <p class="text-white font-thin h4 "> {{mal}} </p>
 			 
                <!-- <span> <i class="glyphicon glyphicon-fire"> </i> </span> -->
               </a>
@@ -73,24 +73,24 @@
 		 
          <div class="col-xs-2 col-md-2 onMap">
               <a href="#/app/dashboardAttack/web/counts/{{wb}}" target="_blank" title="web Attacks">
-			   <img src ="img/web/web-2.png" height="18px"/>
-          	   <p class="text-white font-thin h3 "> {{wb}} </p>
+			   <img src ="img/web/32/web-2.png" height="26px"/>
+          	   <p class="text-white font-thin h4"> {{wb}} </p>
                     <!--<span> <i class="glyphicon glyphicon-globe"></i> </span>  -->
                </a>
          </div>
             
 		<div class="col-xs-2 col-md-2 onMap">
             <a href="#/app/dashboardAttack/ssh/counts/{{ssh}}" target="_blank" title="SSH Attacks">
-				<img src ="img/ssh/SSH-3.png" height="18px"/> 
-			   <p class="text-white font-thin h3 "> {{ssh}} </p>
+				<img src ="img/ssh/32/SSH-2.png" height="28px"/> 
+			   <p class="text-white font-thin h4 "> {{ssh}} </p>
              <!-- <span><i class="glyphicon glyphicon-eye-close"></i> </span>   -->
              </a>
         </div>
 			
 		<div class="col-xs-2 col-md-2 onMap">
              <a href="#/app/dashboardAttack/sip/counts/{{sp}}" target="_blank" title="SIP Attacks">
-				<img src ="img/sip/sip-2.png" height="18px"/>
-               <p class="text-white font-thin h3 "> {{sp}} </p>
+				<img src ="img/sip/32/sip-2.png" height="28px"/>
+               <p class="text-white font-thin h4 "> {{sp}} </p>
              <!--  <span><i class="glyphicon glyphicon-earphone"></i> </span> -->
              </a>
         </div>
@@ -98,8 +98,8 @@
 		<div class="col-xs-2 col-md-2 onMap">
 			 <a href="#/app/dashboardAttack/db/counts/{{db}}" title="Database Attacks" target="_blank">
               <!-- <img src = "img/dashboard/Dashboard-4.png" height="18px" /> -->
-			   <i class="fa fa-database fa-2 dbCol"></i>
-			 <p class="text-white font-thin h3 "> {{db}} </p>
+			   <i class="fa fa-database fa-3 dbCol"></i>
+			 <p class="text-white font-thin h4 "> {{db}} </p>
 			      
              <!--  <span><i class="glyphicon glyphicon-earphone"></i> </span> -->
              </a>
@@ -109,7 +109,7 @@
 	
       <div class="row mapTop">
         <div class="col-md-12 col-xs-12 col-sm-12">
-          <div class="panel bg-black">
+          <div class="panel blackCustom">
           <div d3-maps vals="value" id="container"> </div>
            <!-- <datamap map="map" </datamap>  -->
           </div>
@@ -119,7 +119,7 @@
 
      
 
-    
+ 
       <!-- / tasks -->
 
 	  
@@ -359,7 +359,22 @@
 
 								<tr> <td> User Agent </td>
 									<td>{{detail['userAgent']}}</td>
-								</tr>								
+								</tr>
+
+								
+								<tr> <td> Content Type </td>
+									<td>{{detail['contentType']}}</td>
+								</tr>
+
+								
+								<tr> <td> Request Header </td>
+									<td>{{detail['rawLog']['requestHeader']}}</td>
+								</tr>
+
+								
+								<tr> <td> Response Header </td>
+									<td>{{detail['rawLog']['responseHeader']}}</td>
+								</tr>	
 								
 								</tbody>
 								</table>
@@ -393,9 +408,13 @@
 								</tr>
 								
 								<tr> <td> Hash </td>
-									<td>{{detail['md5Hash']}}</td>
+									<td>{{detail['download']['md5Hash']}}</td>
 								</tr>
 								
+								<tr ng-show="detail.downloads[0]" ng-repeat="ha in detail.downloads">
+								<td> Hash </td>
+								<td>{{ha['md5Hash']}}</td>
+								</tr>
 								
 								<tr> <td> URL </td>
 									<td>{{detail['url']}}</td>
@@ -433,7 +452,7 @@
 								<td> {{detail['signature']}}</td>
 								</tr>	
 								
-								<tr ng-show="detail['signatureClass]">
+								<tr ng-show="detail['signatureClass']">
 								<td> Signature Class </td>
 								<td> {{detail['signatureClass']}}</td>
 								</tr>
@@ -503,7 +522,7 @@
 								
 								<tr>
 								<td> dateTime </td>
-								<td>{{value['dateTime']}}</td>
+								<td>{{val['dateTime']}}</td>
 								</tr>
 								
 								<tr>

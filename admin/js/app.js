@@ -28,6 +28,8 @@ angular.module('app', [
 	'elasticsearch',
 	'ngMessages',
 	'angularUtils.directives.dirPagination',
-	'ui.bootstrap.modal'
+	'ui.bootstrap.modal',
+	'ngToast',
+	'toaster'
 	
 ]);

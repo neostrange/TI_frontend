@@ -124,6 +124,12 @@ angular.module('app')
                   }
               })
 			  
+			   .state('app.activitySummary', {
+                url: '/ip/:ip/attack/:attack',
+                templateUrl : 'views/map/listActivityAttacks.html',
+				controller: 'ActivitySummaryCTRL'
+              })
+			  
 			  .state('app.Reconnaissance', {
                 url: '/Reconnaissance/:country/attack/:attack',
                 templateUrl : 'views/country_view/reconnaissanceMap.html',

@@ -1,465 +1,50 @@
-<div class="wrapper-md" ng-class="{'bg-orange':type == 'probing', 'bg-info':type == 'web' , 'bg-white':type =='ssh', 'bg-success':type =='sip', 'bg-dark lter':type == 'database' , 'bg-danger':type== 'malware'}">
-	 	
-	<h1 class="m-n font-thin h3"> 
-	<img ng-show ="type == 'malware'"  src ="img/Malware-2.png" height="20px"/>	 <img ng-show ="type == 'ssh'"  src ="img/brute.png" height="20px"/> 
-	 <img ng-show ="type == 'web'"  src ="img/web/web-2.png" height="20px"/>
-	 <img ng-show ="type == 'sip'"  src ="img/sip/sip-2.png" height="25px"/> 
-	 <img ng-show ="type == 'probing'"  src ="img/probing/probing-4.png" height="25px"/> 
-	<span ng-show="type">  <b> {{type | getCapitilize}} </b> </span> Attacks </h1>
-</div>
-
+<div class="bg-light lter b-b wrapper-sm">
+  <h1 class="m-n font-thin h3 activityListIP"> {{data[0]['srcIP']}} Activity   <span class="m-n pull-right"> <img src="img/gif/{{data[0]['origin']['srcCountryCode'].toLowerCase()}}.gif" height="12px" /> {{data[0]['origin']['srcCountry']}} </span>  </h1>
+  
+ </div>  
+ 
 <div class="wrapper-md">
-<div class="row"> 
+	<div class="row"> 
 	<div class="col-sm-12 col-xs-12 col-md-12">   
-		<div class="panel panel-default" ng-show="type == 'no'">
-			<p class="msg-dashBoard"> Sorry No Record Found </p>
-		</div>
-		<form class="form-inline m-sm" ng-show = "type != 'no'">
-        <div class="form-group ">
-            <label><b> Search</b> </label>
-            <input type="text" ng-model="search" class="form-control" placeholder="Search">
-        </div>
-		</form>
-          <div class="panel panel-default" ng-show="type == 'malware'">
-			
-			<div class="table-responsive">
-			  <table class="table b-light">
-				<thead>
-				  <tr>
-						
-						 <th> Source IP</th>
-						 <th> Destination IP </th> 
-						 <th> Destination Port </th> 
-						 <th> Service </th>
-						 <th> Country </th>
-						 <th ng-click="sort('dateTime')">DateTime
-						<span class="glyphicon sort-icon" ng-show="sortKey=='dateTime'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
-						</th>
-					<th> Detail </th>
-				  </tr>
-				</thead>
-				<tbody>
-					 <tr dir-paginate="val in data | orderBy:sortKey:reverse | filter:search | itemsPerPage:20" total-items="totalCount" current-page="pagination.current">
-						 <td><span ng-show="!val['srcIP']">-</span> <a href="#/app/CountryIps/{{val['origin']['srcCountry']}}/ip/{{val['srcIP']}}" >{{val['srcIP']}} </a> </td>
-						<td>{{val['dstIP']}}</td>
-						<td>{{val['dstPort']}}</td>				
-						<td><span ng-show="!val['service']"></span>{{val['service']}}</td>						
-						<td><span ng-show="!val['origin']['srcCountry']">-</span>{{val['origin']['srcCountry']}}</td>
-						 <td><span ng-show="!val['date_time']"></span>{{val['dateTime'] | dateTimeFilter }}</td>
-						 <td> <a href="" ng-click="showModal(val)"> <span class="glyphicon glyphicon-eye-open"> </span> </a></td>
-					 </tr>
-				</tbody>
-			  </table>
-			 
-			</div>
-			
-			<div id="content">
-					<dir-pagination-controls on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
-			 </div>
-		</div>
-		
-		 <div class="panel panel-default" ng-show="type == 'probing'">
+	<div class="panel panel-default">
 			
 			<div class="table-responsive">
 			   <table class="table b-light">
 				<thead>
 				  <tr>
-						
-						 <th> Source IP</th>
 						 <th> Destination IP </th> 
 						 <th> Destination Port </th> 
 						 <th> Service </th>
-						 <th> Country </th>
-						 <th ng-click="sort('dateTime')">DateTime
-						<span class="glyphicon sort-icon" ng-show="sortKey=='dateTime'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
-						</th>
-						<th> Detail </th>
+						 <th> DateTime</th>
+						 <th> Detail </th>
+						
 				  </tr>
 				</thead>
 				<tbody>
-					 <tr dir-paginate="val in data | orderBy:sortKey:reverse | filter:search | itemsPerPage:20" total-items="totalCount" current-page="pagination.current">
-						
-						<td><span ng-show="!val['srcIP']">-</span> <a href="#/app/CountryIps/{{val['origin']['srcCountry']}}/ip/{{val['srcIP']}}" >{{val['srcIP']}} </a> </td>
+					 <tr dir-paginate="val in data | itemsPerPage:20" total-items="totalCount" current-page="pagination.current">
 						<td>{{val['dstIP']}}</td>
 						<td>{{val['dstPort']}}</td>				
 						<td><span ng-show="!val['service']"></span>{{val['service']}}</td>						
-						<td><span ng-show="!val['origin']['srcCountry']">-</span>{{val['origin']['srcCountry']}}</td>
 						<td>{{val['dateTime'] | dateTimeFilter }}</td>
 						 <td> <a href="" ng-click="showModal(val)"> <span class="glyphicon glyphicon-eye-open"> </span> </a></td>
-						 
 					 </tr>
 				</tbody>
 			  </table>
 			  
-				
-					<div id="content">
-						<dir-pagination-controls on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
-				   </div>
-				
-			
-			
-			</div>
-			
-		</div>
-		
-		
-		 <div class="panel panel-default" ng-show="type == 'sip'">
-			
-			<div class="table-responsive">
-			  <table class="table b-light">
-				<thead>
-				  <tr>
-						
-						 <th> Source IP</th>
-						 <th> Destination IP </th> 
-						 <th> Destination Port </th> 
-						 <th> Service </th>
-						 <th> Country </th>
-						 <th ng-click="sort('dateTime')">DateTime
-						<span class="glyphicon sort-icon" ng-show="sortKey=='dateTime'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
-						</th>
-					 <th> Detail </th>
-				  </tr>
-				</thead>
-				<tbody>
-					  <tr dir-paginate="val in data | orderBy:sortKey:reverse | filter:search | itemsPerPage:20" total-items="totalCount" current-page="pagination.current">
-						
-						
-						 <td><span ng-show="!val['srcIP']">-</span> <a href="#/app/CountryIps/{{val['origin']['srcCountry']}}/ip/{{val['srcIP']}}" >{{val['srcIP']}} </a> </td>
-						<td>{{val['dstIP']}}</td>
-						<td>{{val['dstPort']}}</td>				
-						<td><span ng-show="!val['service']"></span>{{val['service']}}</td>						
-						<td><span ng-show="!val['origin']['srcCountry']">-</span>{{val['origin']['srcCountry']}}</td>
-						 <td><span ng-show="!val['date_time']"></span>{{val['dateTime'] | dateTimeFilter }}</td>
-						 <td> <a href="" ng-click="showModal(val)"> <span class="glyphicon glyphicon-eye-open"> </span> </a></td>
-					 </tr>
-				</tbody>
-			  </table>
-			</div>
-			  	<div id="content">
-						<dir-pagination-controls on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
-				   </div>
-		</div>
-		
-		
-		
-		
-		 <div class="panel panel-default" ng-show="type == 'ssh'">
-			
-			<div class="table-responsive">
-			   <table class="table b-light">
-				<thead>
-				  <tr>
-						
-						 <th> Source IP</th>
-						 <th> Destination IP </th> 
-						 <th> Destination Port </th> 
-						 <th> Service </th>
-						 <th> Country </th>
-						 <th ng-click="sort('dateTime')">DateTime
-						<span class="glyphicon sort-icon" ng-show="sortKey=='dateTime'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
-						</th>
-						<th> Detail </th>
-				  </tr>
-				</thead>
-				<tbody>
-					 <tr dir-paginate="val in data | orderBy:sortKey:reverse | filter:search | itemsPerPage:20" total-items="totalCount" current-page="pagination.current">
-						
-						
-						 <td><span ng-show="!val['srcIP']">-</span> <a href="#/app/CountryIps/{{val['origin']['srcCountry']}}/ip/{{val['srcIP']}}" >{{val['srcIP']}} </a> </td>
-						<td>{{val['dstIP']}}</td>
-						<td>{{val['dstPort']}}</td>				
-						<td><span ng-show="!val['service']"></span>{{val['service']}}</td>						
-						<td><span ng-show="!val['origin']['srcCountry']">-</span>{{val['origin']['srcCountry']}}</td>
-						 <td><span ng-show="!val['date_time']"></span>{{val['dateTime'] | dateTimeFilter }}</td>
-						 <td> <a href="" ng-click="showModal(val)"> <span class="glyphicon glyphicon-eye-open"> </span> </a></td>
-					 </tr>
-				</tbody>
-			  </table>
-			</div>
-		          <div id="content">
-						<dir-pagination-controls on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
-				   </div>
-		</div>
-		
-		
-		 <div class="panel panel-default" ng-show="type == 'web'">
-			
-			<div class="table-responsive">
-			   <table class="table b-light">
-				<thead>
-				  <tr>
-						
-						 <th> Source IP</th>
-						 <th> Destination IP </th> 
-						 <th> Destination Port </th> 
-						 <th> Service </th>
-						 <th> Country </th>
-						 <th ng-click="sort('dateTime')">DateTime
-						<span class="glyphicon sort-icon" ng-show="sortKey=='dateTime'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
-						</th>
-						<th> Detail </th>
-				  </tr>
-				</thead>
-				<tbody>
-					 <tr dir-paginate="val in data | orderBy:sortKey:reverse | filter:search | itemsPerPage:20" total-items="totalCount" current-page="pagination.current">
-						
-						
-						 <td><span ng-show="!val['srcIP']">-</span> <a href="#/app/CountryIps/{{val['origin']['srcCountry']}}/ip/{{val['srcIP']}}" >{{val['srcIP']}} </a> </td>
-						<td>{{val['dstIP']}}</td>
-						<td>{{val['dstPort']}}</td>				
-						<td><span ng-show="!val['service']"></span>{{val['service']}}</td>						
-						<td><span ng-show="!val['origin']['srcCountry']">-</span>{{val['origin']['srcCountry']}}</td>
-						 <td><span ng-show="!val['date_time']"></span>{{val['dateTime'] | dateTimeFilter }}</td>
-						 <td> <a href="" ng-click="showModal(val)"> <span class="glyphicon glyphicon-eye-open"> </span> </a></td>
-					 </tr>
-				</tbody>
-			  </table>
-			</div>
-		          <div id="content">
-						<dir-pagination-controls on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
-				   </div>
-		</div>
-		
-		 <div class="panel panel-default" ng-show="type == 'database'">
-			
-			<div class="table-responsive">
-			   <table class="table b-light">
-				<thead>
-				  <tr>
-						
-						 <th> Source IP</th>
-						 <th> Destination IP </th> 
-						 <th> Destination Port </th> 
-						 <th> Service </th>
-						 <th> Country </th>
-						 <th ng-click="sort('dateTime')">DateTime
-						<span class="glyphicon sort-icon" ng-show="sortKey=='dateTime'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
-						</th>
-						<th> Detail </th>
-				  </tr>
-				</thead>
-				<tbody>
-					 <tr dir-paginate="val in data | orderBy:sortKey:reverse | filter:search | itemsPerPage:20" total-items="totalCount" current-page="pagination.current">
-						
-						 <td><span ng-show="!val['srcIP']">-</span> <a href="#/app/CountryIps/{{val['origin']['srcCountry']}}/ip/{{val['srcIP']}}" >{{val['srcIP']}} </a> </td>
-						<td>{{val['dstIP']}}</td>
-						<td>{{val['dstPort']}}</td>				
-						<td><span ng-show="!val['service']"></span>{{val['service']}}</td>						
-						<td><span ng-show="!val['origin']['srcCountry']">-</span>{{val['origin']['srcCountry']}}</td>
-						 <td><span ng-show="!val['date_time']"></span>{{val['dateTime'] | dateTimeFilter }}</td>
-						 <td> <a href="" ng-click="showModal(val)"> <span class="glyphicon glyphicon-eye-open"> </span> </a></td>
-					 </tr>
-				</tbody>
-			  </table>
-			</div>
-			    <div id="content">
-						<dir-pagination-controls on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
-				   </div>
-		</div>
-		
-		
-    </div>
-		
-     
-   </div>	
-
-   <!--
-   	<div modal="deleteModal" close="showModalHide()">
-		<div class="modal-dialog modal-md">
-			<div class="modal-content mode_bor">
-				<div class="row">
-					<div class="col-lg-12">
-						<div class="table-responsive" ng-if="modalType == 'sip'">
-							<table class="table b-light">
-								<thead>
-								 
-									<th><span ng-show="type"> {{modalType | getCapitilize}} </span> Attacks Detail </th>
-									
-								</thead>
-								
-								<tbody>
-								<tr>  <td>SIP Method</td>
-								<td>{{value['sipMethod']}}</td>
-								</tr>
-								<tr> <td>SIP Call Id</td>
-								<td>{{value['sipCallId']}}</td>
-								</tr>
-								
-								<tr>  <td>App Layer Protocol</td>
-								<td>{{value['appLayerProtocol']}}</td>
-								</tr>
-								
-								<tr>  <td>User Agent</td>
-								<td>{{value['sipUserAgent']}}</td>								
-								</tr>
-								</tbody>
-								</table>
-						</div>
-						
-						
-						
-						<div class="table-responsive" ng-if="modalType == 'web'">
-							<table class="table b-light">
-								<thead>
-								  <tr>
-									<th><span ng-show="type"> {{modalType | getCapitilize}} </span> Attacks Detail </th>
-									</tr>
-								</thead>	
-								<tbody>
-								<tr> <td> Http Method </td>
-									<td>{{value['httpMethod']}}</td>
-								</tr>
-								
-								<tr ng-show="value['severityStatus']"> 
-								<td> Severity Status</td>
-									<td>{{value['severityStatus']}}</td>
-								</tr>
-								
-
-								<tr> <td> User Agent </td>
-									<td>{{value['userAgent']}}</td>
-								</tr>	
-
-								<tr> <td> Content Type </td>
-									<td>{{value['contentType']}}</td>
-								</tr>
-
-								
-								<tr> <td> Request Header </td>
-									<td>{{value['rawLog']['requestHeader']}}</td>
-								</tr>
-
-								
-								<tr> <td> Response Header </td>
-									<td>{{value['rawLog']['responseHeader']}}</td>
-								</tr>		
-								
-								</tbody>
-								</table>
-						</div>
-						
-						
-						
-							
-							<div class="table-responsive" ng-if="modalType == 'malware'">
-							<table class="table b-light">
-								<thead>
-								  <tr>
-									<th><span ng-show="type"> {{modalType | getCapitilize}} </span> Attacks Detail </th>
-									</tr>
-								</thead>	
-								<tbody>
-								<tr> <td> Hash </td>
-									<td>{{value['download']['md5Hash']}}</td>
-								</tr>
-								
-								<tr> <td> File Path </td>
-									<td>{{value['download']['filePath']}}</td>
-								</tr>
-								
-								<tr> <td> URL </td>
-									<td>{{value['download']['url']}}</td>
-								</tr>
-
-																
-								</tbody>
-								</table>
-							</div>	
-							
-						
-							
-							
-							
-					
-						
-						<div class="table-responsive" ng-if="modalType == 'database'">
-							<table class="table b-light">
-								<thead>
-								  <tr>
-									<th><span ng-show="type"> {{modalType | getCapitilize}} </span> Attacks Detail </th>
-									</tr>
-								</thead>	
-								<tbody ng-show="value.service == 'mssql'">
-								<tr > 
-									<td> Mssql Client Name </td>
-									<td>{{value['mssqlClientName']}}</td>
-								</tr>
-
-								<tr ng-show="value.service == 'mssql'">
-								<td> Mssql Host Name </td>
-								<td>{{value['mssqlHostName']}}</td>
-								</tr>								
-								</tbody>
-								
-								<tbody ng-show="value.mysqlCommands[0]" ng-repeat ="val in value.mysqlCommands">
-								<tr ng-show= "val.mysqlQuery"> 
-								<td> Mysql Query </td>
-								<td>{{val['mysqlQuery']}}</td>
-								</tr>
-								
-								<tr ng-show="val.mysqlOp"> 
-								<td> Mysql OP </td>
-								<td>{{val['mysqlOp']}}</td>
-								</tr>
-								</tbody>
-								
-								</table>
-						</div>
-						
-						<div class="table-responsive" ng-if="modalType == 'ssh'">
-							<table class="table b-light">
-								<thead>
-									<tr>
-									<th><span ng-show="type"> {{modalType | getCapitilize}} </span> Attacks Detail </th>
-									</tr>
-								</thead>
-								
-								<tbody>
-								
-								<tr>
-								<td> Tool </td>
-								<td> {{value['tool']}} <td>
-								</tr>
-								</tbody>
-								
-								<tbody ng-repeat="val in value['authList']">
-							
-								<tr> 
-								<td> Password </td>
-								<td>{{val['password']}}</td>
-								</tr>
-								
-								<tr><td> UserName </td>
-								<td>{{val['username']}}</td>
-								</tr>
-								
-								<tr>
-								<td> dateTime </td>
-								<td>{{value['dateTime']}}</td>
-								</tr>
-								
-								<tr>
-								<td> Auth Success </td>
-								<td>{{val['success']}}</td>
-								</tr>
-								</tbody>
-								
-								</table>
-						</div>
-						
-						<div class="clear"></div>
-						<div class="modal-footer del_pop_footer">
-							<button ng-click="showModalHide()" type="button" class="btn btn-default" style="height:25px; border-radius:20px; margin:10px 0; line-height:10px;"> OK </button>
-						</div>
-					</div>
+				<div id="content">
+					<dir-pagination-controls on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
 				</div>
+				
+			
+			
 			</div>
-		</div>
-	</div>
-	-->
+			
+		</div>	
 	
-	<div modal="deleteModal" close="showModalHide()">
+		
+	</div>
+	
+		<div modal="deleteModal" close="showModalHide()">
 		<div class="modal-dialog modal-md">
 			<div class="modal-content mode_bor">
 				<div class="row">
@@ -495,6 +80,7 @@
 								<div class="med_text">
 									<table class="table">
 									<tbody>
+								
 								
 								
 								<tr> <td> IP version  </td>
@@ -555,7 +141,7 @@
 									<tbody>
 								
 								<tr> <td> PayLoad </td>
-									<td> <pre class="preheader"> {{network['payload']['encodedData']}} </pre> </td>
+										<td> <pre class="preheader"> {{network['payload']['encodedData']}} </pre> </td>
 								</tr>
 								</tbody>
 								</table>
@@ -794,7 +380,7 @@
 											<tbody>
 												<tr>
 													<td> PayLoad </td>
-														<td> <pre class="preheader"> {{network['payload']['encodedData']}} </pre> </td>
+													<td> <pre class="preheader"> {{network['payload']['encodedData']}} </pre> </td>
 												</tr>
 											</tbody>
 										</table>
@@ -1028,7 +614,7 @@
 											<tbody>
 												<tr>
 													<td> PayLoad </td>
-													<td> <pre class="preheader"> {{network['payload']['encodedData']}} </pre> </td>
+														<td> <pre class="preheader"> {{network['payload']['encodedData']}} </pre> </td>
 												</tr>
 											</tbody>
 										</table>
@@ -1127,7 +713,7 @@
 											<tbody>
 												<tr>
 													<td> PayLoad </td>
-												<td> <pre class="preheader"> {{network['payload']['encodedData']}} </pre> </td>
+														<td> <pre class="preheader"> {{network['payload']['encodedData']}} </pre> </td>
 												</tr>
 											</tbody>
 										</table>
@@ -1164,8 +750,14 @@
 	
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	</div>
-   
-</div>   
-
-
+</div>	

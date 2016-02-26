@@ -12,20 +12,55 @@
 			<mydatepicker ng-model="formData.date" date-options="dateOptions" opened="opened"/>   
         </div>
    -->
-    <div class="col-lg-6">
-     <a ui-sref="app.addInternalThreatForm">
-		 <i class="glyphicon glyphicon-file"></i>
-			<!-- <i class="glyphicon glyphicon-dashboard"></i> -->
-          <span> Add New Record </span>
-        </a>
-	</div>
+   
  </div>
  
 <div class="wrapper-md">
-	<div class="row">
-		<div class="col-lg-12">
-			<leaflet center="center" layers="layers" markers="markers" width="100%" height="400px"></leaflet>
+		<div class="row"> 
+	<div class="col-sm-12 col-xs-12 col-md-12">   
+		<div class="panel panel-default" ng-show="data.lengths == 0">
+			<h2> Sorry No Record Found </h2>
 		</div>
-	</div>			
+		
+          <div class="panel panel-default">
+			<div class="table-responsive">
+			  <table class="table b-light">
+				<thead>
+				 <tr>
+						
+						 <th> Source IP</th>
+						 <th> Destination IP </th> 
+						 <th> Destination Port </th> 
+						 <th> Service </th>
+						 <th> Country </th>
+						 <th >DateTime
+						</th>
+					<!--	<th> Detail </th> -->
+				  </tr>
+				</thead>
+				<tbody>
+					 <tr dir-paginate="val in data | itemsPerPage:20" total-items="totalCount" current-page="pagination.current">
+						
+					<td><span ng-show="!val['srcIP']">-</span> <a href="#/app/CountryIps/{{val['origin']['srcCountry']}}/ip/{{val['srcIP']}}" >{{val['srcIP']}} </a> </td>
+						<td>{{val['dstIP']}}</td>
+						<td>{{val['dstPort']}}</td>				
+						<td><span ng-show="!val['service']"></span>{{val['service']}}</td>						
+						<td><span ng-show="!val['origin']['srcCountry']">-</span>{{val['origin']['srcCountry']}}</td>
+						<td>{{val['dateTime'] | dateTimeFilter }}</td>
+						<!-- <td> <a href="" ng-click="showModal(val)"> <span class="glyphicon glyphicon-eye-open"> </span> </a></td> -->
+						 
+					 </tr>
+				</tbody>
+			  </table>
+			 
+			</div>
+			
+			<div id="content">
+					<dir-pagination-controls on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
+			 </div>
+		</div>
+		</div>
+			
 </div>
 
+</div>

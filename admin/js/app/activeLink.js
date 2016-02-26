@@ -543,7 +543,7 @@ app.directive('d3Bars', function($compile, $rootScope, $window) {
 
 
 
-app.directive('d3Maps', function($compile, $rootScope, $window) {
+app.directive('d3Maps', function($compile, $rootScope, $window, $interval, $timeout) {
   return {
 	restrict: 'EA',
 	scope:{
@@ -558,7 +558,7 @@ app.directive('d3Maps', function($compile, $rootScope, $window) {
 		responsive:true,
         element: elem[0],
         // change the projection to something else only if you have absolutely no cartographic sense
-        fills: { 'defaultFill': '#DDDDDD' , 'malware': 'red' , 'probing': '#FFA07A' , 'web':'#19a9d5', 'ssh':'#141719' , 'sip':'#1a9c39', 'database':'#999'},
+        fills: { 'defaultFill': 'black' , 'malware': '#FF0000' , 'probing': '#FFA07A' , 'web':'#19a9d5', 'ssh':'#FFFFFF' , 'sip':'#1a9c39', 'database':'#999'},
         geographyConfig: {
           dataUrl: null,
           hideAntarctica: true,
@@ -586,19 +586,20 @@ app.directive('d3Maps', function($compile, $rootScope, $window) {
 			 var hi = [];
 			console.log(neww);
 			if(neww != undefined){
+				
 				neww.forEach(function(elem){
 					 
 					if(elem.type == "malware"){
-						col = '#f05050';
+						col = '#FF0000'; 
 						fill = elem.type;
 					}else if(elem.type == "probing"){
-						col = '#FFA07A';
+						col = '#FFA07A'; 
 						fill = elem.type;
 					}else if(elem.type == "web"){
 						col = '#19a9d5';
 						fill = elem.type;
 					}else if(elem.type == "ssh"){
-						col = '#141719';
+						col = '#FFFFFF';
 						fill = elem.type;
 					}else if(elem.type == "sip"){
 						col = '#1a9c39';
@@ -622,7 +623,8 @@ app.directive('d3Maps', function($compile, $rootScope, $window) {
 					console.log(boom);
 			});
 				
-			map.arc(hi, {strokeWidth: 3, strokeColor: col});   
+			map.arc(hi, {strokeWidth: 3, strokeColor: col, arcSharpness: 2, animationSpeed: 600}); 
+				var resets = true;
            /*
 		   map.bubbles(boom, {
                 popupTemplate: function(geo, data) {
@@ -652,10 +654,12 @@ app.directive('d3Maps', function($compile, $rootScope, $window) {
 										'</div>'].join('');
                 }
             });
-			
+						
 			}
+			
 			}, true);
 		
+			
 
     // start the ball rolling!
    

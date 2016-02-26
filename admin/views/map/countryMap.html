@@ -1,3 +1,5 @@
+<div ng-controller="DetailCountryIpsCtrl">
+
 <div ng-include="'views/dateBar.html'"> </div>
 <ul class="breadcrumb">
 		<li><a href="#/app/dashboard-v1"> Dashboard </a></li>                   
@@ -5,7 +7,7 @@
 		<li class="active"><a href="" ng-click = "reload()"> Attack Types </a></li>
 </ul>
 
-<div class="wrapper-md" ng-controller="DetailCountryIpsCtrl">
+<div class="wrapper-md" >
 <div class="panel hbox hbox-auto-xs no-border"> 
 
 <div class="col wrapper-sm w-lg bg-auto dk r-r">
@@ -593,7 +595,7 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat="hash in hashes track by $index">
-						<td><a href="#/app/country/{{countryName}}/cCode/{{stateCode}}/hash/{{hash['hash']}}/inbox/signatures" >{{hash['hash']}} </a></td>
+						<td><a href="#/app/country/{{countryName}}/cCode/{{stateCode}}/hash/{{hash['hash']}}/inbox/info" >{{hash['hash']}} </a></td>
 						
 						<td> {{hash['malFamily']}} </td>
 						<td> {{hash['malScore']}} </td>
@@ -628,7 +630,7 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat="hash in hashes track by $index">
-						<td><a href="#/app/country/{{countryName}}/cCode/{{stateCode}}/hash/{{hash['hash']}}/inbox/signatures" >{{hash['hash']}} </a></td>
+						<td><a href="#/app/country/{{countryName}}/cCode/{{stateCode}}/hash/{{hash['hash']}}/inbox/info" >{{hash['hash']}} </a></td>
 					</tr>
 				</tbody>
 			  </table>
@@ -644,7 +646,7 @@
     <div ui-view ></div>
   </div>		
 </div>
-
+</div>
 
 <!--
 <div ng-include="'views/toggleBar.html'"></div>

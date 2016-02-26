@@ -8,6 +8,10 @@ app.service('rootURL', function(){
 	this.jsonURL = {
 		"baseURL": "http://172.20.16.57/",
 	};
+	
+	this.openPage ={
+		open:"http://115.186.132.18:8080/admin/#/"
+	};
 
 });
 
@@ -244,7 +248,8 @@ app.service('utilityMethods', function($timeout, $rootScope, ngProgress, crudSrv
 			options: {
 				 plotOptions: {
 					areaspline: {
-						  fillOpacity: 0.5
+						  fillOpacity: 0.5,
+						  cursor: 'pointer',
 					}	  
 				},
 				tooltip: {
@@ -2359,7 +2364,8 @@ app.service('crudSrv', function($http){
 		 method: 'POST',
 		 url: url,
 		 headers: header,
-		 data: data
+		 data: data,
+		 responseType: "arraybuffer"
 		};
 		
 		

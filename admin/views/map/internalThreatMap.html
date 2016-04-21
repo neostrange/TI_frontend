@@ -17,7 +17,8 @@
  
 <div class="wrapper-md">
 		<div class="row"> 
-	<div class="col-sm-12 col-xs-12 col-md-12">   
+		<!--
+		<div class="col-sm-12 col-xs-12 col-md-12">   
 		<div class="panel panel-default" ng-show="data.lengths == 0">
 			<h2> Sorry No Record Found </h2>
 		</div>
@@ -35,7 +36,7 @@
 						 <th> Country </th>
 						 <th >DateTime
 						</th>
-					<!--	<th> Detail </th> -->
+					
 				  </tr>
 				</thead>
 				<tbody>
@@ -47,7 +48,7 @@
 						<td><span ng-show="!val['service']"></span>{{val['service']}}</td>						
 						<td><span ng-show="!val['origin']['srcCountry']">-</span>{{val['origin']['srcCountry']}}</td>
 						<td>{{val['dateTime'] | dateTimeFilter }}</td>
-						<!-- <td> <a href="" ng-click="showModal(val)"> <span class="glyphicon glyphicon-eye-open"> </span> </a></td> -->
+					
 						 
 					 </tr>
 				</tbody>
@@ -60,7 +61,10 @@
 			 </div>
 		</div>
 		</div>
-			
+		-->
+		 <div class="col-sm-8" align="center">
+			<highchart id="chart1" config="barConfig" class="span9" ></highchart>
+		 </div>	
 </div>
 
 </div>

@@ -1,21 +1,50 @@
+ <div ng-controller="addInternalCTRL">
 <div class="bg-light lter b-b wrapper-sm">
   <h1 class="m-n font-thin h3"> Internal Threat   </h1>
+   <div class="fileUpload btn btn-primary">
+		<span>Upload CSV</span>
+		 <button type="file" ngf-select="uploadFiles($file, $invalidFiles)"
+          accept="application/pdf" ngf-max-height="1000" ngf-max-size="1MB">
+		 Select File</button>
+	</div>
  </div>  
 
 <div class="wrapper-md">
 		<div class="row">
 			<div class="col-lg-12">
-        <div ng-controller="addInternalCTRL">
+      
 		 <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>	
          <form name="userForm" ng-submit="submitForm()" novalidate>
-
-        <!-- NAME -->
-        <div class="form-group" ng-class="{ 'has-error' : userForm.userAssigned.$invalid && !userForm.userAssigned.$pristine }">
-            <label>User Name</label>
-            <input type="text" name="userAssigned" class="form-control" ng-model="user.userAssigned" required>
-            <p ng-show="userForm.userAssigned.$invalid && !userForm.userAssigned.$pristine" class="help-block">You name is required.</p>
+		
+		<div class="form-group" ng-class="{ 'has-error' : userForm.ipBlock.$invalid && !userForm.hostIP.$pristine }">
+            <label>IP Address</label>
+            <input type="text" name="ipBlock" class="form-control" ng-model="user.ipBlock" required>
+            <p ng-show="userForm.ipBlock.$invalid && !userForm.ipBlock.$pristine" class="help-block">IP Address is required.</p>
         </div>
-      
+		 
+       
+		<!-- vs-google-autocomplete="options" -->
+        <div class="form-group">
+          <label for="cityFR">City </label>
+          <input vs-google-autocomplete="options"
+                 ng-model="cityFR" 
+                 type="text" 
+                 name="cityFR"
+                 id="cityFR"
+                 class="form-control"
+                 vs-city="user.city"
+                 vs-country="user.country"
+                 vs-latitude="user.geoPoint.lat"
+                 vs-longitude="user.geoPoint.lon"			
+                 placeholder="Enter city name" >
+        </div>
+		
+		<div class="form-group" >
+            <label> Latitude / longitude </label>
+          
+            <p ng-show="user.geoPoint"> {{user.geoPoint.lat}} <span ng-show="user.geoPoint"> , </span>{{user.geoPoint.lon}}</p>
+        </div>
+	  
         <!-- Department -->
         <div class="form-group" ng-class="{ 'has-error' : userForm.department.$invalid && !userForm.department.$pristine }">
             <label>Department</label>
@@ -24,20 +53,22 @@
             <p ng-show="userForm.department.$error.maxlength" class="help-block">DepartmentName is too long.</p>
         </div>
         
-        <!-- Location -->
-        <div class="form-group" ng-class="{ 'has-error' : userForm.location.$invalid && !userForm.location.$pristine }">
-            <label>Location</label>
-            <input type="text" name="location" class="form-control" ng-model="user.location" ng-minlength="3" ng-maxlength="12">
-           <p ng-show="userForm.location.$error.minlength" class="help-block">Location is too short.</p>
-            <p ng-show="userForm.location.$error.maxlength" class="help-block">Location is too long.</p>
+		 <!-- Branch -->
+        <div class="form-group" ng-class="{ 'has-error' : userForm.branch.$invalid && !userForm.branch.$pristine }">
+            <label>Branch</label>
+            <input type="text" name="organization" class="form-control" ng-model="user.branch" ng-minlength="3" ng-maxlength="12">
+           <p ng-show="userForm.branch.$error.minlength" class="help-block">branch is too short.</p>
+            <p ng-show="userForm.branch.$error.maxlength" class="help-block">branch is too long.</p>
         </div>
 		
-		<div class="form-group" ng-class="{ 'has-error' : userForm.hostIP.$invalid && !userForm.hostIP.$pristine }">
-            <label>IP Address</label>
-            <input type="text" name="hostIP" class="form-control" ng-model="user.hostIP" required>
-            <p ng-show="userForm.hostIP.$invalid && !userForm.hostIP.$pristine" class="help-block">IP Address is required.</p>
+        <!-- Organization -->
+        <div class="form-group" ng-class="{ 'has-error' : userForm.organization.$invalid && !userForm.organization.$pristine }">
+            <label>Organization</label>
+            <input type="text" name="organization" class="form-control" ng-model="user.organization" ng-minlength="3" ng-maxlength="12">
+           <p ng-show="userForm.organization.$error.minlength" class="help-block">Organization is too short.</p>
+            <p ng-show="userForm.organization.$error.maxlength" class="help-block">Organization is too long.</p>
         </div>
-        
+		
 		<div class="form-group" ng-class="{ 'has-error' : userForm.hostMAC.$invalid && !userForm.hostMAC.$pristine }">
             <label> Mac Address</label>
             <input type="text" name="hostMAC" class="form-control" ng-model="user.hostMAC" required>
@@ -50,17 +81,18 @@
             <p ng-show="userForm.hostname.$invalid && !userForm.hostname.$pristine" class="help-block">HostName is required.</p>
         </div>
 		
-		<div class="form-group" ng-class="{ 'has-error' : userForm.hostOS.$invalid && !userForm.hostOS.$pristine }">
-            <label> Operating System</label>
-            <input type="text" name="hostOS" class="form-control" ng-model="user.hostOS" required>
-            <p ng-show="userForm.hostOS.$invalid && !userForm.hostOS.$pristine" class="help-block">Operating System Name is required.</p>
-        </div>
+		
 		
 		
         <button type="submit" class="btn btn-primary" ng-disabled="userForm.$invalid">Submit</button>
         
 		</form>
-        </div>
+        
  </div>
 </div>
 </div> 
+
+<div id="veil" ng-show="isLoading"></div>
+	<div id="feedLoading" ng-show="isLoading">Loading...</div>	
+	
+</div>	

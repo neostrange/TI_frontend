@@ -7,13 +7,20 @@
 
   	<div class="row mapTop">
 		<div class="dashboard-header clearfix">
-			<div class="hidden-sm hidden-xs hidden-md col-lg-4">
-	          <h1 class="m-n page-title font-thin h3 text-black">Dashboard</h1>
+			<div class="hidden-sm hidden-xs hidden-md col-lg-2">
+	          <h1 class="m-n page-title font-thin h3 text-white">Dashboard</h1>
 	          <!--<small class="text-muted">Threat Intelligence </small>-->
 	        </div>
-	        <div class="col-md-4 col-lg-4 col-sm-4 col-xs-12">
-				<h1 class="m-n font-thin page-title h3 text-black" title="Session Start Time">{{currentDate}}</h1>
+	        
+			<div class="col-md-2 col-lg-3 col-sm-2 col-xs-6">
+				<h1 class="m-n font-thin page-title h3 text-white" title="Session Start Time">{{currentDate}}</h1>
 			</div>
+			
+			<div class="col-md-2 col-lg-3 col-sm-2 col-xs-6">
+				<!-- <h1 class="m-n font-thin page-title h3 text-white" title="Session Start Time">{{changeTime}}</h1> -->
+			<h4 class="m-n font-thin page-title h3 text-white"> <timer start-time="passTime" interval="1000">{{days}} day<span ng-show="days">{{daysS}}</span>, {{hhours}}:{{mminutes}}:{{sseconds}}  </timer> </h4> 
+			</div>
+			
 			<div class="col-sm-4 col-lg-4 col-md-4">
 				<div class="pull-right" style="position:relative; right:16px">
 				<ul class="nav navbar-nav m-xs">
@@ -24,7 +31,6 @@
 							<option value="1d">Last Day</option>
 							<option value="1w">Last Week</option>
 							<option value="1m">Last Month</option>
-							<option value="1c" ng-show="header.criteria">Reset Time</option>
 							
 					</select>
 					
@@ -115,8 +121,16 @@
           <div d3-maps vals="value" id="container"> </div>
            <!-- <datamap map="map" </datamap>  -->
           </div>
+		  
+		 
+		  
+		  
+		 <div class="btn-menu toggle-btn" id="toggle-btn" menu> 
+			<i id="menu-toggle" class="fa fa-align-justify"></i>
+		 </div>
+		
           <div class="mapright-col"> 
-          <h3>Attack Activity</h3>     
+		  <h3>Attack Activity</h3>     
       <!-- streamline -->
       
       <div class="">
@@ -126,7 +140,7 @@
           	<a class="item-country text-danger" href="#/app/CountryIps/{{item.data['name']}}/cCode/{{item.data['country-code']}}" >
           		{{item['data']['name']}}
           	</a>
-          	<a class="item-ip" href="#/app/CountryIps/{{item.data['name']}}/ip/{{item.data['Ip']}}" target="_blank"> 
+          	<a class="item-ip" href="#/app/showIps/{{item.data['name']}}/ip/{{item.data['Ip']}}" target="_blank"> 
           		{{item.data['Ip']}}
           	</a>
       		<a  class="item-type text-danger" href=""> {{item.data['type']}}</a> 
@@ -141,7 +155,7 @@
           	<a class="item-country text-info" href="#/app/CountryIps/{{item.data['name']}}/cCode/{{item.data['country-code']}}" >
           		{{item['data']['name']}}
           	</a>
-          	<a class="item-ip" href="#/app/CountryIps/{{item.data['name']}}/ip/{{item.data['Ip']}}" target="_blank"> {{item.data['Ip']}} </a>
+          	<a class="item-ip" href="#/app/showIps/{{item.data['name']}}/ip/{{item.data['Ip']}}" target="_blank"> {{item.data['Ip']}} </a>
           	<a href="" class="item-type text-info"> {{item.data['type']}} </a>
           	<a class="detail-icon" data-popup-open="popup-1" href="" ng-click="showModal(item)" > 
           		<i class="fa fa-info-circle"></i>
@@ -154,7 +168,7 @@
           	<a class="item-country text-orange" href="#/app/CountryIps/{{item.data['name']}}/cCode/{{item.data['country-code']}}" >
           		{{item['data']['name']}}
           	</a>
-          	<a class="item-ip" href="#/app/CountryIps/{{item.data['name']}}/ip/{{item.data['Ip']}}" target="_blank"> {{item.data['Ip']}} </a>
+          	<a class="item-ip" href="#/app/showIps/{{item.data['name']}}/ip/{{item.data['Ip']}}" target="_blank"> {{item.data['Ip']}} </a>
             <a href="" class="item-type text-orange"> {{item.data['type']}} </a>
             <a class="detail-icon" data-popup-open="popup-1" href="" ng-click="showModal(item)" > 
             	<i class="fa fa-info-circle"></i>
@@ -168,7 +182,7 @@
           	<a class="item-country text-success" href="#/app/CountryIps/{{item.data['name']}}/cCode/{{item.data['country-code']}}" >
           		{{item['data']['name']}}
           	</a>
-          	<a class="item-ip" href="#/app/CountryIps/{{item.data['name']}}/ip/{{item.data['Ip']}}" target="_blank"> {{item.data['Ip']}} </a>
+          	<a class="item-ip" href="#/app/showIps/{{item.data['name']}}/ip/{{item.data['Ip']}}" target="_blank"> {{item.data['Ip']}} </a>
           	<a href="" class="item-type text-success"> {{item.data['type']}} </a>
             <a class="detail-icon" data-popup-open="popup-1" href="" ng-click="showModal(item)" > <i class="fa fa-info-circle"></i></a>
           </div>
@@ -179,7 +193,7 @@
           	<a class="item-country map-text-black" href="#/app/CountryIps/{{item.data['name']}}/cCode/{{item.data['country-code']}}" >
           		{{item['data']['name']}}
           	</a>
-          	<a class="item-ip" href="#/app/CountryIps/{{item.data['name']}}/ip/{{item.data['Ip']}}" target="_blank"> {{item.data['Ip']}} </a>
+          	<a class="item-ip" href="#/app/showIps/{{item.data['name']}}/ip/{{item.data['Ip']}}" target="_blank"> {{item.data['Ip']}} </a>
           	<a href="" class="item-type map-text-black"> {{item.data['type']}} </a>
           	<a  class="detail-icon" data-popup-open="popup-1" href="" ng-click="showModal(item)" > <i class="fa fa-info-circle"></i> </a>
             
@@ -191,7 +205,7 @@
           	<a class="item-country text-db" href="#/app/CountryIps/{{item.data['name']}}/cCode/{{item.data['country-code']}}" >
           		{{item['data']['name']}}
           	</a>
-          	<a class="item-ip" href="#/app/CountryIps/{{item.data['name']}}/ip/{{item.data['Ip']}}" target="_blank"> {{item.data['Ip']}} </a>
+          	<a class="item-ip" href="#/app/showIps/{{item.data['name']}}/ip/{{item.data['Ip']}}" target="_blank"> {{item.data['Ip']}} </a>
           	<a href="" class="item-type text-db"> {{item.data['type']}} </a> 
           	<a class="detail-icon" data-popup-open="popup-1" href="" ng-click="showModal(item)" >
           		<i class="fa fa-info-circle"></i>
@@ -270,7 +284,7 @@
 	  
     
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6" ng-if="obj.length > 0">
 		<highchart id="chart1" config="chartConfig" class="span9" ></highchart>
 		<!--
           <div class="panel no-border">
@@ -290,25 +304,11 @@
           </div>
 		  -->
         </div>
-        <div class="col-md-6"> 
+        <div class="col-md-6" ng-if="ob.length > 0"> 
 		
 			
           <div class="panel no-border">
             <highchart id="chart1" config="difference" class="span9" ></highchart>
-			<!--
-			<div class="panel-heading wrapper b-b b-light">
-              <h4 class="font-thin m-t-none m-b-none text-muted">Top Ten Ip</h4>              
-            </div>
-			<ul class="list-group">
-				<li class="list-group-item" ng-repeat="attack in ipDatas"  ui-sref-active="active"> 
-				<a href="#/app/CountryIps/{{attack.ip_country}}/ip/{{attack.ip}}">
-				<span class="badge bg-info pull-right">{{attack.hits}}</span>
-					<span> <img src="img/16/{{attack.ip_country}}-flag.png" height="12px" /> </span>{{attack.ip}} ({{attack.ip_country}})
-				</a>
-				</li>
-			</ul>
-					
-			-->
 			
 			</div>
 	
@@ -344,298 +344,6 @@
       <!-- / tasks -->
     </div>
 	
-	<!--
-	<div modal="showModals" close="showModalHide()">
-		<div class="modal-dialog modal-md">
-			<div class="modal-content mode_bor">
-				<div class="row">
-					<div class="col-lg-12">
-						<div class="table-responsive" ng-show="modalType == 'SIP'">
-							<table class="table b-light">
-								<thead>
-									<th><span ng-show="modalType"> {{modalType}} </span> Attacks Detail </th>
-								</thead>
-								
-								<tbody>
-								
-								<tr>  <td> Source IP </td>
-								<td>{{detail['srcIP']}}</td>
-								</tr>
-								
-								
-								<tr>  <td>Country </td>
-								<td>{{detail['origin']['srcCountry']}}</td>
-								</tr>
-								<tr> <td>Destination IP</td>
-								<td>{{detail['dstIP']}}</td>
-								</tr>
-								
-								<tr>  <td>SIP Method</td>
-								<td>{{detail['sipMethod']}}</td>
-								</tr>
-								<tr> <td>SIP Call Id</td>
-								<td>{{detail['sipCallId']}}</td>
-								</tr>
-								
-								<tr>  <td>App Layer Protocol</td>
-								<td>{{detail['appLayerProtocol']}}</td>
-								</tr>
-								
-								<tr>  <td>User Agent</td>
-								<td>{{detail['sipUserAgent']}}</td>								
-								</tr>
-								</tbody>
-								</table>
-						</div>
-						
-						<div class="table-responsive" ng-show="modalType == 'PROBING'">
-							<table class="table b-light">
-								<thead>
-								 
-									<th><span ng-show="modalType"> {{modalType}} </span> Attacks Detail </th>
-									
-								</thead>
-								
-								<tbody>
-								
-								<tr>  <td> Source IP </td>
-								<td>{{detail['srcIP']}}</td>
-								</tr>
-								
-								<tr>  <td>Country </td>
-								<td>{{detail['origin']['srcCountry']}}</td>
-								</tr>
-								<tr> <td>Destination IP</td>
-								<td>{{detail['dstIP']}}</td>
-								</tr>
-								
-								<tr>  <td>Destination Protocol</td>
-								<td>{{detail['dstPort']}}</td>
-								</tr>
-								
-								<tr> <td> Service </td>
-								<td>{{detail['service']}}</td>								
-								</tr>
-								</tbody>
-								</table>
-						</div>
-						
-						<div class="table-responsive" ng-show="modalType == 'WEB'">
-							<table class="table b-light">
-								<thead>
-								  <tr>
-									<th><span ng-show="modalType"> {{modalType}} </span> Attacks Detail </th>
-									</tr>
-								</thead>	
-								<tbody>
-								
-								<tr>  <td> Source IP </td>
-								<td>{{detail['srcIP']}}</td>
-								</tr>
-								
-								
-								<tr>  <td>Country </td>
-								<td>{{detail['origin']['srcCountry']}}</td>
-								</tr>
-								<tr> <td>Destination IP</td>
-								<td>{{detail['dstIP']}}</td>
-								</tr>
-								<tr> <td> Service </td>
-								<td>{{detail['service']}}</td>								
-								</tr>
-								
-								<tr> <td> Http Method </td>
-									<td>{{detail['httpMethod']}}</td>
-								</tr>
-								
-
-								<tr> <td> User Agent </td>
-									<td>{{detail['userAgent']}}</td>
-								</tr>
-
-								
-								<tr> <td> Content Type </td>
-									<td>{{detail['contentType']}}</td>
-								</tr>
-
-								
-								<tr> <td> Request Header </td>
-									<td>{{detail['rawLog']['requestHeader']}}</td>
-								</tr>
-
-								
-								<tr> <td> Response Header </td>
-									<td>{{detail['rawLog']['responseHeader']}}</td>
-								</tr>	
-								
-								</tbody>
-								</table>
-						</div>
-						
-						
-						<div class="table-responsive" ng-show="modalType == 'MALWARE'">
-							<table class="table b-light">
-								<thead>
-								  <tr>
-									<th><span ng-show="modalType"> {{modalType}} </span> Attacks Detail </th>
-									</tr>
-								</thead>	
-								<tbody>
-								
-								<tr>  <td> Source IP </td>
-								<td>{{detail['srcIP']}}</td>
-								</tr>
-								
-								
-								<tr>  <td>Country </td>
-								<td>{{detail['origin']['srcCountry']}}</td>
-								</tr>
-								<tr> <td>Destination IP</td>
-								<td>{{detail['dstIP']}}</td>
-								</tr>
-								<tr> <td> Service </td>
-								<td>{{detail['service']}}</td>								
-								</tr>
-								
-								<tr> <td> Hash </td>
-									<td>{{detail['download']['md5Hash']}}</td>
-								</tr>
-								
-								<tr ng-show="detail.downloads[0]" ng-repeat="ha in detail.downloads">
-								<td> Hash </td>
-								<td>{{ha['md5Hash']}}</td>
-								</tr>
-								
-								<tr> <td> URL </td>
-									<td>{{detail['url']}}</td>
-								</tr>
-
-								</tbody>
-								</table>
-						</div>
-						
-						<div class="table-responsive" ng-if="modalType == 'DATABASE'">
-							<table class="table b-light">
-								<thead>
-								  <tr>
-									<th><span ng-show="modalType"> {{modalType | getCapitilize}} </span> Attacks Detail </th>
-									</tr>
-								</thead>
-								
-								<tr>  <td> Source IP </td>
-								<td>{{detail['srcIP']}}</td>
-								</tr>
-								
-								<tr>  <td>Country </td>
-								<td>{{detail['origin']['srcCountry']}}</td>
-								</tr>
-								<tr> <td>Destination IP</td>
-								<td>{{detail['dstIP']}}</td>
-								</tr>
-								<tr> <td> Service </td>
-								<td>{{detail['service']}}</td>	
-									
-								<tr ng-show="detail['signature']">
-								<td> Signature </td>
-								<td> {{detail['signature']}}</td>
-								</tr>	
-								
-								<tr ng-show="detail['signatureClass']">
-								<td> Signature Class </td>
-								<td> {{detail['signatureClass']}}</td>
-								</tr>
-								
-								<tbody ng-show="detail.service == 'mssql'">
-								<tr> 
-									<td> Mssql Client Name </td>
-									<td>{{detail['mssqlClientName']}}</td>
-								</tr>
-
-								<tr ng-show="detail.service == 'mssql'">
-								<td> Mssql Host Name </td>
-								<td>{{detail['mssqlHostName']}}</td>
-								</tr>								
-								</tbody>
-								
-								<tbody ng-show="detail.mysqlCommands[0]" ng-repeat ="val in value.mysqlCommands">
-								<tr ng-show= "val.mysqlQuery"> 
-								<td> Mysql Query </td>
-								<td>{{val['mysqlQuery']}}</td>
-								</tr>
-								
-								<tr ng-show="val.mysqlOp"> 
-								<td> Mysql OP </td>
-								<td>{{val['mysqlOp']}}</td>
-								</tr>
-								</tbody>
-								
-								</table>
-						</div>
-						
-						<div class="table-responsive" ng-show="modalType == 'SSH'">
-							<table class="table b-light">
-								<thead>
-								  <tr>
-									<th><span ng-show="modalType"> {{modalType}} </span> Attacks Detail </th>
-									</tr>
-								</thead>
-								
-								<tbody>
-								
-								<tr>  <td> Source IP </td>
-								<td>{{detail['srcIP']}}</td>
-								</tr>
-								
-								<tr>
-								<td> Tool </td>
-								<td> {{detail['tool']}} <td>
-								</tr>
-								
-								<tr> <td> Service </td>
-								<td>{{detail['service']}}</td>								
-								</tr>
-								
-								</tbody>
-								
-								<tbody ng-repeat="val in detail['authList']">
-							
-								<tr> 
-								<td> Password </td>
-								<td>{{val['password']}}</td>
-								</tr>
-								
-								<tr><td> UserName </td>
-								<td>{{val['username']}}</td>
-								</tr>
-								
-								<tr>
-								<td> dateTime </td>
-								<td>{{val['dateTime']}}</td>
-								</tr>
-								
-								<tr>
-								<td> Auth Success </td>
-								<td>{{val['success']}}</td>
-								</tr>
-								</tbody>
-								
-								
-								
-								
-								</table>
-						</div>
-						
-						<div class="clear"></div>
-						<div class="modal-footer del_pop_footer">
-							<button ng-click="showModalHide()" type="button" class="btn btn-default" style="height:25px; border-radius:20px; margin:10px 0; line-height:10px;"> OK </button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	-->
-	
 	<div modal="showModals" close="showModalHide()">
 		<div class="modal-dialog modal-md">
 			<div class="modal-content mode_bor">
@@ -647,17 +355,27 @@
 								<div class="med_text">
 								<table class="table">
 								<tbody>
-								
-								<tr>  <td> Source IP </td>
-								<td>{{detail['srcIP']}}</td>
+								<tr>  
+									<td> Source IP </td>
+									<td>{{detail['origin']['ip']}}</td>
 								</tr>
 								
-								
-								<tr>  <td>Country </td>
-								<td>{{detail['origin']['srcCountry']}}</td>
+								<tr>  
+									<td>Country </td>
+									<td>{{detail['origin']['country']}}</td>
 								</tr>
-								<tr> <td>Destination IP</td>
-								<td>{{detail['dstIP']}}</td>
+								
+								<tr> 
+									<td>Destination IP</td>
+									<td>{{detail['destination']['ip']}}</td>
+								</tr>
+								<tr>  
+									<td>Destination Port</td>
+									<td>{{detail['dstPort']}}</td>
+								</tr>
+								
+								<tr> <td>DateTime</td>
+								<td>{{detail['dateTime'] | dateTimeFilter }}</td>
 								</tr>
 								
 								<tr>  <td>SIP Method</td>
@@ -674,20 +392,47 @@
 								<tr>  <td>User Agent</td>
 								<td>{{detail['sipUserAgent']}}</td>								
 								</tr>
+								
+								<tr> 
+									<td> Severity Score </td>
+									<td>{{detail['severityScore']}}</td>
+								</tr>
 								</tbody>
 								
 								</table>
 							</div>
 							
 							</tab>
-							
-							<tab heading="IP Header" ng-show="network">
+							<tab heading="IP Analysis">
 								<div class="med_text">
 									<table class="table">
 									<tbody>
-								
-								
-								
+									<tr>  <td> Activity Status</td>
+									<td>{{analysis['activity']}}</td>
+									</tr>
+									<tr> <td> Risk Factor </td>
+									<td>{{analysis['riskFactor']}}</td>
+									</tr>
+									
+									<tr> <td> Confidence </td>
+									<td>{{analysis['confidence']}}</td>
+									</tr>
+									
+									<tr>  <td> First Seen </td>
+									<td>{{analysis['firstSeen']}}</td>								
+									</tr>
+									
+									<tr>  <td> Last Seen </td>
+									<td>{{analysis['lastSeen']}}</td>								
+									</tr>
+									</tbody>	
+									</table>
+								</div>
+							</tab>
+							<tab heading="IP Header" ng-show="network.ipHeader">
+								<div class="med_text">
+									<table class="table">
+									<tbody>
 								<tr> <td> IP version  </td>
 									<td>{{network['ipHeader']['ipVersion']}}</td>
 								</tr>
@@ -712,64 +457,80 @@
 									</table>
 								</div>
 							</tab>		
-							<tab heading="UDP Header" ng-show="network">
-								<div class="med_text">
-								<table class="table">
-									<tbody>
-								
-								<tr> <td> Source Port </td>
-									<td>{{network['udpHeader']['srcPort']}}</td>
-								</tr>
-								
-								<tr> <td> Destination Port  </td>
-									<td>{{network['udpHeader']['dstPort']}}</td>
-								</tr>
-								
-								<tr> <td> UDP LEN </td>
-									<td>{{network['udpHeader']['udpLen']}}</td>
-								</tr>
-								
-								<tr> <td> UDP CSUM </td>
-									<td>{{network['udpHeader']['udpCsum']}}</td>
-								</tr>
-								
-																
-								</tbody>
-								</table>
-								</div>
-							
-							</tab>
+							<tab heading="UDP Header" ng-show="network.udpHeader">
+									<div class="med_text">
+										<table class="table">
+											<tbody>
+												<tr>
+													<td> Source Port </td>
+													<td>{{network['udpHeader']['srcPort']}}</td>
+												</tr>
+												<tr>
+													<td> Destination Port  </td>
+													<td>{{network['udpHeader']['dstPort']}}</td>
+												</tr>
+												<tr>
+													<td> UDP LEN </td>
+													<td>{{network['udpHeader']['udpLen']}}</td>
+												</tr>
+												<tr>
+													<td> UDP CSUM </td>
+													<td>{{network['udpHeader']['udpCsum']}}</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</tab>
+								<tab heading="Tcp Header" ng-show="network.tcpHeader">
+									<div class="med_text">
+										<table class="table">
+											<tbody>
+												<tr>
+													<td> Source Port </td>
+													<td>{{network['tcpHeader']['srcPort']}}</td>
+												</tr>
+												<tr>
+													<td> Destination Port  </td>
+													<td>{{network['tcpHeader']['dstPort']}}</td>
+												</tr>
+												<tr>
+													<td> Flags </td>
+													<td>{{network['tcpHeader']['flags']}}</td>
+												</tr>
+												<tr>
+													<td> Tcp CSUM </td>
+													<td>{{network['tcpHeader']['tcpCsum']}}</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</tab>
+								<tab heading="PayLoad" ng-show="network.payload">
+									<div class="med_text">
+										<table class="table">
+											<tbody>
+												<tr>
+													<td> PayLoad </td>
+														<td> <pre class="preheader"> {{network['payload']['encodedData']}} </pre> </td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</tab>
 						
-						<tab heading="PayLoad" ng-show="network">
-							<div class="med_text">
-								<table class="table">
-									<tbody>
-								
-								<tr> <td> PayLoad </td>
-										<td> <pre class="preheader"> {{network['payload']['encodedData']}} </pre> </td>
-								</tr>
-								</tbody>
-								</table>
-								</div>
-						</tab>
-						
-						<tab heading="Signatures" ng-show="network">
-							<div class="med_text">
-								<table class="table">
-									<tbody>
-								
-								<tr> <td> Signatures </td>
-									<td>{{network['signatures']}}</td>
-								</tr>
-								</tbody>
-								</table>
-							</div>
-						
-						</tab>
-						
-						</tabset>		
-								
-								
+								<tab heading="Signatures" ng-show="network.signatures">
+									<div class="med_text">
+										<table class="table">
+											<tbody>
+										
+										<tr> <td> Signatures </td>
+											<td>{{network['signatures']}}</td>
+										</tr>
+										</tbody>
+										</table>
+									</div>
+								</tab>
+						</tabset>			
 						</div>
 						
 						
@@ -782,16 +543,26 @@
 								<tbody>
 								
 								<tr>  <td> Source IP </td>
-								<td>{{detail['srcIP']}}</td>
+								<td>{{detail['origin']['ip']}}</td>
 								</tr>
 								
 								
-								<tr>  <td>Country </td>
-								<td>{{detail['origin']['srcCountry']}}</td>
+								<tr> <td>Country </td>
+								<td>{{detail['origin']['country']}}</td>
 								</tr>
 								<tr> <td>Destination IP</td>
-								<td>{{detail['dstIP']}}</td>
+								<td>{{detail['destination']['ip']}}</td>
 								</tr>
+								
+								<tr>  
+										<td>Destination Port</td>
+										<td>{{detail['dstPort']}}</td>
+								</tr>
+								
+								<tr> <td>DateTime</td>
+								<td>{{detail['dateTime'] | dateTimeFilter }}</td>
+								</tr>
+								
 								<tr> <td> Service </td>
 								<td>{{detail['service']}}</td>								
 								</tr>
@@ -801,37 +572,91 @@
 								</tr>
 								
 
-								<tr> <td> User Agent </td>
+								<tr ng-show="detail['userAgent']"> <td> User Agent </td>
 									<td>{{detail['userAgent']}}</td>
 								</tr>
 
 								
-								<tr> <td> Content Type </td>
+								<tr ng-show="detail['contentType']"> <td> Content Type </td>
 									<td>{{detail['contentType']}}</td>
 								</tr>
 
 								
-								<tr> <td> Request Header </td>
-									<td>{{detail['rawLog']['requestHeader']}}</td>
+								<tr ng-show="detail['rawLog']['requestHeader']"> <td> Request Header </td>
+									<td> <pre class="preheader"> {{detail['rawLog']['requestHeader']}} </pre> </td>
 								</tr>
 
 								
-								<tr> <td> Response Header </td>
-									<td>{{detail['rawLog']['responseHeader']}}</td>
+								<tr ng-show="detail['rawLog']['responseHeader']"> <td> Response Header </td>
+								<td> <pre class="preheader"> {{detail['rawLog']['responseHeader']}} </pre> </td>
 								</tr>	
 								
 								</tbody>
 								</table>
 							</div>
-							
 							</tab>
-							
-							<tab heading="IP Header" ng-show="network">
+							<tab heading="IP Analysis">
 								<div class="med_text">
 									<table class="table">
 									<tbody>
-								
-								
+									<tr>  <td> Activity Status</td>
+									<td>{{analysis['activity']}}</td>
+									</tr>
+									<tr> <td> Risk Factor </td>
+									<td>{{analysis['riskFactor']}}</td>
+									</tr>
+									
+									<tr> <td> Confidence </td>
+									<td>{{analysis['confidence']}}</td>
+									</tr>
+									
+									<tr>  <td> First Seen </td>
+									<td>{{analysis['firstSeen']}}</td>								
+									</tr>
+									
+									<tr>  <td> Last Seen </td>
+									<td>{{analysis['lastSeen']}}</td>								
+									</tr>
+									</tbody>	
+									</table>
+								</div>
+							</tab>
+							
+							<tab heading="Rule List" ng-show="detail.ruleList">
+								<div class="med_text">
+										<table class="table">
+											<tbody ng-repeat="val in detail['ruleList']">
+												<tr> 
+												<td> RuleId </td>
+												<td>{{val['ruleId']}}</td>
+												</tr>
+												<tr> 
+												<td> Regex Expression </td>
+												<td>{{val['regexPattern']}}</td>
+												</tr>
+												
+												<tr><td> RuleCategory </td>
+												<td>{{val['ruleCategory']}}</td>
+												</tr>
+												
+												<tr>
+												<td> RuleFile </td>
+												<td>{{val['ruleFile']}}</td>
+												</tr>
+												
+												<tr>
+												<td> RuleMessage </td>
+												<td>{{val['ruleMessage']}}</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+							</tab>
+							
+								<tab heading="IP Header" ng-show="network.ipHeader">
+								<div class="med_text">
+									<table class="table">
+									<tbody>
 								
 								<tr> <td> IP version  </td>
 									<td>{{network['ipHeader']['ipVersion']}}</td>
@@ -857,48 +682,68 @@
 									</table>
 								</div>
 							</tab>		
-							<tab heading="UDP Header" ng-show="network">
-								<div class="med_text">
-								<table class="table">
-									<tbody>
-								
-								<tr> <td> Source Port </td>
-									<td>{{network['udpHeader']['srcPort']}}</td>
-								</tr>
-								
-								<tr> <td> Destination Port  </td>
-									<td>{{network['udpHeader']['dstPort']}}</td>
-								</tr>
-								
-								<tr> <td> UDP LEN </td>
-									<td>{{network['udpHeader']['udpLen']}}</td>
-								</tr>
-								
-								<tr> <td> UDP CSUM </td>
-									<td>{{network['udpHeader']['udpCsum']}}</td>
-								</tr>
-								
-																
-								</tbody>
-								</table>
-								</div>
-							
-							</tab>
+							<tab heading="UDP Header" ng-show="network.udpHeader">
+									<div class="med_text">
+										<table class="table">
+											<tbody>
+												<tr>
+													<td> Source Port </td>
+													<td>{{network['udpHeader']['srcPort']}}</td>
+												</tr>
+												<tr>
+													<td> Destination Port  </td>
+													<td>{{network['udpHeader']['dstPort']}}</td>
+												</tr>
+												<tr>
+													<td> UDP LEN </td>
+													<td>{{network['udpHeader']['udpLen']}}</td>
+												</tr>
+												<tr>
+													<td> UDP CSUM </td>
+													<td>{{network['udpHeader']['udpCsum']}}</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</tab>
+								<tab heading="Tcp Header" ng-show="network.tcpHeader">
+									<div class="med_text">
+										<table class="table">
+											<tbody>
+												<tr>
+													<td> Source Port </td>
+													<td>{{network['tcpHeader']['srcPort']}}</td>
+												</tr>
+												<tr>
+													<td> Destination Port  </td>
+													<td>{{network['tcpHeader']['dstPort']}}</td>
+												</tr>
+												<tr>
+													<td> Flags </td>
+													<td>{{network['tcpHeader']['flags']}}</td>
+												</tr>
+												<tr>
+													<td> Tcp CSUM </td>
+													<td>{{network['tcpHeader']['tcpCsum']}}</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</tab>
+								<tab heading="PayLoad" ng-show="network.payload">
+									<div class="med_text">
+										<table class="table">
+											<tbody>
+												<tr>
+													<td> PayLoad </td>
+														<td> <pre class="preheader"> {{network['payload']['encodedData']}} </pre> </td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</tab>
 						
-						<tab heading="PayLoad" ng-show="network">
-							<div class="med_text">
-								<table class="table">
-									<tbody>
-								
-								<tr> <td> PayLoad </td>
-										<td> <pre class="preheader"> {{network['payload']['encodedData']}} </pre> </td>
-								</tr>
-								</tbody>
-								</table>
-								</div>
-						</tab>
-						
-						<tab heading="Signatures" ng-show="network">
+						<tab heading="Signatures" ng-show="network.signatures">
 							<div class="med_text">
 								<table class="table">
 									<tbody>
@@ -924,21 +769,26 @@
 										<table class="table">
 											<tbody>
 											<tr>  <td> Source IP </td>
-											<td>{{detail['srcIP']}}</td>
+											<td>{{detail['origin']['ip']}}</td>
 											</tr>
 											
 											<tr>  <td>Country </td>
-											<td>{{detail['origin']['srcCountry']}}</td>
+											<td>{{detail['origin']['country']}}</td>
 											</tr>
 											<tr> <td>Destination IP</td>
-											<td>{{detail['dstIP']}}</td>
+											<td>{{detail['destination']['ip']}}</td>
 											</tr>
+											
+											<tr> <td>DateTime</td>
+												<td>{{detail['dateTime'] | dateTimeFilter }}</td>
+											</tr>
+								
 											<tr> <td> Service </td>
 											<td>{{detail['service']}}</td>								
 											</tr>
 											
 											<tr> <td> Hash </td>
-												<td>{{detail['download']['md5Hash']}}</td>
+												<td><a href="" ng-click="getHash(detail.download.md5Hash)">{{detail['download']['md5Hash']}}  </a> </td>
 											</tr>
 											
 											<tr ng-show="detail.downloads[0]" ng-repeat="ha in detail.downloads">
@@ -946,19 +796,49 @@
 											<td>{{ha['md5Hash']}}</td>
 											</tr>
 											
-											<tr> <td> URL </td>
-												<td>{{detail['url']}}</td>
+											<tr> 
+												<td> Severity Score </td>
+												<td>{{detail['severityScore']}}</td>
+											</tr>
+											
+											<tr ng-show="detail.download.url"> <td> URL </td>
+												<td>{{detail['download']['url']}}</td>
 											</tr>
 
 										</tbody>
 										</table>
 									</div>
 								</tab>
-								<tab heading="IP Header" ng-show="network">
+								<tab heading="IP Analysis">
+									<div class="med_text">
+										<table class="table">
+										<tbody>
+										<tr>  <td> Activity Status</td>
+										<td>{{analysis['activity']}}</td>
+										</tr>
+										<tr> <td> Risk Factor </td>
+										<td>{{analysis['riskFactor']}}</td>
+										</tr>
+										
+										<tr> <td> Confidence </td>
+										<td>{{analysis['confidence']}}</td>
+										</tr>
+										
+										<tr>  <td> First Seen </td>
+										<td>{{analysis['firstSeen']}}</td>								
+										</tr>
+										
+										<tr>  <td> Last Seen </td>
+										<td>{{analysis['lastSeen']}}</td>								
+										</tr>
+										</tbody>	
+										</table>
+									</div>
+								</tab>
+								<tab heading="IP Header" ng-show="network.ipHeader">
 									<div class="med_text">
 										<table class="table">
 											<tbody>
-												
 												<tr>
 													<td> IP version  </td>
 													<td>{{network['ipHeader']['ipVersion']}}</td>
@@ -983,7 +863,7 @@
 										</table>
 									</div>
 								</tab>
-								<tab heading="UDP Header" ng-show="network">
+								<tab heading="UDP Header" ng-show="network.udpHeader">
 									<div class="med_text">
 										<table class="table">
 											<tbody>
@@ -1007,7 +887,31 @@
 										</table>
 									</div>
 								</tab>
-								<tab heading="PayLoad" ng-show="network">
+								<tab heading="Tcp Header" ng-show="network.tcpHeader">
+									<div class="med_text">
+										<table class="table">
+											<tbody>
+												<tr>
+													<td> Source Port </td>
+													<td>{{network['tcpHeader']['srcPort']}}</td>
+												</tr>
+												<tr>
+													<td> Destination Port  </td>
+													<td>{{network['tcpHeader']['dstPort']}}</td>
+												</tr>
+												<tr>
+													<td> Flags </td>
+													<td>{{network['tcpHeader']['flags']}}</td>
+												</tr>
+												<tr>
+													<td> Tcp CSUM </td>
+													<td>{{network['tcpHeader']['tcpCsum']}}</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</tab>
+								<tab heading="PayLoad" ng-show="network.payload">
 									<div class="med_text">
 										<table class="table">
 											<tbody>
@@ -1019,7 +923,7 @@
 										</table>
 									</div>
 								</tab>
-								<tab heading="Signatures" ng-show="network">
+								<tab heading="Signatures" ng-show="network.signatures">
 									<div class="med_text">
 										<table class="table">
 											<tbody>
@@ -1032,8 +936,6 @@
 									</div>
 								</tab>
 							</tabset>
-								
-								
 							</div>	
 							
 						
@@ -1043,15 +945,29 @@
 									<div class="med_text">
 										<table class="table">
 											<tr>  <td> Source IP </td>
-								<td>{{detail['srcIP']}}</td>
+											<td>{{detail['origin']['ip']}}</td>
+											</tr>
+											
+											<tr>  <td>Country </td>
+											<td>{{detail['origin']['country']}}</td>
+											</tr>
+											<tr> <td>Destination IP</td>
+											<td>{{detail['destination']['ip']}}</td>
+											</tr>
+											<tr>  
+												<td>Destination Port</td>
+												<td>{{detail['dstPort']}}</td>
+											</tr>
+											
+											<tr> 
+												<td> Severity Score </td>
+												<td>{{detail['severityScore']}}</td>
+											</tr>
+								
+								<tr> <td>DateTime</td>
+								<td>{{detail['dateTime'] | dateTimeFilter }}</td>
 								</tr>
 								
-								<tr>  <td>Country </td>
-								<td>{{detail['origin']['srcCountry']}}</td>
-								</tr>
-								<tr> <td>Destination IP</td>
-								<td>{{detail['dstIP']}}</td>
-								</tr>
 								<tr> <td> Service </td>
 								<td>{{detail['service']}}</td>	
 									
@@ -1066,61 +982,86 @@
 								</tr>
 								
 								<tbody ng-show="detail.service == 'mssql'">
-								<tr> 
+								<tr ng-show="detail['mssqlClientName']"> 
 									<td> Mssql Client Name </td>
 									<td>{{detail['mssqlClientName']}}</td>
 								</tr>
 
-								<tr ng-show="detail.service == 'mssql'">
+								<tr ng-show="detail['mssqlHostName']">
 								<td> Mssql Host Name </td>
 								<td>{{detail['mssqlHostName']}}</td>
 								</tr>								
 								</tbody>
 								
-								<tbody ng-show="detail.mysqlCommands[0]" ng-repeat ="val in value.mysqlCommands">
+								<tbody ng-show="detail.mysqlCommands[0]" ng-repeat ="val in detail.mysqlCommands">
 								<tr ng-show= "val.mysqlQuery"> 
 								<td> Mysql Query </td>
-								<td>{{val['mysqlQuery']}}</td>
+								<td> <pre class="preheader"> {{val['mysqlQuery']}} </pre></td>
 								</tr>
 								
 								<tr ng-show="val.mysqlOp"> 
 								<td> Mysql OP </td>
-								<td>{{val['mysqlOp']}}</td>
+								<td> <pre class="preheader"> {{val['mysqlOp']}} </pre> </td>
 								</tr>
 								</tbody>
 										</table>
 									</div>
 								</tab>
-								<tab heading="IP Header" ng-show="network">
+								<tab heading="IP Analysis">
 									<div class="med_text">
 										<table class="table">
-											<tbody>
-												
-												<tr>
-													<td> IP version  </td>
-													<td>{{network['ipHeader']['ipVersion']}}</td>
-												</tr>
-												<tr>
-													<td> Header length </td>
-													<td>{{network['ipHeader']['headerLength']}}</td>
-												</tr>
-												<tr>
-													<td> Total length </td>
-													<td>{{network['ipHeader']['totalLength']}}</td>
-												</tr>
-												<tr>
-													<td> Protocol </td>
-													<td>{{network['ipHeader']['protocol']}}</td>
-												</tr>
-												<tr>
-													<td> csum </td>
-													<td>{{network['ipHeader']['csum']}}</td>
-												</tr>
-											</tbody>
+										<tbody>
+										<tr>  <td> Activity Status</td>
+										<td>{{analysis['activity']}}</td>
+										</tr>
+										<tr> <td> Risk Factor </td>
+										<td>{{analysis['riskFactor']}}</td>
+										</tr>
+										
+										<tr> <td> Confidence </td>
+										<td>{{analysis['confidence']}}</td>
+										</tr>
+										
+										<tr>  <td> First Seen </td>
+										<td>{{analysis['firstSeen']}}</td>								
+										</tr>
+										
+										<tr>  <td> Last Seen </td>
+										<td>{{analysis['lastSeen']}}</td>								
+										</tr>
+										</tbody>	
 										</table>
 									</div>
 								</tab>
-								<tab heading="UDP Header" ng-show="network">
+									<tab heading="IP Header" ng-show="network.ipHeader">
+									<div class="med_text">
+										<table class="table">
+											<tbody>
+											<tr>
+											<td> IP version  </td>
+											<td>{{network['ipHeader']['ipVersion']}}</td>
+											</tr>
+											<tr>
+												<td> Header length </td>
+												<td>{{network['ipHeader']['headerLength']}}</td>
+											</tr>
+											<tr>
+												<td> Total length </td>
+												<td>{{network['ipHeader']['totalLength']}}</td>
+											</tr>
+											<tr>
+												<td> Protocol </td>
+												<td>{{network['ipHeader']['protocol']}}</td>
+											</tr>
+											<tr>
+												<td> csum </td>
+												<td>{{network['ipHeader']['csum']}}</td>
+											</tr>
+										</tbody>
+										</table>
+									</div>
+								</tab>
+								<tab heading="UDP Header" ng-show="network.udpHeader">
 									<div class="med_text">
 										<table class="table">
 											<tbody>
@@ -1144,7 +1085,31 @@
 										</table>
 									</div>
 								</tab>
-								<tab heading="PayLoad" ng-show="network">
+								<tab heading="Tcp Header" ng-show="network.tcpHeader">
+									<div class="med_text">
+										<table class="table">
+											<tbody>
+												<tr>
+													<td> Source Port </td>
+													<td>{{network['tcpHeader']['srcPort']}}</td>
+												</tr>
+												<tr>
+													<td> Destination Port  </td>
+													<td>{{network['tcpHeader']['dstPort']}}</td>
+												</tr>
+												<tr>
+													<td> Flags </td>
+													<td>{{network['tcpHeader']['flags']}}</td>
+												</tr>
+												<tr>
+													<td> Tcp CSUM </td>
+													<td>{{network['tcpHeader']['tcpCsum']}}</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</tab>
+								<tab heading="PayLoad" ng-show="network.payload">
 									<div class="med_text">
 										<table class="table">
 											<tbody>
@@ -1156,7 +1121,7 @@
 										</table>
 									</div>
 								</tab>
-								<tab heading="Signatures" ng-show="network">
+								<tab heading="Signatures" ng-show="network.signatures">
 									<div class="med_text">
 										<table class="table">
 											<tbody>
@@ -1169,8 +1134,6 @@
 									</div>
 								</tab>
 							</tabset>
-								
-									
 							
 						</div>
 						
@@ -1182,16 +1145,30 @@
 											<tbody>
 								
 								<tr>  <td> Source IP </td>
-								<td>{{detail['srcIP']}}</td>
+								<td>{{detail['origin']['ip']}}</td>
 								</tr>
 								
 								<tr>
 								<td> Tool </td>
 								<td> {{detail['tool']}} <td>
 								</tr>
-								
+								<tr> <td>Destination IP</td>
+								<td>{{detail['destination']['ip']}}</td>
+								</tr>
+								<tr>  
+										<td>Destination Port</td>
+										<td>{{detail['dstPort']}}</td>
+								</tr>
+								<tr> 
+									<td> Severity Score </td>
+									<td>{{detail['severityScore']}}</td>
+								</tr>
 								<tr> <td> Service </td>
 								<td>{{detail['service']}}</td>								
+								</tr>
+								
+								<tr> <td>DateTime</td>
+								<td>{{detail['dateTime'] | dateTimeFilter }}</td>
 								</tr>
 								
 								</tbody>
@@ -1220,11 +1197,36 @@
 									</table>
 									</div>
 								</tab>
-								<tab heading="IP Header" ng-show="network">
+								<tab heading="IP Analysis">
+									<div class="med_text">
+										<table class="table">
+										<tbody>
+										<tr>  <td> Activity Status</td>
+										<td>{{analysis['activity']}}</td>
+										</tr>
+										<tr> <td> Risk Factor </td>
+										<td>{{analysis['riskFactor']}}</td>
+										</tr>
+										
+										<tr> <td> Confidence </td>
+										<td>{{analysis['confidence']}}</td>
+										</tr>
+										
+										<tr>  <td> First Seen </td>
+										<td>{{analysis['firstSeen']}}</td>								
+										</tr>
+										
+										<tr>  <td> Last Seen </td>
+										<td>{{analysis['lastSeen']}}</td>								
+										</tr>
+										</tbody>	
+										</table>
+									</div>
+								</tab>
+									<tab heading="IP Header" ng-show="network.ipHeader">
 									<div class="med_text">
 										<table class="table">
 											<tbody>
-												
 												<tr>
 													<td> IP version  </td>
 													<td>{{network['ipHeader']['ipVersion']}}</td>
@@ -1249,7 +1251,7 @@
 										</table>
 									</div>
 								</tab>
-								<tab heading="UDP Header" ng-show="network">
+								<tab heading="UDP Header" ng-show="network.udpHeader">
 									<div class="med_text">
 										<table class="table">
 											<tbody>
@@ -1273,7 +1275,31 @@
 										</table>
 									</div>
 								</tab>
-								<tab heading="PayLoad" ng-show="network">
+								<tab heading="Tcp Header" ng-show="network.tcpHeader">
+									<div class="med_text">
+										<table class="table">
+											<tbody>
+												<tr>
+													<td> Source Port </td>
+													<td>{{network['tcpHeader']['srcPort']}}</td>
+												</tr>
+												<tr>
+													<td> Destination Port  </td>
+													<td>{{network['tcpHeader']['dstPort']}}</td>
+												</tr>
+												<tr>
+													<td> Flags </td>
+													<td>{{network['tcpHeader']['flags']}}</td>
+												</tr>
+												<tr>
+													<td> Tcp CSUM </td>
+													<td>{{network['tcpHeader']['tcpCsum']}}</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</tab>
+								<tab heading="PayLoad" ng-show="network.payload">
 									<div class="med_text">
 										<table class="table">
 											<tbody>
@@ -1285,7 +1311,7 @@
 										</table>
 									</div>
 								</tab>
-								<tab heading="Signatures" ng-show="network">
+								<tab heading="Signatures" ng-show="network.signatures">
 									<div class="med_text">
 										<table class="table">
 											<tbody>
@@ -1308,32 +1334,70 @@
 									<div class="med_text">
 										<table class="table">
 											<tbody>
-								
-								<tr>  <td> Source IP </td>
-								<td>{{detail['srcIP']}}</td>
-								</tr>
-								
-								<tr>  <td>Country </td>
-								<td>{{detail['origin']['srcCountry']}}</td>
-								</tr>
-								<tr> <td>Destination IP</td>
-								<td>{{detail['dstIP']}}</td>
-								</tr>
-								
-								<tr>  <td>Destination Protocol</td>
-								<td>{{detail['dstPort']}}</td>
-								</tr>
-								
-								<tr> <td> Service </td>
-								<td>{{detail['service']}}</td>								
-								</tr>
-								</tbody>
-								
+									<tr> 
+									<td> Source IP </td>
+									<td>{{detail['origin']['ip']}}</td>
+									</tr>
 											
+									<tr>  
+									<td>Country </td>
+									<td>{{detail['origin']['country']}}</td>
+									</tr>
+									<tr> 
+									<td>Destination IP</td>
+									<td>{{detail['destination']['ip']}}</td>
+									</tr>	
+
+								
+									<tr> <td>DateTime</td>
+									<td>{{detail['dateTime'] | dateTimeFilter }}</td>
+									</tr>
+									
+									<tr>  
+										<td>Destination Port</td>
+										<td>{{detail['dstPort']}}</td>
+									</tr>
+									
+									<tr> 
+										<td> Severity Score </td>
+										<td>{{detail['severityScore']}}</td>
+									</tr>
+									
+									<tr> <td> Service </td>
+									<td>{{detail['service']}}</td>								
+									</tr>
+									</tbody>
+											</table>
+										</div>
+								</tab>
+								<tab heading="IP Analysis">
+									<div class="med_text">
+										<table class="table">
+										<tbody>
+										<tr>  <td> Activity Status</td>
+										<td>{{analysis['activity']}}</td>
+										</tr>
+										<tr> <td> Risk Factor </td>
+										<td>{{analysis['riskFactor']}}</td>
+										</tr>
+										
+										<tr> <td> Confidence </td>
+										<td>{{analysis['confidence']}}</td>
+										</tr>
+										
+										<tr>  <td> First Seen </td>
+										<td>{{analysis['firstSeen']}}</td>								
+										</tr>
+										
+										<tr>  <td> Last Seen </td>
+										<td>{{analysis['lastSeen']}}</td>								
+										</tr>
+										</tbody>	
 										</table>
 									</div>
 								</tab>
-								<tab heading="IP Header" ng-show="network">
+								
+								<tab heading="IP Header" ng-show="network.ipHeader">
 									<div class="med_text">
 										<table class="table">
 											<tbody>
@@ -1362,7 +1426,7 @@
 										</table>
 									</div>
 								</tab>
-								<tab heading="UDP Header" ng-show="network">
+								<tab heading="UDP Header" ng-show="network.udpHeader">
 									<div class="med_text">
 										<table class="table">
 											<tbody>
@@ -1386,19 +1450,43 @@
 										</table>
 									</div>
 								</tab>
-								<tab heading="PayLoad" ng-show="network">
+								<tab heading="Tcp Header" ng-show="network.tcpHeader">
 									<div class="med_text">
 										<table class="table">
 											<tbody>
 												<tr>
-													<td> PayLoad </td>
-													<td> <pre class="preheader"> {{network['payload']['encodedData']}} </pre> </td>
+													<td> Source Port </td>
+													<td>{{network['tcpHeader']['srcPort']}}</td>
+												</tr>
+												<tr>
+													<td> Destination Port  </td>
+													<td>{{network['tcpHeader']['dstPort']}}</td>
+												</tr>
+												<tr>
+													<td> Flags </td>
+													<td>{{network['tcpHeader']['flags']}}</td>
+												</tr>
+												<tr>
+													<td> Tcp CSUM </td>
+													<td>{{network['tcpHeader']['tcpCsum']}}</td>
 												</tr>
 											</tbody>
 										</table>
 									</div>
 								</tab>
-								<tab heading="Signatures" ng-show="network">
+								<tab heading="PayLoad" ng-show="network.payload">
+									<div class="med_text">
+										<table class="table">
+											<tbody>
+												<tr>
+													<td> PayLoad </td>
+														<td> <pre class="preheader"> {{network['payload']['encodedData']}} </pre> </td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</tab>
+								<tab heading="Signatures" ng-show="network.signatures">
 									<div class="med_text">
 										<table class="table">
 											<tbody>
@@ -1411,12 +1499,8 @@
 									</div>
 								</tab>
 							</tabset>	
-								
-								
-						</div>
-						
-						
-						
+					</div>
+					
 						<div class="clear"></div>
 						<div class="modal-footer del_pop_footer">
 							<button ng-click="showModalHide()" type="button" class="btn btn-default" style="height:25px; border-radius:20px; margin:10px 0; line-height:10px;"> OK </button>
@@ -1426,8 +1510,6 @@
 			</div>
 		</div>
 	</div>
-	
-	
 	
   </div>
   <!-- / main -->

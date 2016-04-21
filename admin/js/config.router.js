@@ -5,8 +5,8 @@
  */
 angular.module('app')
   .run(
-    [          '$rootScope', '$state', '$stateParams','$location', '$cookies',
-      function ($rootScope,   $state,   $stateParams, $location, $cookies) {
+    [          '$rootScope', '$state', '$stateParams','$location', '$cookies','$window',
+      function ($rootScope,   $state,   $stateParams, $location, $cookies, $window) {
           $rootScope.$state = $state;
           $rootScope.$stateParams = $stateParams;  
 		
@@ -16,8 +16,7 @@ angular.module('app')
 		
 			$rootScope.$on('$stateChangeStart', 
 			function(event, toState, toParams, fromState, fromParams){ 
-			// do something
-				
+			// do something	
 			});
 
 		$rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
@@ -26,6 +25,28 @@ angular.module('app')
 				}
 			
 		});
+		
+			$rootScope.online = navigator.onLine; 
+                $window.addEventListener("offline", function () {
+                  $rootScope.$apply(function() {
+                    $rootScope.online = false;
+					console.log("offline");
+                    $rootScope.warning = "No internet connection";
+                  });
+                }, false);
+                $window.addEventListener("online", function () {
+                  $rootScope.$apply(function() {
+                    $rootScope.online = true;
+                    $rootScope.warning = "";
+					console.log("online");
+                  });
+                }, false);
+		
+		
+		$rootScope.$watch('online', function(newStatus){
+				console.log(newStatus);
+		});
+		
      }]
   )
   .config(
@@ -57,16 +78,42 @@ angular.module('app')
                   }
               })
 			  
+			  .state('app.situationalAwareness', {
+                  url: '/situationalAwareness',
+                  templateUrl: 'views/situational/situationalAwareness.html',
+                  controller:'SituationalAwareness'
+              })
+			  
+			   .state('app.advancedSearchForm', {
+                url: '/advancedSearchForm',
+                templateUrl : 'views/search/advancedSearchForm.html',
+				controller:'advancedSearchCTRL'
+              })
+			  
+			   .state('app.freeSearch', {
+                url: '/freeSearch/:q',
+                templateUrl : 'views/search/freeSearch.html',
+				controller:'FreeSearchCTRL'
+              })
+			  
 			  .state('app.globalThreat', {
+				cache: false,
                 url: '/globalThreat',
                 templateUrl : 'views/map/globalThreatMap.html',
-				controller : 'GlobalThreatCtrl'
+				controller : 'GlobalThreatCtrl',
+				reload:true
               })
 			  
 			  .state('app.internalThreat', {
                 url: '/internalThreat',
                 templateUrl : 'views/map/internalThreatMap.html',
 				controller : 'InternalThreatCtrl'
+              })
+			  
+			  .state('app.internalThreatDetectedList', {
+                url: '/dep/:ID',
+                templateUrl : 'views/map/internalThreatsDetected.html',
+				controller : 'InternalThreatsDetectedListCtrl'
               })
 			  
 			    .state('app.addInternalThreatForm', {
@@ -158,7 +205,7 @@ angular.module('app')
               })
 			  
 			  .state('app.showIp', {
-                url: '/CountryIps/:ID/ip/:IP',
+                url: '/showIps/:ID/ip/:IP',
                 templateUrl : 'views/map/ipMap.html',
 				controller: 'DetailIpCtrl'
               })
@@ -407,6 +454,12 @@ angular.module('app')
                   url: '/topFewWebAttacks',
                   templateUrl : 'views/web_attacks/top_few_web_attacks.html',
 				  controller  : 'TopFewWebAttacksCtrl'
+              })
+			  
+			  .state('app.web.webSeverity',{
+                  url: '/topFewWebSeverities',
+                  templateUrl : 'views/web_attacks/top_few_web_severties.html',
+				  controller  : 'TopFewWebSevertiesCtrl'
               })
               
               .state('app.form.imagecrop', {

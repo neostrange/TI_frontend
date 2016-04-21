@@ -29,9 +29,7 @@
   </li>
   -->
    <li ui-sref-active="active">
-   
         <a ui-sref="app.dashboard-v1">
-		
 		 <i class="glyphicon glyphicon-dashboard"></i>
           <span>Dashboard </span>
         </a>
@@ -67,15 +65,41 @@
 	
     </ul>
   </li>
-	<!--
+	
 	<li ui-sref-active="active">
-    <a ui-sref="app.globalThreat">
-      <i class="glyphicon glyphicon-globe"></i>
-      <span class="font-bold" translate="aside.nav.GLOBAL THREAT">Global Threat</span>
+	  <a ui-sref="app.situationalAwareness">
+	   <i class="glyphicon glyphicon-signal"></i>
+		<span> Top Statistics </span>
+	  </a>
+	</li>
+  
+    <li>
+    <a href class="auto">      
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-search"></i>
+      <span class="font-bold" >Advance search</span>
     </a>
+    <ul class="nav nav-sub dk">
+      <li class="nav-sub-header">
+        <a href>
+          <span>Advance search</span>
+        </a>
+      </li>
+    
+     <li ui-sref-active="active">
+		<a ui-sref="app.advancedSearchForm">
+			<span class="font-bold">Advance Search</span>
+		</a>
 	</li>
 	
-	-->
+	
+	
+    </ul>
+  </li>
+  
   
   <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
     <span translate="aside.nav.attacks.ATTACKS"> Attacks </span>
@@ -244,6 +268,13 @@
           <span translate="aside.nav.attacks.web.TFWA">TFWA</span>
         </a>
       </li>
+	  
+	  <li ui-sref-active="active">
+        <a ui-sref="app.web.webSeverity">
+          <span >Web Severities</span>
+        </a>
+      </li>
+	  
     </ul>
 	
   </li>

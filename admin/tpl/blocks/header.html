@@ -150,7 +150,7 @@
       <!-- / link and dropdown -->
 
         <!-- search form -->
-        <form class="navbar-form navbar-form-sm navbar-left" target=".navbar-collapse" role="search" ng-controller="AppSearchCtrl">
+        <form class="navbar-form navbar-form-md navbar-left" target=".navbar-collapse" role="search" ng-controller="AppSearchCtrl">
           <!--
 		  <div class="form-group">
             <div class="input-group">
@@ -163,7 +163,7 @@
 		  -->
 		  <div class="new_sear">
 										
-			<input type="text" ng-model="selected" class="form-control" placeholder="Search IP">
+			<input type="text" ng-model="selected" class="form-control mainSearch" placeholder="Search Here" />
 				<button ng-show="selected" type="button" ng-click="clearSearch()" class="btn_del">
 						<span class="glyphicon glyphicon-remove"></span>
 				</button>
@@ -199,16 +199,11 @@
                       <img src="img/a0.jpg" alt="..." class="img-circle">
                     </span>
                     <span class="media-body block m-b-none">
-                      Use awesome animate.css<br>
+                     Malware has been analyzed<br>
                       <small class="text-muted">10 minutes ago</small>
                     </span>
                   </a>
-                  <a href class="media list-group-item">
-                    <span class="media-body block m-b-none">
-                      1.0 initial released<br>
-                      <small class="text-muted">1 hour ago</small>
-                    </span>
-                  </a>
+                  
                 </div>
                 <div class="panel-footer text-sm">
                   <a href class="pull-right"><i class="fa fa-cog"></i></a>
@@ -228,12 +223,7 @@
             </a>
             <!-- dropdown -->
             <ul class="dropdown-menu animated fadeInRight w">
-              <li class="wrapper b-b m-b-sm bg-light m-t-n-xs">
-                <div>
-                  <p>300mb of 500mb used</p>
-                </div>
-                <progressbar value="60" class="progress-xs m-b-none bg-white"></progressbar>
-              </li>
+              
               <li>
                 <a href>
                   <span class="badge bg-danger pull-right">30%</span>

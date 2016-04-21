@@ -1,0 +1,67 @@
+<div class="bg-light lter b-b wrapper-sm">
+  <h1 class="m-n font-thin h3"> Internal Threat   </h1>
+ </div>  
+<div class="bg-light lter b-b wrapper-sm">
+  
+  <div class="row">
+  <!--      
+		<div class="col-sm-2">
+		<mydatepicker ng-model="formData.date" date-options="dateOptions" opened="opened"/>
+		</div>
+		<div class="col-sm-2">
+			<mydatepicker ng-model="formData.date" date-options="dateOptions" opened="opened"/>   
+        </div>
+   -->
+   
+ </div>
+ 
+<div class="wrapper-md">
+		<div class="row"> 
+		<div class="col-sm-12 col-xs-12 col-md-12">   
+		<div class="panel panel-default" ng-show="data.lengths == 0">
+			<h2> Sorry No Record Found </h2>
+		</div>
+		
+          <div class="panel panel-default">
+			<div class="table-responsive">
+			  <table class="table b-light">
+				<thead>
+				 <tr>
+						
+						 <th> Source IP</th>
+						 <th> Destination IP </th> 
+						 <th> Destination Port </th> 
+						 <th> Service </th>
+						 <th> Country </th>
+						 <th >DateTime
+						</th>
+					
+				  </tr>
+				</thead>
+				<tbody>
+					 <tr dir-paginate="val in data | itemsPerPage:20" total-items="totalCount" current-page="pagination.current">
+						
+						<td ><span ng-show="!val['origin']['ip']">-</span> <a href="#/app/showIps/{{val['destination']['countryCode']}}/ip/{{val['origin']['ip']}}" >{{val['origin']['ip']}} </a> </td>
+						<td>{{val['destination']['ip']}}</td>
+						<td>{{val['dstPort']}}</td>				
+						<td><span ng-show="!val['service']"></span>{{val['service']}}</td>						
+						<td><span ng-show="!val['origin']['srcCountry']">-</span>{{val['origin']['country']}}</td>
+						<td>{{val['dateTime'] | dateTimeFilter }}</td>
+					
+						 
+					 </tr>
+				</tbody>
+			  </table>
+			 
+			</div>
+			
+			<div id="content">
+					<dir-pagination-controls on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
+			 </div>
+		</div>
+		</div>
+		
+		
+</div>
+
+</div>

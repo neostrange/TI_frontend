@@ -11,7 +11,7 @@
 <div class="wrapper-md">
 
 	<div class="row wrapper-sm">
-		 <div class="col-sm-4">	  
+		 <div class="col-sm-3">	  
 		<div class="dropdown">
 			<a class="dropdown-toggle" id="dropdown1" role="button" data-toggle="dropdown" data-target="#"
 			   href="">
@@ -33,7 +33,7 @@
 		
 	</div>
 	
-	<div class="col-sm-4">	  
+	<div class="col-sm-3">	  
 		<div class="dropdown">
 			<a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#"
 			   href="">
@@ -59,36 +59,168 @@
 		<div class="col-sm-2" ng-show="showReset">
 			<button type="button" class="btn m-b-xs w-xs btn-default" ng-click="showResetCountry()"> Reset </button>
 		</div>
-		
+	
+		<div class="col-sm-2">
+				<div class="pull-right">
+				<ul class="nav navbar-nav m-xs">
+					<li class="dropdown">
+					<select class="form-control" ng-model="criteria" ng-change="chooseValue(criteria)">
+							<option value="country" > Global Countries</option>
+							<option value="summary" >Attack Summary</option>
+							
+							
+					</select>
+					
+					</li>
+				</ul>
+				</div>
+		</div>
+
+	
 	</div>
 	
 	
 	<div class="row">	
-		<div class="col-lg-12 col-md-12 col-sm-12">
+		<div class="col-lg-8 col-md-8 col-sm-12">
 		<div class="panel wrapper-sm" id="placement">
-		<!--<div new-map vals="value"> </div> -->
 			<datamap resize
 					map="map"
 					plugins="mapPlugins"
 					plugin-data="mapPluginData"
 					on-click="updateActiveGeography">
 			</datamap>
-			
-			
-		</div>	
 		</div>
+		</div>
+		<div class="col-lg-4 col-md-4 col-sm-12" ng-if="criteria == 'country'">
+			<div class="panel wrapper">
+				<h4 class="font-thin m-t-none m-b"> Attacking Countries  <span> <input type="text" ng-model="search" class="form-control" placeholder="Search Country"> </span> </h4>
+						
+				<div class="panel panel-default">
+					<div class="table-responsive">
+					  <table class="table b-t b-light">
+						<thead>
+						<th> Country Name </th>
+						<th> Attack hits </th>
+						</thead>
+						<tbody>
+							<tr dir-paginate="val in countries | filter:search | itemsPerPage:20">
+								 <td><span ng-show="!val['country']"> </span>  <img src="img/gif/{{val['countryCode']}}.gif" height="12px" /> <a href="#/app/CountryIps/{{val.country}}/cCode/{{val.countryCode}}" >{{val['country']}}  </a> </td>
+								 <td> {{val['numberOfThings']}} </td>
+								 
+							</tr>
+						 
+						</tbody>
+					  </table>
+					
+					</div>
+					
+				</div>
+				<div id="content">
+					<dir-pagination-controls></dir-pagination-controls>
+				</div>
+			</div>
+		</div>
+		
+		<div ng-if="criteria == 'summary'">
+		<div class="col-lg-4 col-md-4 col-sm-12" ng-show="attackTypes.length > 1">
+			<div class="panel wrapper">
+				<h4 class="font-thin m-t-none m-b"> Global Attack Summary </h4>
+						
+				<div class="panel panel-default">
+					<div class="table-responsive">
+					  <table class="table b-t b-light">
+						<thead>
+						<th> Attack Name </th>
+						<th> Attack hits </th>
+						</thead>
+						<tbody>
+							<tr ng-repeat="val in attackTypes" ng-click ="changeView(val.category, val.hits, $index)" ng-class="{'bg-info':val.category === showType}">
+								 <td> <a href=""> {{val['category']}} </td>
+								 <td> {{val['hits']}} </td>
+								 
+							 </tr>
+						 
+						</tbody>
+					  </table>
+					
+					</div>
+					
+				</div>
+				
+			</div>
+		
+		</div>
+		</div>
+		
+	</div>
+	<!--
+	<div class="row" ng-if="criteria == 'summary'">	
+		
+		<div class="col-lg-8 col-md-8 col-sm-12">
+		<div class="panel wrapper-sm">
+			<datamap resize
+					map="mapSum"
+					plugins="mapPluginsSum"
+					plugin-data="mapPluginDataSum"
+					on-click="updateActiveGeographySum">
+			</datamap>
+		</div>
+		</div>
+	
+		<div class="col-lg-4 col-md-4 col-sm-12" ng-show="attackTypes.length > 1">
+			<div class="panel wrapper">
+				<h4 class="font-thin m-t-none m-b"> Global Attack Summary </h4>
+						
+				<div class="panel panel-default">
+					<div class="table-responsive">
+					  <table class="table b-t b-light">
+						<thead>
+						<th> Attack Name </th>
+						<th> Attack hits </th>
+						</thead>
+						<tbody>
+							<tr ng-repeat="val in attackTypes" ng-click ="changeView(val.category, val.hits, $index)" ng-class="{'bg-info':val.category === showType}">
+								 <td> <a href=""> {{val['category']}} </td>
+								 <td> {{val['hits']}} </td>
+								 
+							 </tr>
+						 
+						</tbody>
+					  </table>
+					
+					</div>
+					
+				</div>
+				
+			</div>
+		</div>
+		
 	</div>
 	
+	-->
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	   <!--
 		<div class="row">
 		<div class="col-lg-6 col-md-6 col-sm-6">
 			<div class="panel wrapper">
-				<h4 class="font-thin m-t-none m-b"> Attacking Countries </h4>
-				  <form class="form-inline m-sm" ng-show = "type != 'no'">
-					<div class="form-group countrySrh">
-					<label><b> Search </b> </label>
-					<input type="text" ng-model="search" class="form-control" placeholder="Search Country">
-					</div>
-					</form>
+				<h4 class="font-thin m-t-none m-b"> Attacking Countries  <span class="col-sm-6 global-search"> <input type="text" ng-model="search" class="form-control" placeholder="Search Country"> </span> </h4>
+				
 						
 						
 				<div class="panel panel-default">
@@ -146,47 +278,10 @@
 		</div>
 		
 	</div>
- 
+    -->
  
 </div>
 
-<!--
-<div class="panel hbox hbox-auto-xs no-border">
-        <div class="col wrapper auto">
-         <div>
-					<datamap
-							map="map"
-							plugins="mapPlugins"
-							plugin-data="mapPluginData"
-							on-click="updateActiveGeography">
-					</datamap>
 
-		</div>			
-        </div>
-        <div class="col wrapper-lg w-xl bg-light dk r-r">
-          <h4 class="font-thin m-t-none m-b"> Top few Attacks</h4>
-          
-          <p class="text-muted">Following are the  of Countries that are doing most number of malware attacks. Attacks are the next
-step after Probing and connection.
-Vulnerable services and targeted
-systems are exploited in this process.. </p>
-
-	 <div class="table-responsive">
-      <table class="table b-t b-light">
-        <thead>
-        </thead>
-        <tbody>
-			<tr ng-repeat="val in countries">
-                 <td ng-class="{fst:val.color == '#1f77b4', sec:val.color == '#ff4040',third:val.color == '#1f77b4', forth:val.color == '#ff4040',fifth:val.color == '#1f77b4', six:val.color == '#ff4040',seven:val.color == '#1f77b4', eight:val.color == '#ff4040',}"><span ng-show="!val['country']">-</span>{{val['country']}} ({{val['numberOfThings']}})</td>
-                
-             </tr>
-          
-        </tbody>
-      </table>
-    </div>
-
-        </div>
- </div>			
-	-->
 
 

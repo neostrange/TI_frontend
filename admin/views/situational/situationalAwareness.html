@@ -1,0 +1,154 @@
+<meta charset="utf-8">
+<div class="col-md-6">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">Top attacking IPs in term of attacks</h3>
+		</div>
+		<div class="panel-body" >
+			<nvd3 options="barOptions" data="viewData" ng-if="load"></nvd3>
+		</div>
+	</div>
+</div>
+<div class="col-md-6">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">Top attacks of different types</h3>
+		</div>
+		<div class="panel-body" >
+			<nvd3 options="barOptions" data="viewsData" ng-if="load"></nvd3>
+		</div>
+	</div>
+</div>
+<div class="col-md-6">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">Top attacking countries</h3>
+		</div>
+		<div class="panel-body" >
+			<nvd3 options="PieOptions" data="countryData"></nvd3>
+		</div>
+	</div>
+</div>
+<div class="col-md-6">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">Top attacking services</h3>
+		</div>
+		<div class="panel-body" >
+			<nvd3 options="PieOptions" data="servicesData"></nvd3>
+		</div>
+	</div>
+</div>
+<div class="col-md-6">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">Top ssh attacking tools</h3>
+		</div>
+		<div class="panel-body" >
+			<canvas id="radar" options="myoptions" class="chart chart-radar" data="hitsdata"
+				labels="toolsData" ></canvas>
+		</div>
+	</div>
+</div>
+<div class="col-md-6">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">Top username used</h3>
+		</div>
+		<div class="panel-body" >
+			<canvas id="polar-area" class="chart chart-polar-area" data="polarData.data" labels="polarData.labels" chart-legend="true"></canvas>
+		</div>
+	</div>
+</div>
+<div class="col-md-6">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">Top passwords used</h3>
+		</div>
+		<div class="panel-body" >
+			<canvas id="line" class="chart chart-line" chart-data="passwrddata"
+				chart-labels="plabelData" chart-series="series"
+				chart-click="onClick" ></canvas>
+		</div>
+	</div>
+</div>
+<div class="col-md-6">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">Top users & passwords used</h3>
+		</div>
+		<div class="panel-body" >
+			<canvas id="line" class="chart chart-line" chart-data="datas"
+				chart-labels="pulabelData" chart-series="series"
+				chart-click="onClick" ></canvas>
+		</div>
+	</div>
+</div>
+<div class="col-md-12">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">Top ports/services in term of attacks</h3>
+		</div>
+		<div class="panel-body" >
+			<nvd3 options="lineChartOptions" data="viewwData"></nvd3>
+		</div>
+	</div>
+</div>
+<div class="col-md-6">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">Top Sensors w.r.t Attacks</h3>
+		</div>
+		<div class="panel-body" >
+			<nvd3 options="optionsss" data="sensorsdata"></nvd3>
+		</div>
+	</div>
+</div>
+<div class="col-md-6">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">Top Url used</h3>
+		</div>
+		<div class="panel-body" >
+			<div class="table-responsive">
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>Urls</th>
+							<th>Hits</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="x in urlsData">
+							<td>{{x.url}}</td>
+							<td>{{x.hits}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="col-md-6">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">Top sip tools</h3>
+		</div>
+		<div class="panel-body" >
+			<nvd3 options="barOptions" data="siptoolsData" ng-if="load"></nvd3>
+		</div>
+	</div>
+</div>
+<div class="col-md-6">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">All sensors with different number of attacks</h3>
+		</div>
+		<div class="panel-body" >
+			<canvas id="bar" class="chart chart-bar"
+				chart-data="data" chart-labels="labels">
+			chart-series="series"
+			</canvas
+		</div>
+	</div>
+</div>

@@ -15,7 +15,7 @@
 			<div class="upfront_sec">
 					<h2 class="head">Analysis Result for:</h2>
 					<p>   <span class="ipAddress"> {{ipAddress}} <span></p>
-					<p> <span class="cityName">{{country.srcCity}}</span> <span class="countryName"><img src="img/gif/{{country.srcCountryCode}}.gif"> <span>{{country.srcCountry}} </span>  </p>  
+					<p> <span class="cityName">{{country.srcCity}}</span> <span class="countryName"><img src="img/gif/{{country.CountryCode}}.gif"> <span>{{country.country}} </span>  </p>  
 						
 			</div>
 			
@@ -50,6 +50,9 @@
 					<h6> Confidence <span class="badge bg-info ipRisk" title="This is a percentage of how reliable our analysis of this IP is. Smaller percentages might be due to 
 not enough data, or old data." > {{analysis.confidence}} </span>  <span class="info-but" data-trigger="hover" data-placement="right" data-title="This is a percentage of how reliable our analysis of this IP is. Smaller percentages might be due to 
 not enough data, or old data." bs-tooltip> <i class="fa fa-info-circle"></i> </span>  </h6>
+					
+					<h6>Total Attacks <span class="badge bg-info"> {{totalHits}}</span> </h6> 
+					
 					<!--
 					<div class = "block" ng-class="{ 'bg-warning': analysis.riskFactor >=0 || analysis.riskFactor <=2 , 'bg-warning':analysis.riskFactor >=3 || analysis.riskFactor <=4, 'bg-danger':analysis.riskFactor >=5 || analysis.riskFactor <=9}">
 					<p class="font-thin h1 text-center">{{analysis.riskFactor}} </p>
@@ -59,28 +62,23 @@ not enough data, or old data." bs-tooltip> <i class="fa fa-info-circle"></i> </s
 	
 			</div>
 		  
-	
-
 				 <div class="row row-lg text-center wrapper-sm">
 				<button class="btn btn-md btn-info"ng-click="viewIPHistory(countryName,ipAddress)" ng-show="showMap"> View IP History  </button>
 				<button class="btn btn-md btn-info" ng-click="viewMap()" ng-show="showIp"> View MAP  </button>
-				</div>
-				
+				</div>	
         </div>
 
-	
         <div class="col wrapper" >
          <div class="wrapper-sm">
 		 <div class="row">
 		 
-		 <div ng-show="showMap" class="col-md-6">
+			<div ng-show="showMap" class="col-md-6">
 				<leaflet center="center" layers="layers" markers="markers" width="100%" height="400px" defaults="defaults" ></leaflet>
-		</div>
+			</div>
 		 <div ng-show="showMap" class="col-md-6 ">
-				<div class="panel wrapper">		
-				 <highchart id="chart1" config="barConfig" class="span9" ></highchart>
-				
-				</div>
+			<div class="panel wrapper">		
+				 <highchart id="chart1" config="barConfig" class="span9" ></highchart>	
+			</div>
 		</div>
 		
 		</div>
@@ -105,7 +103,7 @@ not enough data, or old data." bs-tooltip> <i class="fa fa-info-circle"></i> </s
 				</thead>	
 				<tbody>
 					<tr dir-paginate="val in data | itemsPerPage:20" total-items="totalCount" current-page="pagination.current">
-					 <td>{{val['dstIP']}}</td>
+					 <td>{{val['destination']['ip']}}</td>
 					<td>{{val['dstPort']}}</td>
 					<td>{{val['service']}}</td>				
 					 <td>{{val['dateTime'] | dateTimeFilter}}</td>
@@ -118,9 +116,8 @@ not enough data, or old data." bs-tooltip> <i class="fa fa-info-circle"></i> </s
 			  
 			  <div id="content">
 					<dir-pagination-controls on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
+				</div>
 			</div>
-			</div>
-	
 		<div modal="deleteModal" close="showModalHide()">
 		<div class="modal-dialog modal-md">
 			<div class="modal-content mode_bor">
@@ -184,47 +181,66 @@ not enough data, or old data." bs-tooltip> <i class="fa fa-info-circle"></i> </s
 									</table>
 								</div>
 							</tab>		
-							<tab heading="UDP Header" ng-show="network">
-								<div class="med_text">
-								<table class="table">
-									<tbody>
-								
-								<tr> <td> Source Port </td>
-									<td>{{network['udpHeader']['srcPort']}}</td>
-								</tr>
-								
-								<tr> <td> Destination Port  </td>
-									<td>{{network['udpHeader']['dstPort']}}</td>
-								</tr>
-								
-								<tr> <td> UDP LEN </td>
-									<td>{{network['udpHeader']['udpLen']}}</td>
-								</tr>
-								
-								<tr> <td> UDP CSUM </td>
-									<td>{{network['udpHeader']['udpCsum']}}</td>
-								</tr>
-								
-																
-								</tbody>
-								</table>
-								</div>
-							
-							</tab>
-						
-						<tab heading="PayLoad" ng-show="network">
-							<div class="med_text">
-								<table class="table">
-									<tbody>
-								
-								<tr> <td> PayLoad </td>
-										<td> <pre class="preheader"> {{network['payload']['encodedData']}} </pre> </td>
-								</tr>
-								</tbody>
-								</table>
-								</div>
-						</tab>
-						
+							<tab heading="UDP Header" ng-show="network.udpHeader">
+									<div class="med_text">
+										<table class="table">
+											<tbody>
+												<tr>
+													<td> Source Port </td>
+													<td>{{network['udpHeader']['srcPort']}}</td>
+												</tr>
+												<tr>
+													<td> Destination Port  </td>
+													<td>{{network['udpHeader']['dstPort']}}</td>
+												</tr>
+												<tr>
+													<td> UDP LEN </td>
+													<td>{{network['udpHeader']['udpLen']}}</td>
+												</tr>
+												<tr>
+													<td> UDP CSUM </td>
+													<td>{{network['udpHeader']['udpCsum']}}</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</tab>
+								<tab heading="Tcp Header" ng-show="network.tcpHeader">
+									<div class="med_text">
+										<table class="table">
+											<tbody>
+												<tr>
+													<td> Source Port </td>
+													<td>{{network['tcpHeader']['srcPort']}}</td>
+												</tr>
+												<tr>
+													<td> Destination Port  </td>
+													<td>{{network['tcpHeader']['dstPort']}}</td>
+												</tr>
+												<tr>
+													<td> Flags </td>
+													<td>{{network['tcpHeader']['flags']}}</td>
+												</tr>
+												<tr>
+													<td> Tcp CSUM </td>
+													<td>{{network['tcpHeader']['tcpCsum']}}</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</tab>
+								<tab heading="PayLoad" ng-show="network.payload">
+									<div class="med_text">
+										<table class="table">
+											<tbody>
+												<tr>
+													<td> PayLoad </td>
+														<td> <pre class="preheader"> {{network['payload']['encodedData']}} </pre> </td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</tab>
 						<tab heading="Signatures" ng-show="network">
 							<div class="med_text">
 								<table class="table">
@@ -272,12 +288,12 @@ not enough data, or old data." bs-tooltip> <i class="fa fa-info-circle"></i> </s
 
 								
 								<tr> <td> Request Header </td>
-									<td>{{value['rawLog']['requestHeader']}}</td>
+									<td> <pre class="preheader"> {{value['rawLog']['requestHeader']}} </pre> </td>
 								</tr>
 
 								
 								<tr> <td> Response Header </td>
-									<td>{{value['rawLog']['responseHeader']}}</td>
+									<td> <pre class="preheader"> {{value['rawLog']['responseHeader']}} </pre> </td>
 								</tr>		
 								
 								</tbody>
@@ -285,13 +301,41 @@ not enough data, or old data." bs-tooltip> <i class="fa fa-info-circle"></i> </s
 							</div>
 							
 							</tab>
+							<tab heading="Rule List" ng-show="value.ruleList">
+								<div class="med_text">
+										<table class="table">
+											<tbody ng-repeat="val in value['ruleList']">
+												<tr> 
+												<td> RuleId </td>
+												<td>{{val['ruleId']}}</td>
+												</tr>
+												<tr> 
+												<td> Regex Expression </td>
+												<td>{{val['regexPattern']}}</td>
+												</tr>
+												
+												<tr><td> RuleCategory </td>
+												<td>{{val['ruleCategory']}}</td>
+												</tr>
+												
+												<tr>
+												<td> RuleFile </td>
+												<td>{{val['ruleFile']}}</td>
+												</tr>
+												
+												<tr>
+												<td> RuleMessage </td>
+												<td>{{val['ruleMessage']}}</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+							</tab>
 							
 							<tab heading="IP Header" ng-show="network">
 								<div class="med_text">
 									<table class="table">
 									<tbody>
-								
-								
 								
 								<tr> <td> IP version  </td>
 									<td>{{network['ipHeader']['ipVersion']}}</td>
@@ -317,46 +361,66 @@ not enough data, or old data." bs-tooltip> <i class="fa fa-info-circle"></i> </s
 									</table>
 								</div>
 							</tab>		
-							<tab heading="UDP Header" ng-show="network">
-								<div class="med_text">
-								<table class="table">
-									<tbody>
-								
-								<tr> <td> Source Port </td>
-									<td>{{network['udpHeader']['srcPort']}}</td>
-								</tr>
-								
-								<tr> <td> Destination Port  </td>
-									<td>{{network['udpHeader']['dstPort']}}</td>
-								</tr>
-								
-								<tr> <td> UDP LEN </td>
-									<td>{{network['udpHeader']['udpLen']}}</td>
-								</tr>
-								
-								<tr> <td> UDP CSUM </td>
-									<td>{{network['udpHeader']['udpCsum']}}</td>
-								</tr>
-								
-																
-								</tbody>
-								</table>
-								</div>
-							
-							</tab>
-						
-						<tab heading="PayLoad" ng-show="network">
-							<div class="med_text">
-								<table class="table">
-									<tbody>
-								
-								<tr> <td> PayLoad </td>
-									<td> <pre class="preheader"> {{network['payload']['encodedData']}} </pre> </td>
-								</tr>
-								</tbody>
-								</table>
-								</div>
-						</tab>
+							<tab heading="UDP Header" ng-show="network.udpHeader">
+									<div class="med_text">
+										<table class="table">
+											<tbody>
+												<tr>
+													<td> Source Port </td>
+													<td>{{network['udpHeader']['srcPort']}}</td>
+												</tr>
+												<tr>
+													<td> Destination Port  </td>
+													<td>{{network['udpHeader']['dstPort']}}</td>
+												</tr>
+												<tr>
+													<td> UDP LEN </td>
+													<td>{{network['udpHeader']['udpLen']}}</td>
+												</tr>
+												<tr>
+													<td> UDP CSUM </td>
+													<td>{{network['udpHeader']['udpCsum']}}</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</tab>
+								<tab heading="Tcp Header" ng-show="network.tcpHeader">
+									<div class="med_text">
+										<table class="table">
+											<tbody>
+												<tr>
+													<td> Source Port </td>
+													<td>{{network['tcpHeader']['srcPort']}}</td>
+												</tr>
+												<tr>
+													<td> Destination Port  </td>
+													<td>{{network['tcpHeader']['dstPort']}}</td>
+												</tr>
+												<tr>
+													<td> Flags </td>
+													<td>{{network['tcpHeader']['flags']}}</td>
+												</tr>
+												<tr>
+													<td> Tcp CSUM </td>
+													<td>{{network['tcpHeader']['tcpCsum']}}</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</tab>
+								<tab heading="PayLoad" ng-show="network.payload">
+									<div class="med_text">
+										<table class="table">
+											<tbody>
+												<tr>
+													<td> PayLoad </td>
+														<td> <pre class="preheader"> {{network['payload']['encodedData']}} </pre> </td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</tab>
 						
 						<tab heading="Signatures" ng-show="network">
 							<div class="med_text">
@@ -427,7 +491,7 @@ not enough data, or old data." bs-tooltip> <i class="fa fa-info-circle"></i> </s
 										</table>
 									</div>
 								</tab>
-								<tab heading="UDP Header" ng-show="network">
+								<tab heading="UDP Header" ng-show="network.udpHeader">
 									<div class="med_text">
 										<table class="table">
 											<tbody>
@@ -451,13 +515,37 @@ not enough data, or old data." bs-tooltip> <i class="fa fa-info-circle"></i> </s
 										</table>
 									</div>
 								</tab>
-								<tab heading="PayLoad" ng-show="network">
+								<tab heading="Tcp Header" ng-show="network.tcpHeader">
+									<div class="med_text">
+										<table class="table">
+											<tbody>
+												<tr>
+													<td> Source Port </td>
+													<td>{{network['tcpHeader']['srcPort']}}</td>
+												</tr>
+												<tr>
+													<td> Destination Port  </td>
+													<td>{{network['tcpHeader']['dstPort']}}</td>
+												</tr>
+												<tr>
+													<td> Flags </td>
+													<td>{{network['tcpHeader']['flags']}}</td>
+												</tr>
+												<tr>
+													<td> Tcp CSUM </td>
+													<td>{{network['tcpHeader']['tcpCsum']}}</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</tab>
+								<tab heading="PayLoad" ng-show="network.payload">
 									<div class="med_text">
 										<table class="table">
 											<tbody>
 												<tr>
 													<td> PayLoad </td>
-													<td> <pre class="preheader"> {{network['payload']['encodedData']}} </pre> </td>
+														<td> <pre class="preheader"> {{network['payload']['encodedData']}} </pre> </td>
 												</tr>
 											</tbody>
 										</table>
@@ -484,8 +572,8 @@ not enough data, or old data." bs-tooltip> <i class="fa fa-info-circle"></i> </s
 						<div ng-if="modalType == 'database'">	
 								<tabset>
 								<tab heading="Attack Information" active="true">
-									<div class="med_text">
-										<table class="table">
+									<div class="tab_text">
+										<table class="table tab_text">
 											<tbody ng-show="value.service == 'mssql'">
 											<tr > 
 												<td> Mssql Client Name </td>
@@ -501,7 +589,7 @@ not enough data, or old data." bs-tooltip> <i class="fa fa-info-circle"></i> </s
 											<tbody ng-show="value.mysqlCommands[0]" ng-repeat ="val in value.mysqlCommands">
 											<tr ng-show= "val.mysqlQuery"> 
 											<td> Mysql Query </td>
-											<td>{{val['mysqlQuery']}}</td>
+											<td> <pre class="preheader"> {{val['mysqlQuery']}} </td> </td>
 											</tr>
 											
 											<tr ng-show="val.mysqlOp"> 
@@ -541,7 +629,7 @@ not enough data, or old data." bs-tooltip> <i class="fa fa-info-circle"></i> </s
 										</table>
 									</div>
 								</tab>
-								<tab heading="UDP Header" ng-show="network">
+								<tab heading="UDP Header" ng-show="network.udpHeader">
 									<div class="med_text">
 										<table class="table">
 											<tbody>
@@ -565,7 +653,31 @@ not enough data, or old data." bs-tooltip> <i class="fa fa-info-circle"></i> </s
 										</table>
 									</div>
 								</tab>
-								<tab heading="PayLoad" ng-show="network">
+								<tab heading="Tcp Header" ng-show="network.tcpHeader">
+									<div class="med_text">
+										<table class="table">
+											<tbody>
+												<tr>
+													<td> Source Port </td>
+													<td>{{network['tcpHeader']['srcPort']}}</td>
+												</tr>
+												<tr>
+													<td> Destination Port  </td>
+													<td>{{network['tcpHeader']['dstPort']}}</td>
+												</tr>
+												<tr>
+													<td> Flags </td>
+													<td>{{network['tcpHeader']['flags']}}</td>
+												</tr>
+												<tr>
+													<td> Tcp CSUM </td>
+													<td>{{network['tcpHeader']['tcpCsum']}}</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</tab>
+								<tab heading="PayLoad" ng-show="network.payload">
 									<div class="med_text">
 										<table class="table">
 											<tbody>
@@ -661,7 +773,7 @@ not enough data, or old data." bs-tooltip> <i class="fa fa-info-circle"></i> </s
 										</table>
 									</div>
 								</tab>
-								<tab heading="UDP Header" ng-show="network">
+								<tab heading="UDP Header" ng-show="network.udpHeader">
 									<div class="med_text">
 										<table class="table">
 											<tbody>
@@ -685,7 +797,31 @@ not enough data, or old data." bs-tooltip> <i class="fa fa-info-circle"></i> </s
 										</table>
 									</div>
 								</tab>
-								<tab heading="PayLoad" ng-show="network">
+								<tab heading="Tcp Header" ng-show="network.tcpHeader">
+									<div class="med_text">
+										<table class="table">
+											<tbody>
+												<tr>
+													<td> Source Port </td>
+													<td>{{network['tcpHeader']['srcPort']}}</td>
+												</tr>
+												<tr>
+													<td> Destination Port  </td>
+													<td>{{network['tcpHeader']['dstPort']}}</td>
+												</tr>
+												<tr>
+													<td> Flags </td>
+													<td>{{network['tcpHeader']['flags']}}</td>
+												</tr>
+												<tr>
+													<td> Tcp CSUM </td>
+													<td>{{network['tcpHeader']['tcpCsum']}}</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</tab>
+								<tab heading="PayLoad" ng-show="network.payload">
 									<div class="med_text">
 										<table class="table">
 											<tbody>
@@ -760,7 +896,7 @@ not enough data, or old data." bs-tooltip> <i class="fa fa-info-circle"></i> </s
 										</table>
 									</div>
 								</tab>
-								<tab heading="UDP Header" ng-show="network">
+								<tab heading="UDP Header" ng-show="network.udpHeader">
 									<div class="med_text">
 										<table class="table">
 											<tbody>
@@ -784,7 +920,31 @@ not enough data, or old data." bs-tooltip> <i class="fa fa-info-circle"></i> </s
 										</table>
 									</div>
 								</tab>
-								<tab heading="PayLoad" ng-show="network">
+								<tab heading="Tcp Header" ng-show="network.tcpHeader">
+									<div class="med_text">
+										<table class="table">
+											<tbody>
+												<tr>
+													<td> Source Port </td>
+													<td>{{network['tcpHeader']['srcPort']}}</td>
+												</tr>
+												<tr>
+													<td> Destination Port  </td>
+													<td>{{network['tcpHeader']['dstPort']}}</td>
+												</tr>
+												<tr>
+													<td> Flags </td>
+													<td>{{network['tcpHeader']['flags']}}</td>
+												</tr>
+												<tr>
+													<td> Tcp CSUM </td>
+													<td>{{network['tcpHeader']['tcpCsum']}}</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</tab>
+								<tab heading="PayLoad" ng-show="network.payload">
 									<div class="med_text">
 										<table class="table">
 											<tbody>
@@ -824,8 +984,7 @@ not enough data, or old data." bs-tooltip> <i class="fa fa-info-circle"></i> </s
 			</div>
 		</div>
 	</div>
-	
-	
+			
 	
 		</div>
   </div>
@@ -834,18 +993,20 @@ not enough data, or old data." bs-tooltip> <i class="fa fa-info-circle"></i> </s
 		
 	<div class="panel hbox hbox-auto-xs no-border">
 	<div class="row">
-		<div class="panel wrapper">	
+		<div class="wrapper-sm">	
 		 <div ng-show="showMap" class="col-md-8 col-lg-8 col-sm-8">
 			<highchart id="chart1" config="chartConfig" class="span9" ></highchart>
 		</div>
-		</div>	
+	
 		
 		<div ng-show="showMap" class="col-md-4 col-lg-4 col-sm-4">
 			<div>	
 			<highchart id="chart1" config="actConfig" ng-show="linkedActivity" class="span9" ></highchart>
 			</div>
-		</div>	
-	</div>
+		</div>
+		
+		</div>			
+		</div>
 	</div>	
 	
 		

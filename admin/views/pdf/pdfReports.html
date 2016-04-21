@@ -56,8 +56,8 @@
 		 <div class="row">
 			<div class="col-xs-4">
 				<div class="m-md">
-					<h4 class="font-bold"> Malware Attacks </h4> 
-					 <input type="checkbox" name="name" ng-model="malwareAll" ng-click="showAllMalware()" /> Select All
+					<h4 class="font-bold"> <span><input type="checkbox" name="name" ng-model="malwareAll" ng-click="showAllMalware()" /> </span> Malware Attacks </h4> 
+					 
 					<div ng-repeat="employee in malware">
 						<div class="action-checkbox">
 							 <input name="name" type="checkbox" ng-model="employee.Selected" ng-change="checkMalwareAll(malware)"/>
@@ -66,8 +66,7 @@
 						</div>
 					</div>
 					
-						<h4 class="font-bold"> Probing Attacks  </h4>
-						<input type="checkbox" name="name" ng-model="probingAll" ng-click="showAllProbing()" /> Select All						
+						<h4 class="font-bold"> <span> <input type="checkbox" name="name" ng-model="probingAll" ng-click="showAllProbing()" /></span> Probing Attacks  </h4>					
 						<div ng-repeat="prob in probing">
 						<div class="action-checkbox">
 							 <input type="checkbox" name="name" ng-model="prob.Selected" ng-change="checkProbingAll(probing)"/>
@@ -80,8 +79,8 @@
 			
 			<div class="col-xs-4">
 				<div class="m-md">
-					<h4 class="font-bold">  Sip Attacks  </h4>
-					<input type="checkbox" name="name" ng-model="sipAll" ng-click="showAllSip()" /> Select All						
+					<h4 class="font-bold"> <span> <input type="checkbox" name="name" ng-model="sipAll" ng-click="showAllSip()" /> </span> Sip Attacks  </h4>
+									
 					<div ng-repeat="sp in sip">
 						<div class="action-checkbox">
 							 <input type="checkbox" name="name" ng-model="sp.Selected" ng-change="checkSipAll(sip)"/>
@@ -89,8 +88,8 @@
 							{{sp.name}}
 						</div>
 					</div>
-					<h4 class="font-bold"> Web Attacks </h4>
-					<input type="checkbox" ng-model="webAll" name="name" ng-click="showAllWeb()" /> Select All		
+					<h4 class="font-bold"> <span> <input type="checkbox" ng-model="webAll" name="name" ng-click="showAllWeb()" />  </span>  Web Attacks  </h4>
+							
 					<div ng-repeat="wb in web">
 						<div class="action-checkbox">
 						 <input type="checkbox" name="name" ng-model="wb.Selected" ng-change="checkWebAll(web)"/>
@@ -103,8 +102,7 @@
 			
 			<div class="col-xs-4">
 				<div class="m-md">
-				<h4 class="font-bold">  Brute-Force Attacks  </h4>
-					<input type="checkbox" ng-model="bruteAll" name="name" ng-click="showAllBrute()" /> Select All						
+				<h4 class="font-bold"> <span> <input type="checkbox" ng-model="bruteAll" name="name" ng-click="showAllBrute()" /> </span> Brute-Force Attacks  </h4>					
 					<div ng-repeat="brt in brute">
 						<div class="action-checkbox">
 							 <input type="checkbox" name="name" ng-model="brt.Selected" ng-change="checkBruteAll(brute)"/>
@@ -112,8 +110,7 @@
 							{{brt.name}}
 						</div>
 					</div>
-					<h4 class="font-bold">  Global Attack  </h4>
-					<input type="checkbox" ng-model="globalAll" name="name" ng-click="showAllGlobal()" /> Select All						
+					<h4 class="font-bold"> <span> <input type="checkbox" ng-model="globalAll" name="name" ng-click="showAllGlobal()" /> </span> Global Attack  </h4>						
 					<div ng-repeat="glob in global">
 						<div class="action-checkbox">
 							<input type="checkbox" name="name" ng-model="glob.Selected" ng-change="checkGlobalAll(global)"/>

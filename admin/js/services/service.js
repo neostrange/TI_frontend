@@ -387,7 +387,6 @@ app.service('utilityMethods', function($timeout, $rootScope, ngProgress, crudSrv
 		return chartConfig;
 	};
 	
-	
 	this.showMsgOnTop = function(msg, type, duration){
 		$rootScope[type] = msg;
 		$timeout(function(){
@@ -426,11 +425,60 @@ app.service('utilityMethods', function($timeout, $rootScope, ngProgress, crudSrv
 				console.log(error);
 				fail(error);
 				});
-		
-		
+	
 	};
 	
-	this.countMarkers = function($scope, markerData){
+	
+			this.refreshUISelect = function(query, url, qParam, $scope, key1, key2 ){
+					var that = this;
+					if(query.length > 0){
+						var params = qParam;
+						return $http
+						.get(url,{params: params})
+						.then(function(data) {
+					    	data = data['data'];
+					        data = that.checkGraphArray(data);
+					    	if(rdfType != undefined){
+					    		
+						    	var obj = normalizeJSONLD.findAllObjectsByType(data['@graph'], rdfType);
+								var object = normalizeJSONLD.normalizeLD(data['@graph'], obj);
+								console.log(object);
+								if((key1 != undefined) && (key2 != undefined)){
+									$scope[key1][key2] = object;
+								}else {
+									$scope[key1] = object;
+								}
+					    	} else {
+					    		if((key1 != undefined) && (key2 != undefined)){
+									$scope[key1][key2] = data;
+									console.log(data);
+								}else {
+									$scope[key1] = data;
+									console.log(data);
+								}
+					    	}
+					    }, function(){
+					    	if((key1 != undefined) && (key2 != undefined)){
+								$scope[key1][key2] = [];
+							}else {
+								$scope[key1] = [];
+							}
+					    });
+						if((key1 != undefined) && (key2 != undefined)){
+							$scope[key1][key2] = [];
+						}else {
+							$scope[key1] = [];
+						}
+					} else {
+						if((key1 != undefined) && (key2 != undefined)){
+							$scope[key1][key2] = [];
+						}else {
+							$scope[key1] = [];
+						}
+					}
+				};
+	
+			this.countMarkers = function($scope, markerData){
 		
 		markerData.forEach(function(data, i) {
 			 console.log(data);		
@@ -496,6 +544,77 @@ app.service('utilityMethods', function($timeout, $rootScope, ngProgress, crudSrv
 				return obj;
 			}
 		}
+	};
+	
+	
+	this.getJson = function(){
+	var ar = {
+		"ports": [
+	  445,
+	  81,
+	  21,
+	  1433,
+	  3306,
+	  5061,
+	  5060,
+	  135,
+	  139,
+	  554,
+	  42,
+	  22,
+	  80,
+	  8008
+	],
+	  "sensors": [
+		"sensor00",
+		"sensor01",
+		"sensor02",
+		"sensor03",
+		"sensor04"
+	  ],
+	  "attacks": [
+		 "web",
+		 "malware",
+		 "database",
+		 "ssh",
+		"probing",
+		"sip"
+	  ]
+	};
+ return ar;
+	};
+	
+	this.getType = function(service,ob){
+			var type ;
+			if(ob.hasOwnProperty('category')){
+				if(ob.category === "Reconnaissance"){
+					type = "probing";
+				}
+			}else{
+				if(service == "ssh"){
+					if(ob.hasOwnProperty('downloads')){
+						type = "malware";
+					}else{
+						type = "ssh";
+					}
+				}else if(service == "smb" || service == "microsoft-ds" ){
+						if(ob.hasOwnProperty('download')){
+								type  = "malware";
+						}else{
+							type = "probing";
+						} 
+				}else if(service == "sip" ){
+					type = "sip";
+				}else if(service == "http" || service == "https" || service == "http-alt" || service == "smc-https" ){
+					type = "web";
+				}else if(service == "mssql" || service == "ms-sql-s" || service == "mysql" || service == "postgresql" || service == "sqlserv" || service == "neo4j"){
+					 type = "database";
+				}else{
+					type = "probing";
+				}
+			}
+	
+		return type;
 	};
 	
 	this.commonElasticQuery = function(query, type, success, fail){
@@ -2350,7 +2469,7 @@ app.service('utilityMethods', function($timeout, $rootScope, ngProgress, crudSrv
 });
 	
 
-app.service('crudSrv', function($http){
+app.service('crudSrv', function($http, rootURL , Upload){
     this.getResults = function(url, success, error){
 		$http.get(url).success(function(data, status){
 			success(data, status);
@@ -2374,6 +2493,44 @@ app.service('crudSrv', function($http){
 		}).error(function(data, status){
 			error(data, status);
 		});
+	};
+	
+	
+	this.deleteResults = function(url, success, error){
+		$http.delete(url).success(function(data, status){
+			success(data, status);
+		}).error(function(data, status){
+			error(data, status);
+		});
+	};
+	
+	
+	this.fileUploadOnServer = function(file, $scope, callback) {
+		var apiUrl = rootURL.url.baseURL + "config/upload/config_type=sensor";
+		//$scope.confirmCheck = true;
+		var upload = Upload.upload({
+			url: apiUrl,
+			file: file,
+		}).progress(function(evt) {
+			$scope.confirmCheck = true;
+			console.log('FUS: progress: ' + parseInt(100.0 * evt.loaded / evt.total) + '% file :' + evt.config.file.name);
+		}).success(function(data, status, headers, config) {
+			//$scope.confirmCheck = false;
+			callback(data);
+		});
+		
+		$scope.$on("$locationChangeStart", function(event){
+			if($scope.confirmCheck == true){
+				var returnConfirm = confirm("Image upload in progress. Do you really want to leave?");
+				if(returnConfirm == false){
+					event.preventDefault();
+				} else {
+					$scope.confirmCheck = false;
+					upload.abort();
+				}
+			}
+		});
+		
 	};
 	
 });
@@ -2474,10 +2631,251 @@ app.service('menuItemSrv', function($http){
 			error(data, status);
 		});
 	};
-	
-	
+
 });
 
+
+app.service('myService', [function() {
+	this.getSensorsDetail = function(url) {
+		var donutChartOptions = {
+			chart: {
+				type: url,
+				height: 350,
+				donut: true,
+				x: function(d) {
+					return d.label;
+				},
+				y: function(d) {
+					return d.value;
+				},
+				valueFormat: function(d) {
+					return d3.format()(d);
+				},
+				showLabels: true,
+				pie: {
+					startAngle: function(d) {
+						return d.startAngle - Math.PI
+					},
+					endAngle: function(d) {
+						return d.endAngle - Math.PI
+					}
+				},
+				duration: 500,
+				legend: {
+					margin: {
+						top: 5,
+						right: 70,
+						bottom: 5,
+						left: 0
+					}
+				}
+			}
+		};
+		return donutChartOptions;
+	};
+	this.getIpsDetail = function(type) {
+		var barChartOptions = {
+			chart: {
+				type: type,
+				height: 340,
+				width: 499,
+				rotateLabels: (-35),
+				x: function(d) {
+					return d.label;
+				},
+				y: function(d) {
+					return d.value;
+				},
+				margin: {
+					left: 70,
+					bottom: 90,
+					right: 30
+				},
+				showValues: false,
+				legend: {
+					margin: {
+						top: 5,
+						right: 15,
+						bottom: 5,
+						left: 0
+					}
+				},
+				xAxis: {
+					rotateLabels: -20
+				},
+				yAxis: {
+					axisLabel: 'Hits',
+					axisLabelDistance: 30,
+					tickFormat: function(d) {
+						return d3.format('d')(d)
+					}
+
+				},
+				dispatch: {
+					tooltipShow: function(e) {
+						console.log('! tooltip SHOW !')
+					},
+					tooltipHide: function(e) {
+						console.log('! tooltip HIDE !')
+					},
+					beforeUpdate: function(e) {
+						console.log('! before UPDATE !')
+					}
+				},
+				discretebar: {
+					dispatch: {
+						//chartClick: function(e) {console.log("! chart Click !")},
+						elementClick: function(e) {
+							console.log("! element Click !")
+						},
+						elementDblClick: function(e) {
+							console.log("! element Double Click !")
+						},
+						elementMouseout: function(e) {
+							console.log("! element Mouseout !")
+						},
+						elementMouseover: function(e) {
+							console.log("! element Mouseover !")
+						}
+					}
+				},
+				callback: function(e) {
+					console.log('! callback !')
+				}
+			}
+		};
+		return barChartOptions;
+	};
+	this.getCountriesDetail = function(type) {
+		var pieChartOptions = {
+			chart: {
+				type: 'pieChart',
+				height: 500,
+				x: function(d) {
+					return d.label;
+				},
+				y: function(d) {
+					return d.value;
+				},
+				valueFormat: function(d) {
+					return d3.format()(d);
+				},
+				showLabels: true,
+				duration: 500,
+				labelThreshold: 0.01,
+				labelSunbeamLayout: true,
+				legend: {
+					margin: {
+						top: 5,
+						right: 35,
+						bottom: 0,
+						left: 0
+					}
+				}
+			}
+
+		};
+		return pieChartOptions;
+	};
+
+	this.getPortsDetail = function(type, viewData) {
+		var lineChartOptions = {
+			chart: {
+				type: type,
+				height: 550,
+				width: 900,
+				margin: {
+					top: 20,
+					right: 0,
+					bottom: 40,
+					left: 55
+				},
+				x: function(d) {
+					return d.x;
+				},
+				y: function(d) {
+					return d.y;
+				},
+				useInteractiveGuideline: false,
+				dispatch: {
+					stateChange: function(e) {
+						console.log("stateChange");
+					},
+					changeState: function(e) {
+						console.log("changeState");
+					},
+					tooltipShow: function(e) {
+						console.log("tooltipShow");
+					},
+					tooltipHide: function(e) {
+						console.log("tooltipHide");
+					}
+				},
+				xAxis: {
+					axisLabel: 'Ports',
+					tickFormat: function(d) {
+						var l = viewData[0].values[d].label;
+						return l;
+					},
+				},
+				yAxis: {
+					axisLabel: 'Hits',
+					axisLabelDistance: 100
+				},
+				callback: function(chart) {
+
+				}
+			},
+			title: {
+				enable: true,
+				text: 'Title for Line Chart'
+			}
+		};
+		return lineChartOptions;
+	};
+	this.getIPsDetailData = function(data, key, value) {
+		var viewsData = [];
+
+		data.forEach(function(column) {
+			if (column.hasOwnProperty("total")) {} else if (column.hits == 0) {} else {
+				var objects = {
+					label: "",
+					value: ""
+				};
+				objects.label = column[key];
+				objects.value = column[value];
+				viewsData.push(objects);
+			}
+		})
+		return viewsData;
+	};
+	this.getServicesDetailData = function(data, key, value) {
+		var servicesData = [];
+		data.forEach(function(column) {
+			if (column.hasOwnProperty("total")) {} else if (column.hits == 0) {} else {
+				var objects = {
+					label: "",
+					value: ""
+				};
+				objects.label = column[key];
+				objects.value = column[value];
+				servicesData.push(objects);
+			}
+		})
+		return servicesData;
+	};
+	this.getToolsDetailData = function(data, key, value) {
+		var toolsData = [];
+
+		data.forEach(function(column) {
+			if (column.hasOwnProperty("total")) {} else if (column.hits == 0) {} else {
+				toolsData.push(column[value]);
+			}
+		})
+		return toolsData;
+	};
+
+}]);
 
 
 

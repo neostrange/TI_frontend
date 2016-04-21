@@ -30,6 +30,14 @@ angular.module('app', [
 	'angularUtils.directives.dirPagination',
 	'ui.bootstrap.modal',
 	'ngToast',
-	'toaster'
+	'toaster',
+	'timer',
+	'ngFileUpload',
+	'ui.select',
+	'ui',
+	'ngTagsInput',
+	'ui.bootstrap.contextMenu',
+	'vsGoogleAutocomplete',
+	'chart.js'
 	
 ]);

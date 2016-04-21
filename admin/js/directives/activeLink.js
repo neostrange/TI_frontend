@@ -74,18 +74,38 @@ app.directive('menuToggle', function(menuItemSrv, $compile) {
   }; 
 });
 
-app.directive('menu', function($compile, $rootScope, $route) {
+app.directive('menu', function($compile, $rootScope) {
   return {
 	restrict: 'A',
 	link: function (scope, element, attrs) {
-		console.log("heloo");
-				
 		
-		$("#toggle-btn").click(function(e){
-        e.preventDefault();
-		$("#toggle-btn").toggleClass("toggle-btn");
-       $("#wrapper").toggleClass("toggled");
+		/*
+		element.toggle(function(){
+			  $("#toggle-btn.toggle-btn").css("right","15px");
+		}
+		, function(){
+			 $("#toggle-btn.toggle-btn").css("right","255px");
+		});	
+
+		*/
+		
+		element.click(function(e){
+			  e.preventDefault();
+		//	alert("click");
+		
+			
+			if ( $( "div.mapright-col" ).is( ":hidden" ) ) {
+				 $("div.mapright-col" ).show();
+				  $("#toggle-btn.toggle-btn").css("right","255px");
+ 
+			}else{
+				 $("#toggle-btn.toggle-btn").css("right","15px");
+				$("div.mapright-col" ).hide();
+			}
+			
+	  // $("div.mapright-col").css("width","25px");
 		});
+		
 	
 	}
   }; 
@@ -550,8 +570,8 @@ app.directive('d3Maps', function($compile, $rootScope, $window, $interval, $time
 		vals:"=" 
 	},
 	link: function (scope, elem, attrs) {
-			console.log(elem);
-			console.log(attrs);
+			//console.log(elem);
+		//	console.log(attrs);
     var map = new Datamap({
 
         scope: 'world',
@@ -577,14 +597,13 @@ app.directive('d3Maps', function($compile, $rootScope, $window, $interval, $time
 	});
 
 		
-	
 			var dot = [];
 			scope.$watch('vals', function (neww, old) {
-			 var boom = [];	
+				var boom = [];	
 			  var col = '';
 			  var fill;
 			 var hi = [];
-			console.log(neww);
+		//	console.log(neww);
 			if(neww != undefined){
 				
 				neww.forEach(function(elem){
@@ -620,7 +639,7 @@ app.directive('d3Maps', function($compile, $rootScope, $window, $interval, $time
 						
 				boom.push( { radius: 7, latitude: +elem.affected.lat, longitude: +elem.affected.longs,
                         fillOpacity: 0.5, attk: elem.name , IP:elem['Ip']});
-					console.log(boom);
+				//	console.log(boom);
 			});
 				
 			map.arc(hi, {strokeWidth: 3, strokeColor: col, arcSharpness: 2, animationSpeed: 600}); 
@@ -641,17 +660,24 @@ app.directive('d3Maps', function($compile, $rootScope, $window, $interval, $time
             });
 			*/
 			
+            if( hi.length >= 1){
+				stop = $interval(function() {
+					hi = [];
+					var hit = { origin : { latitude: +51.399206, longitude: +23.730469 }, destination : { latitude: +51.399206, longitude: +23.730469 } };	
+					hi.push(hit);
+				map.arc(hi, {strokeWidth: 1, strokeColor: '#000' , arcSharpness: 1}); 
+					stopfight();
+				}, 2000);
+				//console.log("out");
+			}			
 			 map.bubbles(dot, {
                 popupTemplate: function(geo, data) {
-					console.log(boom);
-					console.log(geo);
-					console.log(data);
                     return ['<div class="hoverinfo"><strong>',
-										'Attack By ' + data.attk +
-										'</strong><strong>',
-										' IP ' + data.IP,
-										'</strong>',
-										'</div>'].join('');
+								'Attack By ' + data.attk +
+								'</strong><strong>',
+								' IP ' + data.IP,
+								'</strong>',
+							   '</div>'].join('');
                 }
             });
 						
@@ -669,7 +695,16 @@ app.directive('d3Maps', function($compile, $rootScope, $window, $interval, $time
                     map.resize();
                 });
 
-
+		 function stopfight() {
+			
+          if (angular.isDefined(stop)) {
+			 
+            $interval.cancel(stop);
+            stop = undefined;
+			 console.log("in");
+          }
+        };		
+		
 	}
   }; 
 });
